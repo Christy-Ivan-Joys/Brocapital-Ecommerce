@@ -1,0 +1,126 @@
+<%- include('header') %>
+
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="title-header option-title d-sm-flex d-block">
+                            <h5>User list</h5>
+                           
+                        </div>
+                        <div>
+                            <div class="table-responsive">
+                                <table class="table all-package theme-table table-product" id="table_id">
+                                    <thead>
+                                        <tr>
+                                            <!-- <th>User Image</th> -->
+                                            <th>User Name</th>
+                                            <th>Email</th>
+                                            <th>Phone Number</th>
+                                            <th>Block / Unblock</th>
+                                          
+                                            
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <%if (users.length > 0){%>
+                                            <% for (let i=0;i < users.length; i++){ %>
+                                        <tr>
+                                            <!-- <td>
+                                                <div class="table-image">
+                                                    <img class="img-wrap"  src="/adminassets/images/productimg/" class="img-fluid"
+                                                        alt="" width="50" height="50">
+                                                </div>
+                                                
+                                            </td> -->
+                                            
+
+                                            <td><%= users[i].name %></td>
+
+                                            <td><%= users[i].email %></td>
+
+                                            <td><%= users[i].phonenumber %></td>
+
+                                            
+
+                                           
+                                            
+
+                                            <% if(users[i].block==true){ %>
+                                            <td>
+                                                <span><a class="badge-button alert success " href="/admin/UnBlockuser?id=<%=users[i]._id %>">Unblock</a></span> </td>
+                                           
+                                            <% }else{ %>
+                                                <td> <span> <a class="badge-button alert-secondary danger" href="/admin/Blockuser?id=<%=users[i]._id %>">Block</a></span></td>
+
+                                                <% } %>
+                                            
+                                        </tr>
+
+                                        <%}%>
+                                        <%}%>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    
+
+
+</div>
+<!-- page-wrapper End-->
+
+<!-- Modal End -->
+
+
+
+
+<!-- latest js -->
+<script src="/adminassets/js/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap js -->
+<script src="/adminassets/js/bootstrap/bootstrap.bundle.min.js"></script>
+
+<!-- feather icon js -->
+<script src="/adminassets/js/icons/feather-icon/feather.min.js"></script>
+<script src="/adminassets/js/icons/feather-icon/feather-icon.js"></script>
+
+<!-- scrollbar simplebar js -->
+<script src="/adminassets/js/scrollbar/simplebar.js"></script>
+<script src="/adminassets/js/scrollbar/custom.js"></script>
+
+<!-- Sidebar js -->
+<script src="/adminassets/js/config.js"></script>
+
+<!-- customizer js -->
+<script src="/adminassets/js/customizer.js"></script>
+
+<!-- Plugins js -->
+<script src="/adminassets/js/sidebar-menu.js"></script>
+<script src="/adminassets/js/notify/bootstrap-notify.min.js"></script>
+<script src="/adminassets/js/notify/index.js"></script>
+
+<!-- Data table js -->
+<script src="/adminassets/js/jquery.dataTables.js"></script>
+<script src="/adminassets/js/custom-data-table.js"></script>
+
+<!-- sidebar effect -->
+<script src="/adminassets/js/sidebareffect.js"></script>
+
+<!-- Theme js -->
+<script src="/adminassets/js/script.js"></script>
+</body>
+
+
+<!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/products.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 14 Oct 2023 04:08:58 GMT -->
+</html>

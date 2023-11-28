@@ -1,0 +1,311 @@
+<%-include ('header')%>
+
+
+
+<style>
+    .pagination {
+        font-size: 18px;
+    }
+
+    .page-item {
+        width: 40px;
+        height: 40px;
+        margin: 5px;
+    }
+
+    .page-link {
+        background-color: #000;
+        color: #fff;
+        border: 1px solid #000;
+        border-radius: 0;
+        min-width: 40px;
+        text-align: center;
+        padding: 0;
+        line-height: 40px;
+    }
+
+    .page-item.active .page-link {
+        background-color: #000;
+        border-color: #000;
+    }
+
+    .page-item:last-child .page-link {
+        background-color: #fff;
+        /* Set the background color to white for the last button */
+        color: #000;
+        /* Set the text color to black for the last button */
+    }
+
+    .page-item:first-child .page-link {
+        background-color: #fff;
+        /* Set the background color to white for the first button (Previous) */
+        color: #000;
+        /* Set the text color to black for the first button (Previous) */
+    }
+    </style>
+
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="title-header option-title d-sm-flex d-block">
+                            <h5>Products List</h5>
+                            <div class="right-options">
+                                <ul>
+                                   
+                                    <li>
+                                        <a class="btn btn-solid" href="">Add Product</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="table-responsive">
+                                <table class="table all-package theme-table table-product" id="table_id">
+                                    <thead>
+                                        <tr>
+                                            <th>Product Image</th>
+                                            <th>Product Name</th>
+                                            <th>Category</th>
+                                            <th>Current Qty</th>
+                                            <th>Price</th>
+                                            <th>Brand</th>
+                                            <th>Stock</th>
+                                            <th>Status</th>
+                                            <th>Edit</th>
+                                            
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <%if (product.length > 0){%>
+                                            <% for (let i=0;i < product.length; i++){ %>
+                                        <tr>
+                                            <td>
+                                                <div class="table-image">
+                                                    <img class="img-wrap"  src="/adminassets/images/productimg/<%=product [i] .image[0]%>" class="img-fluid"
+                                                        alt="" width="50" height="50">
+                                                </div>
+                                                
+                                            </td>
+
+                                            <td><%= product[i].productname %></td>
+
+                                            <td><%= product[i].category.name %></td>
+
+                                            <td><%= product[i].quantity %></td>
+
+                                             <td class="td-price">₹ <%= product[i].price %></td>
+
+                                            <td class="td-price"> <%= product[i].brand %></td>
+                                            <td class="td-price"> <%= product[i].stock %></td>
+                                            
+
+                                            <% if(product[i].status==true){ %>
+                                            <td>
+                                                <span><a class="badge-button alert-success" href="/admin/UnlistProduct?id=<%=product[i]._id %>">Unlist</a></span> </td>
+                                           
+                                            <% }else{ %>
+                                                <td> <span> <a class="badge-button alert-secondary" href="/admin/listProduct?id=<%=product[i]._id %>">list</a></span></td>
+
+                                                <% } %>
+                                            <td>
+                                                <ul>
+                                                    <!-- <li>
+                                                        
+                                                            <i class="ri-eye-line"></i>
+                                                    
+                                                    </li> -->
+
+                                                    <li>
+                                                        <a href="/admin/editProductpage?id=<%= product[i]._id %>">
+                                                            <i class="ri-pencil-line"></i>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <!-- <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModalToggle">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </a> -->
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+
+                                        <%}%>
+                                        <%}%>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% if (locals.totalPages) { %>
+		<!-- Bootstrap Pagination -->
+		<nav aria-label="Page navigation" style="margin-bottom: 60px;size:px ;">
+			<ul class="pagination justify-content-center">
+				<% if (locals.currentPage> 1) { %>
+					<li class="page-item">
+						<a class="page-link btn-dark" href="?page=<%= locals.currentPage - 1 %>" aria-label="Previous">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					<% } else { %>
+						<li class="page-item disabled">
+							<span class="page-link btn-dark" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+							</span>
+						</li>
+						<% } %>
+
+							<% for (let i=1; i <=locals.totalPages; i++) { %>
+								<li class="page-item <%= i === locals.currentPage ? 'active' : '' %>">
+									<a class="page-link btn-dark" href="?page=<%= i %>">
+										<%= i %>
+									</a>
+								</li>
+								<% } %>
+
+									<% if (locals.currentPage < locals.totalPages){ %>
+										<li class="page-item">
+											<a class="page-link btn" href="?page=<%= locals.currentPage + 1 %>"
+												aria-label="Next">
+												<span aria-hidden="true">&raquo;</span>
+											</a>
+										</li>
+										<% } else { %>
+											<li class="page-item disabled">
+												<span class="page-link btn" aria-label="Next">
+													<span aria-hidden="true">&raquo;</span>
+												</span>
+											</li>
+											<% } %>
+			</ul>
+		</nav>
+		<% } %>
+
+
+    
+
+</div>
+<!-- page-wrapper End-->
+
+<!-- Modal Start -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog  modal-dialog-centered">
+<div class="modal-content">
+    <div class="modal-body">
+        <h5 class="modal-title" id="staticBackdropLabel">Logging Out</h5>
+        <p>Are you sure you want to log out?</p>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+        <div class="button-box">
+            <button type="button" class="btn btn--no" data-bs-dismiss="modal">No</button>
+            <button type="button" class="btn  btn--yes btn-primary">Yes</button>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- Modal End -->
+
+<!-- Delete Modal Box Start -->
+<div class="modal fade theme-modal remove-coupon" id="exampleModalToggle" aria-hidden="true" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+    <div class="modal-header d-block text-center">
+        <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="remove-box">
+            <p>The permission for the use/group, preview is inherited from the object, object will create a
+                new permission for this object</p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-target="#exampleModalToggle2"
+            data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
+    </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade theme-modal remove-coupon" id="exampleModalToggle2" aria-hidden="true" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title text-center" id="exampleModalLabel12">Done!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="remove-box text-center">
+            <div class="wrapper">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                </svg>
+            </div>
+            <h4 class="text-content">It's Removed.</h4>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">Close</button>
+    </div>
+</div>
+</div>
+</div>
+<!-- Delete Modal Box End -->
+
+<!-- latest js -->
+<script src="/adminassets/js/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap js -->
+<script src="/adminassets/js/bootstrap/bootstrap.bundle.min.js"></script>
+
+<!-- feather icon js -->
+<script src="/adminassets/js/icons/feather-icon/feather.min.js"></script>
+<script src="/adminassets/js/icons/feather-icon/feather-icon.js"></script>
+
+<!-- scrollbar simplebar js -->
+<script src="/adminassets/js/scrollbar/simplebar.js"></script>
+<script src="/adminassets/js/scrollbar/custom.js"></script>
+
+<!-- Sidebar js -->
+<script src="/adminassets/js/config.js"></script>
+
+<!-- customizer js -->
+<script src="/adminassets/js/customizer.js"></script>
+
+<!-- Plugins js -->
+<script src="/adminassets/js/sidebar-menu.js"></script>
+<script src="/adminassets/js/notify/bootstrap-notify.min.js"></script>
+<script src="/adminassets/js/notify/index.js"></script>
+
+<!-- Data table js -->
+<script src="/adminassets/js/jquery.dataTables.js"></script>
+<script src="/adminassets/js/custom-data-table.js"></script>
+
+<!-- sidebar effect -->
+<script src="/adminassets/js/sidebareffect.js"></script>
+
+<!-- Theme js -->
+<script src="/adminassets/js/script.js"></script>
+</body>
+
+
+<!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/products.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 14 Oct 2023 04:08:58 GMT -->
+</html>

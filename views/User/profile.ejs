@@ -1,0 +1,350 @@
+<%-include('homeHeader') %>
+
+
+    <link rel="stylesheet" href="/evarassets/css/main.css?v=3.4">
+
+    <main class="main" style="margin-top: -100px;">
+        <div class="section block-breadcrumb">
+            <div class="container">
+                <div class="breadcrumbs">
+
+                </div>
+            </div>
+        </div>
+
+        <section class="pt-150 pb-150">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 m-auto">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="dashboard-menu">
+                                    <ul class="nav flex-column" role="tablist">
+
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="account-detail-tab" href="/profile"
+                                                role="tab" aria-controls="account-detail" aria-selected="true"><i
+                                                    class="fi-rs-user mr-10"></i>Account details</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="track-orders-tab" href="/UserAddress" role="tab"
+                                                aria-controls="track-orders" aria-selected="false"><i
+                                                    class="fi-rs-shopping-cart-check mr-10"></i>Add Address</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="address-tab" href="/ManageAddress" role="tab"
+                                                aria-controls="address" aria-selected="true"><i
+                                                    class="fi-rs-marker mr-10"></i>Manage Address</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="orders-tab" href="/ordersPage" role="tab"
+                                                aria-controls="orders" aria-selected="false"><i
+                                                    class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="wallet-tab" href="/walletPage" role="tab"
+                                                aria-controls="walley" aria-selected="false"><i
+                                                    class="fi-rs-settings-sliders mr-10"></i>Wallet</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link " id="dashboard-tab" href="/account/referrals" role="tab"
+                                                aria-controls="dashboard" aria-selected="false"><i
+                                                    class="fi fi-rs-share mr-10"></i>Referrals</a>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/logout"><i
+                                                    class="fi-rs-sign-out mr-10"></i>Logout</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="tab-content dashboard-content">
+
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Account Details</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>Here you can Edit account details and change your password!</p><br>
+                                            <!-- flash message -->
+
+
+
+                                            <!-- express validator message -->
+
+
+
+
+
+                                            <form action="/edituserDetails?id=<%= user._id%>" method="post">
+                                                <div class="row">
+                                                    <div class="form-group col-md-12">
+                                                        <label>Username <span>*</span></label>
+                                                        <input id="name" class="form-control square"
+                                                            value="<%= user.name %>" name="name" type="text">
+                                                        <p id="nameError" style="color:red"> </p>
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label>Email Address <span>*</span></label>
+                                                        <input id="email" class="form-control square"
+                                                            value="<%= user.email %>" name="email" type="email">
+                                                        <p id="emailError" style="color:red"></p>
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label>Phone number <span>*</span></label>
+                                                        <input id="phonenumber" class="form-control square"
+                                                            value="<%= user.phonenumber %>" name="phonenumber"
+                                                            type="phone">
+                                                        <p id="phoneError" style="color:red"></p>
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label>Current Password <span>*</span></label>
+                                                        <input id="password" class="form-control square"
+                                                            placeholder="Enter your current password" name="password"
+                                                            type="password">
+                                                        <p id="passwordError" style="color:red"></p>
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label>New Password <span></span></label>
+                                                        <input id="npassword" class="form-control square"
+                                                            placeholder="(Optional)" name="npassword" type="password">
+                                                        <p id="npasswordError" style="color:red"></p>
+                                                    </div>
+                                                    <% if(currentPassError){ %>
+                                                        <p style="color:red"> Enter your current password correctly !</p>
+                                                        <% } else{%>
+                                                            <p style="color:red"></p>
+                                                            <% } %>
+                                                                <div class="col-md-12">
+                                                                    <button onclick="validate()"
+                                                                        class="btn btn-fill-out submit">Save</button>
+                                                                </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <main>
+
+            <script>
+
+                function validate() {
+
+                    const name = document.getElementById('name').value
+                    const email = document.getElementById('email').value
+                    const phonenumber = document.getElementById('phonenumber').value
+                    const password = document.getElementById('password').value
+                    const npassword = document.getElementById('npassword').value
+
+
+
+                    const nameRegex = /^\s*[A-Z]/
+                    const passRegex = /^(?!\s*$)(?=.*\d{5,}).*$/;
+
+
+                    const emailRegex = /[a-zA-Z0-9._+%]+@gmail+\.[a-zA-Z]{3}$/
+
+                    const phoneRegex = /^\s*(?!0{5,})[0-9]{10}\s*$/;
+
+
+                    if (nameRegex.test(name)) {
+                        nameError.innerHTML = ''
+                    } else {
+
+                        nameError.innerHTML = 'Invalid name format(Name must start with capital letter)'
+                        event.preventDefault()
+
+                    }
+                    if (emailRegex.test(email)) {
+
+                        emailError.innerHTML = ''
+                    } else {
+
+                        emailError.innerHTML = 'Enter a valid email'
+                        event.preventDefault()
+
+                    }
+                    if (phoneRegex.test(phonenumber)) {
+
+                        phoneError.innerHTML = ''
+                    } else {
+                        phoneError.innerHTML = 'Enter a valid 10 digit Phonenumber'
+                        event.preventDefault()
+
+                    }
+                    if (password) {
+                        if (npassword) {
+                            passwordError.innerHTML = ''
+                            npasswordError.innerHTML = ''
+
+                        } else {
+                            npasswordError.innerHTML = 'Enter new password to continue'
+                            event.preventDefault()
+                        }
+                    } else {
+                        passwordError.innerHTML = 'Enter the current password to continue'
+                        password.focus()
+                        event.preventDefault()
+                    }
+
+                    if (passRegex.test(password)) {
+                        passwordError.innerHTML = ''
+                    } else {
+                        passwordError.innerHTML = 'enter atleast 5 digits'
+                        event.preventDefault()
+                    }
+                    if (passRegex.test(npassword)) {
+                        npasswordError.innerHTML = ''
+                    } else {
+                        npasswordError.innerHTML = 'enter atleast 5 digits'
+                        event.preventDefault()
+                    }
+
+
+
+
+
+                }
+
+
+            </script>
+
+            <script src="/evarassets/js/vendor/modernizr-3.6.0.min.js"></script>
+            <script src="/evarassets/js/vendor/jquery-3.6.0.min.js"></script>
+            <script src="/evarassets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+            <script src="/evarassets/js/vendor/bootstrap.bundle.min.js"></script>
+            <script src="/evarassets/js/plugins/slick.js"></script>
+            <script src="/evarassets/js/plugins/jquery.syotimer.min.js"></script>
+            <script src="/evarassets/js/plugins/wow.js"></script>
+            <script src="/evarassets/js/plugins/jquery-ui.js"></script>
+            <script src="/evarassets/js/plugins/perfect-scrollbar.js"></script>
+            <script src="/evarassets/js/plugins/magnific-popup.js"></script>
+            <script src="/evarassets/js/plugins/select2.min.js"></script>
+            <script src="/evarassets/js/plugins/waypoints.js"></script>
+            <script src="/evarassets/js/plugins/counterup.js"></script>
+            <script src="/evarassets/js/plugins/jquery.countdown.min.js"></script>
+            <script src="/evarassets/js/plugins/images-loaded.js"></script>
+            <script src="/evarassets/js/plugins/isotope.js"></script>
+            <script src="/evarassets/js/plugins/scrollup.js"></script>
+            <script src="/evarassets/js/plugins/jquery.vticker-min.js"></script>
+            <script src="/evarassets/js/plugins/jquery.theia.sticky.js"></script>
+            <!-- Template  JS -->
+            <script src="/evarassets/js/main.js?v=3.4"></script>
+
+
+            <!--===============================================================================================-->
+            <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/animsition/js/animsition.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/bootstrap/js/popper.js"></script>
+            <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/select2/select2.min.js"></script>
+            <script>
+                $(".js-select2").each(function () {
+                    $(this).select2({
+                        minimumResultsForSearch: 20,
+                        dropdownParent: $(this).next('.dropDownSelect2')
+                    });
+                })
+            </script>
+            <!--===============================================================================================-->
+            <script src="vendor/daterangepicker/moment.min.js"></script>
+            <script src="vendor/daterangepicker/daterangepicker.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/slick/slick.min.js"></script>
+            <script src="js/slick-custom.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/parallax100/parallax100.js"></script>
+            <script>
+                $('.parallax100').parallax100();
+            </script>
+            <!--===============================================================================================-->
+            <script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+            <script>
+                $('.gallery-lb').each(function () { // the containers for all your galleries
+                    $(this).magnificPopup({
+                        delegate: 'a', // the selector for gallery item
+                        type: 'image',
+                        gallery: {
+                            enabled: true
+                        },
+                        mainClass: 'mfp-fade'
+                    });
+                });
+            </script>
+            <!--===============================================================================================-->
+            <script src="vendor/isotope/isotope.pkgd.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/sweetalert/sweetalert.min.js"></script>
+            <script>
+                $('.js-addwish-b2, .js-addwish-detail').on('click', function (e) {
+                    e.preventDefault();
+                });
+
+                $('.js-addwish-b2').each(function () {
+                    var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
+                    $(this).on('click', function () {
+                        swal(nameProduct, "is added to wishlist !", "success");
+
+                        $(this).addClass('js-addedwish-b2');
+                        $(this).off('click');
+                    });
+                });
+
+                $('.js-addwish-detail').each(function () {
+                    var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
+
+                    $(this).on('click', function () {
+                        swal(nameProduct, "is added to wishlist !", "success");
+
+                        $(this).addClass('js-addedwish-detail');
+                        $(this).off('click');
+                    });
+                });
+
+                /*---------------------------------------------*/
+
+                $('.js-addcart-detail').each(function () {
+                    var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+                    $(this).on('click', function () {
+                        swal(nameProduct, "is added to cart !", "success");
+                    });
+                });
+
+            </script>
+            <!--===============================================================================================-->
+            <script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+            <script>
+                $('.js-pscroll').each(function () {
+                    $(this).css('position', 'relative');
+                    $(this).css('overflow', 'hidden');
+                    var ps = new PerfectScrollbar(this, {
+                        wheelSpeed: 1,
+                        scrollingThreshold: 1000,
+                        wheelPropagation: false,
+                    });
+
+                    $(window).on('resize', function () {
+                        ps.update();
+                    })
+                });
+            </script>
+            <!--===============================================================================================-->
+            <script src="/js/main.js"></script>
+            </body>
+
+            </html>

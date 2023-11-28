@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Password Reset</title>
+    <!-- Bootstrap CSS (Note that the 'integrity' and 'crossorigin' attributes are for security) -->
+
+
+    <link rel="stylesheet" href="  https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #ccc;
+    }
+</style>
+
+
+<div class="card text-center" style="width: 400px; box-shadow: 5px 5px 10px rgba(0, 0.5, 0.5, 0.5);">
+    <div class="card-header h5 text-white bg-dark">Password Reset</div>
+    <div class="card-body px-5">
+        <p class="card-text py-2" style="font-size:larger ;">
+            Enter your new password
+        </p>
+        <div class="form-outline">
+            <form  id="newPasswordForm">
+                <label for="newPassword" class="form-label">New Password:</label>
+                <input type="password" id="newPassword" name="newPassword" class="form-control my-3" required>
+                <p id="passwordError" style="color:red"></p>
+        </div>
+        <div>
+            <label for="confirmPassword" class="form-label">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control my-3" required>
+            <p id="confirmpasswordError" style="color:red"></p>
+        </div>
+        <p id="error" style="color: red;"></p>
+        <button class="btn btn-dark w-100" type="submit">Reset password</button>
+        <br>
+        <br>
+        <br>
+    </div>
+</div>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('newPasswordForm').addEventListener('submit', function () {
+        
+
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        // const passRegex = /^[0-6]/
+
+        // if (passRegex.test(newPassword)) {
+        //     passwordError.innerHTML = ''
+        // } else {
+        //     passwordError.innerHTML = 'Enter 6 digit password'
+        //     event.preventDefault()
+        // }
+        // if (passRegex.test(confirmPassword)) {
+        //     passwordError.innerHTML = ''
+        // } else {
+        //     confirmpasswordError.innerHTML = 'Enter 6 digit password'
+        //     event.preventDefault()
+        // }
+
+
+
+        if (newPassword !== confirmPassword) {
+            alert('1111111111')
+            document.getElementById('error').textContent = 'Passwords do not match.';
+            event.preventDefault()
+          
+        } else {
+            alert('i amh ere')
+            document.getElementById('error').textContent = '';
+
+            $.ajax({
+                url: '/ResetPassword',
+                method: 'POST',
+                data:{
+                    newPassword
+                },success:function(){
+                    $.ajax({
+                        url:'/loginPage',
+                        method:'GET'
+                    })     
+                     
+                }
+                   
+            })
+                
+            
+
+        }
+    });
+</script>
+
+<!-- jQuery (required for Bootstrap) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Popper.js (required for Bootstrap) -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+
+<!-- Bootstrap JavaScript (required for Bootstrap) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

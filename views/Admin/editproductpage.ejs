@@ -1,0 +1,494 @@
+
+
+<%-include('header')%>
+
+
+
+
+<style>
+
+.edit-image {
+  width: 100px; 
+  height: auto; 
+}
+</style>
+
+<br>
+<h1>hii</h1>
+<form action="/admin/editproduct/<%= product._id  %>" method="post" enctype="multipart/form-data">
+   
+                <!-- New Product Add Start -->
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-sm-8 m-auto">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header-2">
+                                                <h5>Edit product</h5>
+                                            </div>
+
+                                            
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">Product
+                                                        Name</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Product Name" name="productname" value="<%= product.productname %>" >
+                                                            <p id="nameError" style="color:red;"></p>
+                                                    </div>
+                                                </div>
+
+                                               
+
+                                                <div class="mb-4 row align-items-center">
+                                                    <label
+                                                        class="col-sm-3 col-form-label form-label-title">Category</label>
+                                                    <div class="col-sm-9">
+                                                      
+                                                        <select class="js-example-basic-single w-100" name="category">
+                                                            
+                                                                <% for(let i=0;i<category.length;i++){ %>
+    
+                                                            
+                                                            <option value="<%= category[i].name %>"><%= category[i].name %></option>
+                                                                
+                                                            
+                                                             <% } %>
+                                                           
+                                                            
+                                                        </select>
+                                                        <p id="catError" style="color:red"></p>
+                                                       
+                                                    </div>
+                                                </div>
+
+                                               
+
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="col-sm-3 col-form-label form-label-title">Brand</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="js-example-basic-single w-100" name="brand" id="brand">
+                                                            
+                                                            <% for(let i=0;i<brand.length;i++){%>
+            
+                                                                <option value="<%= brand[i].name %>">
+                                                                    <%= brand[i].name %>
+                                                                </option>
+                                                                <% } %>
+            
+                                                        </select>
+                                                        <p id="brandError" style="color:red"></p>
+                                                    </div>
+                                                </div>
+
+                                               
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="col-sm-3 col-form-label form-label-title">Size</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="js-example-basic-single w-100" name="size">
+                                                            <option>S</option>
+                                                            <option>M</option>
+                                                            <option>L</option>
+                                                            <option>XL</option>
+                                                            
+                                            
+                                                        </select>
+                                                        <p id="sizeError" style="color:red"></p>
+                                                    </div>
+                                                </div>
+                                            
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="col-sm-3 form-label-title">Quantity</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="number" placeholder="0"  name="quantity" value="<%= product.quantity %>">
+                                                        <p id="quantityError" style="color:red ;"></p>
+                                                    </div>
+                                                </div>
+                                                
+                                              
+                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header-2">
+                                                <h5>Description</h5>
+                                            </div>
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">Description
+                                                </label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control" type="text"
+                                                        placeholder="Product Name" name="description" value="<%= product.description %>" >
+                                                        <p id="descriptionError" style="color:red ;"></p>
+                                                    
+                                                </div>
+                                            </div>
+                                           
+                                            
+                                      
+                                        </div>
+                                    </div>
+
+                                    <div class="card-header">
+                                        <h4>Images</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="input-upload">
+                                            <div class="d-flex"> 
+                                                <% for(var i=0;i<product.image.length;i++){ %>
+                                                    <img src="/adminassets/images/productimg/<%= product.image[i] %>?v=<%= Date.now()%>" alt="<%= product.image[1] %>" class="edit-image">
+                                                    <div><a class="btn-sm text  btn-danger" href="/admin/deleteImage/<%=product._id%>/<%= product.image[i]%>" onclick="return confirm('This action is going to delete the selected image.')">X</a></div>
+                                                <% } %>
+                                            </div>
+                                            <input multiple name="image" id="image" class="form-control" type="file">
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="product_name" class="form-label"></label>
+                                        <input type="hidden" class="form-control" value="<%=product.image%>" id="currentname" name="imageImport">
+                                        <p id="ImageError" style="color:red ; margin-left: 275px;"></p>
+                                    </div>
+
+                                  
+                                    
+
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header-2">
+                                                <h5>Product Price</h5>
+                                            </div>
+
+                                            
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="col-sm-3 form-label-title">price</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="number" placeholder="0" required="true" name="price" value="<%= product.price %>">
+                                                        <p id="priceError" style="color:red ; margin-left: 275px;"></p>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="mb-4 row align-items-center">
+                                                    <label class="col-sm-3 form-label-title">Offer
+                                                        price</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="number" placeholder="0" name="offerprice" value="<%= product.offerprice %>">
+                                                    </div>
+                                                </div> -->
+                                               
+                                           
+                                        </div>
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header-2">
+                                                <h5>Product Inventory</h5>
+                                            </div>
+
+                                            
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="col-sm-3 col-form-label form-label-title">Stock
+                                                        Status</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="js-example-basic-single w-100" name="stock">
+                                                            <option>In Stock</option>
+                                                            <option>Out Of Stock</option>
+                                                            <option>On Backorder</option>
+                                                        </select>
+                                                        <p id="stockError" style="color:red ; margin-left: 275px;"></p>
+                                                    </div>
+                                                </div>
+                                         
+                                        
+                                        </div>
+                                    </div>
+
+                                    
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="title-header option-title" style="margin-bottom: 70px; margin-right: 350px;">
+                    <h5></h5>
+                    
+                        <button class="align-items-center btn btn-theme d-flex" type="submit" onclick="validate(event)" ><i data-feather="plus"></i>Update</button>
+                    
+                </div>
+               
+                
+               
+
+            </form>
+            <div class="title-header option-title" style="margin-bottom: 70px; margin-right: 350px;">
+                <h5></h5>
+                
+               
+            </div>
+            
+               
+            
+      
+    </div>
+    <!-- page-wrapper End -->
+
+    <!-- Modal Start -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5 class="modal-title" id="staticBackdropLabel">Logging Out</h5>
+                    <p>Are you sure you want to log out?</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                    <div class="button-box">
+                        <button type="button" class="btn btn--no" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn  btn--yes btn-primary">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
+
+<style>
+
+/* CSS for image preview size */
+.image-preview {
+    max-width: 200px; /* Set the maximum width */
+    max-height: 200px; /* Set the maximum height */
+    margin: 5px; /* Add margin for spacing */
+}
+
+</style>
+<script>
+
+
+  
+function validate(event) {
+                 alert('hellooooo')
+                 const current=document.getElementById('currentimage').value
+                 alert(current)
+                 const image=document.getElementById('formFile').value
+                 alert(image)
+                 const name = document.getElementById('productname').value
+                 alert(name)
+                 const category = document.getElementById('category').value
+                 alert(category)
+                 const size = document.getElementById('size').value
+                 alert(size)
+                 const brand = document.getElementById('brand').value
+                 alert(brand)
+                 const description = document.getElementById('description').value
+                 alert(description)
+                 const quantity = document.getElementById('quantity').value
+                 alert(quantity)
+                 const price = document.getElementById('price').value
+                 alert(price)
+                 const stock=document.getElementById('stock').value
+                 
+
+
+               
+                
+                 
+                 const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+     
+     
+     
+                 const catRegex = /^[A-Z][^0-9]*$/;
+                 const brandRegex = /^[A-Z][A-Za-z0-9]*[^\d]$/
+     
+                 const quantityRegex = /^(?!0\d*$)\d+(\.\d+)?$/
+     
+     
+                 if (nameRegex.test(name)) {
+                        nameError.innerHTML = ''
+                 } else {
+     
+                     nameError.innerHTML = 'Invalid name'
+                     event.preventDefault()
+                 }
+     
+                 if (category === '') {
+                    
+     
+                     catError.innerHTML = ' Category is empty ,Enter a category name starting with capital letter'
+                     event.preventDefault()
+     
+                 } else if (!catRegex.test(category)) {
+                    
+                     categoryError.innerHTML = 'Enter a category name starting with a capital letter.'
+                     event.preventDefault()
+                 } else {
+                     catError.innerHTML = ''
+                 }
+     
+     
+                 if (brandRegex.test(brand)) {
+                     
+                     brandError.innerHTML = ''
+                 } else {
+                   
+                     brandError.innerHTML = 'Enter a brand start with capital letter !'
+                     event.preventDefault()
+                 }
+     
+                 if (size === '') {
+                    
+     
+                     sizeError.innerHTML = ' Size is empty ,select a size'
+                     event.preventDefault()
+     
+                 } else if (!catRegex.test(category)) {
+                   
+                     sizeError.innerHTML = 'Size is empty ,select a size'
+                     event.preventDefault()
+                 } else {
+                     sizeError.innerHTML = ''
+                 }
+                 if (quantityRegex.test(quantity)) {
+                     quantityError.innerHTML = ''
+                 } else {
+                     quantityError.innerHTML = 'Enter a valid quantity (non-zero & non-negative number)'
+                     event.preventDefault()
+                 }
+                 if(quantityRegex.test(price)){
+                     priceError.innerHTML=''
+                 }else{
+                     priceError.innerHTML='Enter a valid price'
+                     event.preventDefault()
+                 }
+                 if(nameRegex.test(description)){
+                     descriptionError.innerHTML=''
+                   }else{
+                 descriptionError.innerHTML='Enter a valid description'
+                 }
+     
+                 if (stock === '') {
+                    
+     
+                     stockError.innerHTML = ' stock is empty ,Enter the stock status'
+                     event.preventDefault()
+     
+                 } else if (!catRegex.test(category)) {
+                   
+                     stockError.innerHTML = 'stock is empty ,Enter the stock status'
+                     event.preventDefault()
+                 } else {
+                     stockError.innerHTML = ''     
+                 }
+                 if(image.files.length===0 ){
+                     ImageError.innerHTML='Upload product images to continue'
+                     event.preventDefault()
+                 }else if( image.files.length<4){
+                     ImageError.innerHTML='Upload product images to continue'
+                     event.preventDefault()
+                 }else{
+                     ImageError.innerHTML=''
+                 }
+             }
+
+
+
+
+
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const removeButtons = document.querySelectorAll(".remove-image");
+        removeButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+                const index = this.getAttribute("data-index");
+                // Remove the image from the DOM
+                this.parentNode.remove();
+                // Add logic to remove the corresponding image from your data
+            });
+        });
+
+        // Handle newly selected images
+// Inside the JavaScript code for handling newly selected images
+const newImagesInput = document.querySelector('input[name="new_images"]');
+newImagesInput.addEventListener("change", function () {
+    const files = this.files;
+    const imageContainer = this.nextElementSibling; // Assuming it's the div after the input
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            // Create an image element, apply the CSS class, and append it to the container
+            const img = document.createElement("img");
+            img.src = event.target.result;
+            img.classList.add("image-preview"); // Apply the CSS class
+            imageContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+    });
+</script>
+
+  
+  
+
+    <!-- latest js -->
+    <script src="/adminassets/js/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap js -->
+    <script src="/adminassets/js/bootstrap/bootstrap.bundle.min.js"></script>
+
+    <!-- feather icon js -->
+    <script src="/adminassets/js/icons/feather-icon/feather.min.js"></script>
+    <script src="/adminassets/js/icons/feather-icon/feather-icon.js"></script>
+
+    <!-- scrollbar simplebar js -->
+    <script src="/adminassets/js/scrollbar/simplebar.js"></script>
+    <script src="/adminassets/js/scrollbar/custom.js"></script>
+
+    <!-- Sidebar js -->
+    <script src="/adminassets/js/config.js"></script>
+
+    <!-- bootstrap tag-input js -->
+    <script src="/adminassets/js/bootstrap-tagsinput.min.js"></script>
+    <script src="/adminassets/js/sidebar-menu.js"></script>
+
+    <!-- customizer js -->
+    <script src="/adminassets/js/customizer.js"></script>
+
+    <!--Dropzon js -->
+    <script src="/adminassets/js/dropzone/dropzone.js"></script>
+    <script src="/adminassets/js/dropzone/dropzone-script.js"></script>
+
+    <!-- Plugins js -->
+    <script src="/adminassets/js/notify/bootstrap-notify.min.js"></script>
+    <script src="/adminassets/js/notify/index.js"></script>
+
+    <!-- ck editor js -->
+    <script src="/adminassets/js/ckeditor.js"></script>
+    <script src="/adminassets/js/ckeditor-custom.js"></script>
+
+    <!-- select2 js -->
+    <script src="/adminassets/js/select2.min.js"></script>
+    <script src="/adminassets/js/select2-custom.js"></script>
+
+    <!-- sidebar effect -->
+    <script src="/adminassets/js/sidebareffect.js"></script>
+
+    <!-- Theme js -->
+    <script src="/adminassets/js/script.js"></script>
+   
+</body>
+
+
+<!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/add-new-product.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 14 Oct 2023 04:08:59 GMT -->
+</html>

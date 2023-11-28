@@ -1,0 +1,310 @@
+<%- include('header')  %>
+
+<script src="/adminOrderDetail/js/layout.js"></script>
+<!-- Bootstrap Css -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+
+<!-- Icons Css -->
+<link href="/adminOrderDetail/css/icons.min.css" rel="stylesheet" type="text/css" />
+<!-- App Css-->
+
+<!-- custom Css-->
+<link href="/adminOrderDetail/css/custom.min.css" rel="stylesheet" type="text/css" />
+
+
+
+    <div class="main-content" style="margin-left: 280px;margin-top: 70px;" >
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+               
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                           
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                                    <li class="breadcrumb-item active">Order Details</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+              
+
+                <div class="row">
+                    <div class="col-xl-9">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex align-items-center">
+                                    <h5 class="card-title flex-grow-1 mb-0">Order #VL2667</h5>
+                                    <div class="flex-shrink-0">
+                                        <a href="/admin/downloadinvoice?id=<%= order._id%>" class="btn btn-success btn-sm"><i class="ri-download-2-fill align-middle me-1"></i> Invoice</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive table-card">
+                                    <table class="table table-nowrap align-middle table-borderless mb-0">
+                                        <thead class="table-light text-muted">
+                                            <tr>
+                                                <th scope="col">Product Details</th>
+                                                <th scope="col">Item Price</th>
+                                                <th scope="col">Quantity</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col" class="text-end">Total Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <% var sum=0 %>
+                                                <% for(let i=0;i<sortedProducts.length;i++){ %>
+
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <div class="flex-shrink-0 avatar-md bg-light rounded p-1">
+                                                            <img src="/adminassets/images/productimg/<%= sortedProducts[i].image[0]%>" alt="" class="img-fluid d-block" style="height:70px;width: 60px;"></img>
+                                                        </div>
+                                                        <div class="flex-grow-1 ms-3">
+                                                            <h5 class="fs-14"><a href="apps-ecommerce-product-details.html" class="text-body"><%= sortedProducts[i].productname %></a></h5>
+                                                            <p class="text-muted mb-0">Brand: <span class="fw-medium"><%=sortedProducts[i].brand%></span></p>
+                                                            <p class="text-muted mb-0">Size: <span class="fw-medium"><%= sortedProducts[i].size%></span></p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>₹ <%=sortedProducts[i].price%></td>
+                                                <td><%= orderProducts[i].quantity%></td>
+                                               <td>
+
+                                                <li>
+                                                  
+                                                        <div class="group">
+                                                            <select name="status" class="form-control" id=selectedStatus>
+                                                                <% if(order.status==='pending'){ %>
+                                                                    <option value="pending" disabled><%= order.status %></option>
+                                                                    <option value="placed" >Order placed</option>
+                                                                    <option value="shipped" >Shipped</option>
+                                                                    <option value="delivered">Delivered</option>
+                                                                    <option value="cancelled">Cancelled</option>
+                                                               <% }else if(order.status==='placed'){%>
+                                                                    <option value=""disabled ><%= order.status %></option>
+                                                                    <option value="shipped">Shipped</option>
+                                                                    <option value="delivered">Delivered</option>
+                                                                    <option value="cancelled">Cancelled</option>
+                                                                <% }else if(order.status==='shipped'){ %>
+                                                                    <option value="placed" ><%= order.status %></option>
+                                                                    <option value="delivered">Delivered</option>
+                                                                    <option value="cancelled">Cancelled</option>
+                                                                    <% }else if(order.status==='delivered'){ %>
+                                                                        <option style="color: green; font-weight: bold;"value="cancelled" disabled selected>Delivered</option>
+                                                                        <% } %>
+                                                              
+                                                               
+                                                            </select>
+                                                        </div>
+                                                        <button class="btn btn-primary ml-2" style="height: 30px;height: 40px;width: 60px;" onclick="changeStatus('<%= order._id%>')">Update</button>
+                                                
+                                                </li>
+                                                
+
+                                               </td>
+                                              
+
+
+
+
+
+                                                <td class="fw-medium text-end">₹ 
+                                                    <%= sortedProducts[i].price * orderProducts[i].quantity%>
+                                                    <%sum= sum+sortedProducts[i].price * orderProducts[i].quantity %>
+                                                </td>
+                                                <% } %>
+                                            </tr>
+                                            
+                                           
+                                            <tr class="border-top border-top-dashed">
+                                                <td colspan="3"></td>
+                                                <td colspan="2" class="fw-medium p-0">
+                                                    <table class="table table-borderless mb-0">
+                                                        <tbody>
+                                                          
+                                                            <!-- <tr>
+                                                                <td>Discount <span class="text-muted">(VELZON15)</span> : :</td>
+                                                                <td class="text-end">-$53.99</td>
+                                                            </tr> -->
+                                                            <!-- <tr>
+                                                                <td>Shipping Charge :</td>
+                                                                <td class="text-end">$65.00</td>
+                                                            </tr> -->
+                                                          
+                                                            <tr class="border-top border-top-dashed">
+                                                                <th scope="row">Total  :</th>
+                                                                <th class="text-end">₹ <%= sum%></th>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                
+                    </div>
+                    <!--end col--> 
+                    <div class="col-xl-3" style="margin-top: 55px;">
+                     
+
+                        <div class="card" >
+                            <div class="card-header">
+                                <div class="d-flex">
+                                    <h5 class="card-title flex-grow-1 mb-0">Customer Details</h5>
+                                 
+                                </div>
+                            </div>
+                            <% if(user){ %>
+                            <div class="card-body">
+                                <ul class="list-unstyled mb-0 vstack gap-3">
+                               
+                                    <li>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <img src="" alt="" class="avatar-sm rounded"></img>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h6 class="fs-14 mb-1"><%= user.name %></h6>
+                                                <p class="text-muted mb-0">Customer</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li><i class="ri-mail-line me-2 align-middle text-muted fs-16"></i><%= user.email %></li>
+                                    <li><i class="ri-phone-line me-2 align-middle text-muted fs-16"></i><%= user.phonenumber %></li>
+                                </ul>
+                            </div>
+                            <% } %>
+                        </div>
+                    <% if(order.Address[0]){ %>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0"><i class="ri-map-pin-line align-middle me-1 text-muted"></i> Shipping Address</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled vstack gap-2 fs-13 mb-0">
+                                    <li class="fw-medium fs-14"><%= order.Address[0].fullname %></li>
+                                    <li><%=order.Address[0].town%>,<%= order.Address[0].state %></li>
+                                    <li><%= order.Address[0].addressline%></li>
+                                    <li><%= order.Address[0].landmark %></li>
+                                    <li><%= order.Address[0].country %>,<%=order.Address[0].pincode %></li>
+                            
+                                </ul>
+                            </div>
+                        </div>
+                        <% } %>
+
+                        
+                       
+                    </div>
+                     <!--end col-->
+                </div>
+                 <!--end row--> 
+
+            </div>
+             <!-- container-fluid --> 
+        </div>
+     <!-- End Page-content --> 
+
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <script>document.write(new Date().getFullYear())</script> © Velzon.
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end d-none d-sm-block">
+                            Design & Develop by Themesbrand
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+<script>
+    function changeStatus(id){
+      
+        alert('hello')
+        const status=document.getElementById('selectedStatus').value
+        const orderId=id
+   
+
+        alert(status)
+        $.ajax({
+            url:'/admin/updateOrderStatus/'+orderId,
+            method:'post',
+            data:{
+                status:status
+            }
+         
+        })
+
+    }
+</script>
+
+
+<!-- Bootstrap js -->
+<script src="/adminassets/js/bootstrap/bootstrap.bundle.min.js"></script>
+
+<!-- feather icon js -->
+<script src="/adminassets/js/icons/feather-icon/feather.min.js"></script>
+<script src="/adminassets/js/icons/feather-icon/feather-icon.js"></script>
+
+<!-- scrollbar simplebar js -->
+<script src="/adminassets/js/scrollbar/simplebar.js"></script>
+<script src="/adminassets/js/scrollbar/custom.js"></script>
+
+<!-- Sidebar js -->
+<script src="/adminassets/js/config.js"></script>
+
+<!-- customizer js -->
+<script src="/adminassets/js/customizer.js"></script>
+
+<!-- Plugins js -->
+<script src="/adminassets/js/sidebar-menu.js"></script>
+<script src="/adminassets/js/notify/bootstrap-notify.min.js"></script>
+<script src="/adminassets/js/notify/index.js"></script>
+
+<!-- Data table js -->
+<script src="/adminassets/js/jquery.dataTables.js"></script>
+<script src="/adminassets/js/custom-data-table.js"></script>
+
+<!-- sidebar effect -->
+<script src="/adminassets/js/sidebareffect.js"></script>
+
+<!-- Theme js -->
+<script src="/adminassets/js/script.js"></script>
+
+
+
+<!-- this is body page links -->
+<script src="/adminOrderDetail/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/adminOrderDetail/libs/simplebar/simplebar.min.js"></script>
+<script src="/adminOrderDetail/libs/node-waves/waves.min.js"></script>
+<script src="/adminOrderDetail/libs/feather-icons/feather.min.js"></script>
+<script src="/adminOrderDetail/js/pages/plugins/lord-icon-2.1.0.js"></script>
+<script src="/adminOrderDetail/js/plugins.js"></script>
+
+<!-- App js -->
+<script src="/adminOrderDetail/assets/js/app.js"></script>
+
+
+</body>
+
+
+<!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/products.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 14 Oct 2023 04:08:58 GMT -->
+</html>

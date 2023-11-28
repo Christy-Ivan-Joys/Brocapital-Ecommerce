@@ -1,0 +1,241 @@
+<%-include ('header')%>
+
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="title-header option-title d-sm-flex d-block">
+                            <h5>Orders List</h5>
+                            <div class="right-options">
+                                <!-- <ul>
+                                   
+                                    <li>
+                                        <a class="btn btn-solid" href="">Add Product</a>
+                                    </li>
+                                </ul> -->
+                            </div>
+                        </div>
+                        <div>
+                            <div class="table-responsive">
+                                <table class="table all-package theme-table table-product" id="table_id">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th> 
+                                            <th>User Name</th>
+                                            <th>status</th>
+                                            <th>Payment</th>
+                                            <th>Payment status</th>
+                                            
+                                            <th>Details</th>
+                                            <th>Grandtotal</th>
+                                            
+                                          
+
+                                           
+
+                                            
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <%if (orders.length > 0){%>
+                                            <% for (let i=0;i < orders.length; i++){ %>
+                                        <tr>
+                                           
+
+                                            <td><%= orders[i].createdOn %></td>
+                                       
+                                            <td><%= orders[i].user.name %></td>
+
+                                
+                                            <td><%= orders[i].status %></td>
+
+
+                                           <td><%= orders[i].paymentMethod %></td>
+
+                                            <td><%= orders[i].paymentStatus %></td>
+
+                                            <td><a href="/admin/orderDetailsPage/<%= orders[i]._id %>"
+                                                class="btn-small d-block">View</a></td>
+                                            <td > ₹<%= orders[i].totalprice %></td>
+                                            
+                                        </tr>
+
+                                        <%}%>
+                                        <%}%>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    
+
+</div>
+<!-- page-wrapper End-->
+<% if (locals.totalPages) { %>
+    <!-- Bootstrap Pagination -->
+    <nav aria-label="Page navigation" style="margin-bottom: 60px;size:px ;">
+        <ul class="pagination justify-content-center">
+            <% if (locals.currentPage> 1) { %>
+                <li class="page-item">
+                    <a class="page-link btn-dark" href="?page=<%= locals.currentPage - 1 %>" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <% } else { %>
+                    <li class="page-item disabled">
+                        <span class="page-link btn-dark" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </span>
+                    </li>
+                    <% } %>
+
+                        <% for (let i=1; i <=locals.totalPages; i++) { %>
+                            <li class="page-item <%= i === locals.currentPage ? 'active' : '' %>">
+                                <a class="page-link btn-dark" href="?page=<%= i %>">
+                                    <%= i %>
+                                </a>
+                            </li>
+                            <% } %>
+
+                                <% if (locals.currentPage < locals.totalPages){ %>
+                                    <li class="page-item">
+                                        <a class="page-link btn" href="?page=<%= locals.currentPage + 1 %>"
+                                            aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                    <% } else { %>
+                                        <li class="page-item disabled">
+                                            <span class="page-link btn" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </span>
+                                        </li>
+                                        <% } %>
+        </ul>
+    </nav>
+    <% } %>
+
+
+
+<!-- Modal Start -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog  modal-dialog-centered">
+<div class="modal-content">
+    <div class="modal-body">
+        <h5 class="modal-title" id="staticBackdropLabel">Logging Out</h5>
+        <p>Are you sure you want to log out?</p>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+        <div class="button-box">
+            <button type="button" class="btn btn--no" data-bs-dismiss="modal">No</button>
+            <button type="button" class="btn  btn--yes btn-primary">Yes</button>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- Modal End -->
+
+<!-- Delete Modal Box Start -->
+<div class="modal fade theme-modal remove-coupon" id="exampleModalToggle" aria-hidden="true" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+    <div class="modal-header d-block text-center">
+        <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="remove-box">
+            <p>The permission for the use/group, preview is inherited from the object, object will create a
+                new permission for this object</p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-target="#exampleModalToggle2"
+            data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
+    </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade theme-modal remove-coupon" id="exampleModalToggle2" aria-hidden="true" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title text-center" id="exampleModalLabel12">Done!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="remove-box text-center">
+            <div class="wrapper">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                </svg>
+            </div>
+            <h4 class="text-content">It's Removed.</h4>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">Close</button>
+    </div>
+</div>
+</div>
+</div>
+<!-- Delete Modal Box End -->
+
+<!-- latest js -->
+<script src="/adminassets/js/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap js -->
+<script src="/adminassets/js/bootstrap/bootstrap.bundle.min.js"></script>
+
+<!-- feather icon js -->
+<script src="/adminassets/js/icons/feather-icon/feather.min.js"></script>
+<script src="/adminassets/js/icons/feather-icon/feather-icon.js"></script>
+
+<!-- scrollbar simplebar js -->
+<script src="/adminassets/js/scrollbar/simplebar.js"></script>
+<script src="/adminassets/js/scrollbar/custom.js"></script>
+
+<!-- Sidebar js -->
+<script src="/adminassets/js/config.js"></script>
+
+<!-- customizer js -->
+<script src="/adminassets/js/customizer.js"></script>
+
+<!-- Plugins js -->
+<script src="/adminassets/js/sidebar-menu.js"></script>
+<script src="/adminassets/js/notify/bootstrap-notify.min.js"></script>
+<script src="/adminassets/js/notify/index.js"></script>
+
+<!-- Data table js -->
+<script src="/adminassets/js/jquery.dataTables.js"></script>
+<script src="/adminassets/js/custom-data-table.js"></script>
+
+<!-- sidebar effect -->
+<script src="/adminassets/js/sidebareffect.js"></script>
+
+<!-- Theme js -->
+<script src="/adminassets/js/script.js"></script>
+</body>
+
+
+<!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/products.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 14 Oct 2023 04:08:58 GMT -->
+</html>

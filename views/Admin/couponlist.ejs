@@ -1,0 +1,143 @@
+<%- include('header') %>
+
+
+    <div class="page-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card card-table">
+                        <div class="card-body">
+                            <div class="title-header option-title d-sm-flex d-block">
+                                <h5>Products List</h5>
+                                <div class="right-options">
+                                    <ul>
+
+                                        <li>
+                                            <a class="btn btn-solid" href="">Add Product</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="table-responsive">
+                                    <table class="table all-package theme-table table-product" id="table_id">
+                                        <thead>
+                                            <tr>
+
+                                                <th>Coupon Name</th>
+                                                <th>Coupon Code</th>
+                                                <th>Discount %</th>
+                                                <th>Minimum purchase</th>
+                                                <th>Start Date</th>
+                                                <th>Expiry</th>
+                                                <th>Edit</th>
+
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <% for(let i=0;i<coupons.length;i++){ %>
+                                            <tr>
+                                               
+
+                                                    <td>
+                                                        <%= coupons[i].name %>
+                                                    </td>
+
+                                                    <td>
+                                                        <%= coupons[i].code%>
+                                                    </td>
+
+                                                    <td>
+                                                        <%= coupons[i].discount %>%
+                                                    </td>
+
+                                                    <td class="td-price">₹<%= coupons[i].minprice%>
+                                                    </td>
+
+                                                    <td class="td-price">
+                                                        <%= coupons[i].startdate.toDateString()%>
+                                                    </td>
+                                                    <td class="td-price">
+                                                        <%= coupons[i].Enddate.toDateString()%>
+                                                    </td>
+
+                                                    <td><a href="/admin/editCoupon?id=<%= coupons[i]._id%>">
+                                                            <i class="ri-pencil-line"></i>
+                                                        </a></td>
+                                                    </td>
+                                               
+                                            </tr>
+
+                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+
+
+
+
+    <!-- latest js -->
+    <script src="/adminassets/js/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap js -->
+    <script src="/adminassets/js/bootstrap/bootstrap.bundle.min.js"></script>
+
+    <!-- feather icon js -->
+    <script src="/adminassets/js/icons/feather-icon/feather.min.js"></script>
+    <script src="/adminassets/js/icons/feather-icon/feather-icon.js"></script>
+
+    <!-- scrollbar simplebar js -->
+    <script src="/adminassets/js/scrollbar/simplebar.js"></script>
+    <script src="/adminassets/js/scrollbar/custom.js"></script>
+
+    <!-- Sidebar js -->
+    <script src="/adminassets/js/config.js"></script>
+
+    <!-- bootstrap tag-input js -->
+    <script src="/adminassets/js/bootstrap-tagsinput.min.js"></script>
+    <script src="/adminassets/js/sidebar-menu.js"></script>
+
+    <!-- customizer js -->
+    <script src="/adminassets/js/customizer.js"></script>
+
+    <!--Dropzon js -->
+    <script src="/adminassets/js/dropzone/dropzone.js"></script>
+    <script src="/adminassets/js/dropzone/dropzone-script.js"></script>
+
+    <!-- Plugins js -->
+    <script src="/adminassets/js/notify/bootstrap-notify.min.js"></script>
+    <script src="/adminassets/js/notify/index.js"></script>
+
+    <!-- ck editor js -->
+    <script src="/adminassets/js/ckeditor.js"></script>
+    <script src="/adminassets/js/ckeditor-custom.js"></script>
+
+    <!-- select2 js -->
+    <script src="/adminassets/js/select2.min.js"></script>
+    <script src="/adminassets/js/select2-custom.js"></script>
+
+    <!-- sidebar effect -->
+    <script src="/adminassets/js/sidebareffect.js"></script>
+
+    <!-- Theme js -->
+    <script src="/adminassets/js/script.js"></script>
+
+    </body>
+
+
+    <!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/add-new-product.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 14 Oct 2023 04:08:59 GMT -->
+
+    </html>

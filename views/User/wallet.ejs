@@ -1,0 +1,418 @@
+<%-include('homeHeader') %>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyA7HdmyLzA2Q6CygF/J9LdCkST5Un/sW" crossorigin="anonymous">
+    <link rel="stylesheet" href="/evarassets/css/main.css?v=3.4">
+
+    <main class="main" style="margin-top: -100px;">
+        <div class="section block-breadcrumb">
+            <div class="container">
+                <div class="breadcrumbs">
+
+                </div>
+            </div>
+        </div>
+
+        <section class="pt-150 pb-150">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 m-auto">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="dashboard-menu">
+                                    <ul class="nav flex-column" role="tablist">
+
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="account-detail-tab" href="/profile"
+                                                role="tab" aria-controls="account-detail" aria-selected="true"><i
+                                                    class="fi-rs-user mr-10"></i>Account details</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="track-orders-tab" href="/UserAddress" role="tab"
+                                                aria-controls="track-orders" aria-selected="false"><i
+                                                    class="fi-rs-shopping-cart-check mr-10"></i>Add Address</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="address-tab" href="/ManageAddress" role="tab"
+                                                aria-controls="address" aria-selected="true"><i
+                                                    class="fi-rs-marker mr-10"></i>Manage Address</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="orders-tab" href="/ordersPage" role="tab"
+                                                aria-controls="orders" aria-selected="false"><i
+                                                    class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="wallet-tab" href="/walletPage" role="tab"
+                                                aria-controls="walley" aria-selected="false"><i
+                                                    class="fi-rs-settings-sliders mr-10"></i>Wallet</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link " id="dashboard-tab" href="/account/referrals" role="tab"
+                                                aria-controls="dashboard" aria-selected="false"><i
+                                                    class="fi fi-rs-share mr-10"></i>Referrals</a>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/logout"><i
+                                                    class="fi-rs-sign-out mr-10"></i>Logout</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-lg-4">
+                                <div class="card card-body mb-4">
+                                    <article class="icontext">
+                                        <span class="icon icon-sm rounded-circle bg-primary-light"><i
+                                                class="text-primary material-icons md-monetization_on"></i></span>
+                                        <div class="text">
+                                            <h6 class="mb-1 card-title" style="font-size: 20px;font-weight: bold;">
+                                                Wallet</h6>
+                                            <br>
+                                            <span style="font-size: 25px;font-weight: bold;">₹<%= wallet %></span>
+
+                                            <span class="text-sm">
+                                                <br>
+                                                <br>
+                                                <br>
+
+                                                <br>
+                                            </span>
+                                            <div class="banner-features wow fadeIn animated hover-up">
+                                                <img src="/user/assets/imgs/theme/icons/feature-3.png" alt="">
+                                                <a href="#" data-toggle="modal" data-target="#addMoneyModal">
+                                                    <h4 class="bg-2">Add Money</h4>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </article>
+                                </div>
+                            </div>
+
+                            <!-- <div class="col-lg-4">
+                                        <div class="card card-body mb-4">
+                                            <article class="icontext">
+                                                <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
+                                                <div class="text">
+                                                    <h3 class="mb-1 card-title">Wallet</h3>
+                                                    <br>
+                                                    
+                                                        <br>
+                                                    
+                                                    <span><h5>Ballence:₹</h5></span>
+                                                    <br>
+                                                    <br>
+                                                    <span class="text-sm">
+                                                     
+                                                        
+                                                       
+                                                        <br>
+                                                    
+                                                    
+                                
+                                                      
+                                                      
+                            
+                                                    </span>
+                                                </div>
+                                            </article>
+                                        </div>
+                                    </div>
+                                   -->
+
+
+
+
+
+
+                        </div>
+
+                        <!-- Add Money Modal -->
+                        <div class="modal fade" id="addMoneyModal" tabindex="-1" role="dialog"
+                            aria-labelledby="addMoneyModalTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addMoneyModalTitle">Add Money</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="addMoneyForm">
+                                            <div class="form-group">
+                                                <label for="moneyAmount">Amount (₹)</label>
+                                                <input type="number" class="form-control" id="moneyAmount"
+                                                    placeholder="Enter amount">
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" id="addMoneyButton">Add
+                                            Money</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+        <main>
+
+
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
+
+
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+                integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+                crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+                integrity="sha384-Q6E9RHvbIyZFJi8bDTL/LphtIYb8AeRyi2QxnJMPzr39g4HtFhq6KAz2u1TK3N6j"
+                crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+                integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyA7HdmyLzA2Q6CygF/J9LdCkST5Un/sW"
+                crossorigin="anonymous"></script>
+            <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+            
+            <script>
+
+
+                function verifyPayment(response, order) {
+                    alert(JSON.stringify(response))
+                    $.ajax({
+                        url: '/verifyRazWalletPayment',
+                        method: 'post',
+                        data: {
+                            response,
+                            order
+                        }, success: function (response) {
+                            if (response) {
+                                alert('finisged')
+                                Swal.fire({
+                                    title: "Transaction success",
+                                    text: "Your amout has been succesfully credited",
+                                    icon: "success",
+                                    showCancelButton: true,
+                                    // confirmButtonText: "View Orders",
+                                    // cancelButtonText: "Continue shopping",
+                                    reverseButtons: true
+                                }).then(() => {
+                                    alert('indkssf2222')
+                                    location.href = '/walletPage'
+                                })
+                            } else {
+                                swal.fire(
+                                    "PAYMENT ERROR !",
+                                    "Something went wrong while processing the payment",
+                                    "error"
+                                )
+                            }
+
+                        },
+                    })
+                }
+
+
+                function razorpay(order) {
+                    alert(JSON.stringify(order,))
+
+                    alert(JSON.stringify(order.amout))
+                    alert('hello')
+                    var options = {
+
+                        "key": 'rzp_test_WIH73aEGVkDEmV',
+                        "amount": order.amount,
+                        "currency": "INR",
+                        "name": "BROCAPITAL",
+                        "description": "Test transaction",
+                        "image": "http://localhost:3000/images/icons/BroCapital1.png",
+                        "order_id": order.id,
+                        "handler": function (response) {
+                            alert('eglakjkjslfkjklj')
+                            verifyPayment(response, order)
+                        },
+                        "prefill": {
+                            "name": "BroCapital",
+                            "email": "christyivanjoys@gmail.com",
+                            "contact": "9567258960"
+                        },
+                        "notes": {
+                            "address": "Razorpay corporate office"
+                        },
+                        "theme": {
+                            "color": "#3399cc"
+                        }
+
+                    }
+                    var raz1 = new Razorpay(options)
+                    raz1.open()
+                }
+
+
+                $(document).ready(function () {
+                    $("#addMoneyButton").click(function () {
+                        var amount = $("#moneyAmount").val()
+                        alert(amount)
+                        if (amount.trim() === "") {
+                            alert("enter a valid amount")
+                            return
+
+                        }
+                        $("#addMoneyModal").modal("hide")
+                        $("walletBalance").text("₹" + amount)
+                        $.ajax({
+                            url: '/addMoneytoWallet',
+                            method: "post",
+                            data: {
+                                amount: amount
+                            }, success: function (response) {
+                                alert('hello')
+                                alert(JSON.stringify(response))
+
+                                razorpay(response.order)
+                            }
+                        })
+                    })
+                })
+
+
+            </script>
+
+            <script src="/evarassets/js/vendor/modernizr-3.6.0.min.js"></script>
+            <script src="/evarassets/js/vendor/jquery-3.6.0.min.js"></script>
+            <script src="/evarassets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+            <script src="/evarassets/js/vendor/bootstrap.bundle.min.js"></script>
+            <script src="/evarassets/js/plugins/slick.js"></script>
+            <script src="/evarassets/js/plugins/jquery.syotimer.min.js"></script>
+            <script src="/evarassets/js/plugins/wow.js"></script>
+            <script src="/evarassets/js/plugins/jquery-ui.js"></script>
+            <script src="/evarassets/js/plugins/perfect-scrollbar.js"></script>
+            <script src="/evarassets/js/plugins/magnific-popup.js"></script>
+            <script src="/evarassets/js/plugins/select2.min.js"></script>
+            <script src="/evarassets/js/plugins/waypoints.js"></script>
+            <script src="/evarassets/js/plugins/counterup.js"></script>
+            <script src="/evarassets/js/plugins/jquery.countdown.min.js"></script>
+            <script src="/evarassets/js/plugins/images-loaded.js"></script>
+            <script src="/evarassets/js/plugins/isotope.js"></script>
+            <script src="/evarassets/js/plugins/scrollup.js"></script>
+            <script src="/evarassets/js/plugins/jquery.vticker-min.js"></script>
+            <script src="/evarassets/js/plugins/jquery.theia.sticky.js"></script>
+            <!-- Template  JS -->
+            <script src="/evarassets/js/main.js?v=3.4"></script>
+
+
+            <!--===============================================================================================-->
+            <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/animsition/js/animsition.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/bootstrap/js/popper.js"></script>
+            <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/select2/select2.min.js"></script>
+            <script>
+                $(".js-select2").each(function () {
+                    $(this).select2({
+                        minimumResultsForSearch: 20,
+                        dropdownParent: $(this).next('.dropDownSelect2')
+                    });
+                })
+            </script>
+            <!--===============================================================================================-->
+            <script src="vendor/daterangepicker/moment.min.js"></script>
+            <script src="vendor/daterangepicker/daterangepicker.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/slick/slick.min.js"></script>
+            <script src="js/slick-custom.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/parallax100/parallax100.js"></script>
+            <script>
+                $('.parallax100').parallax100();
+            </script>
+            <!--===============================================================================================-->
+            <script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+            <script>
+                $('.gallery-lb').each(function () { // the containers for all your galleries
+                    $(this).magnificPopup({
+                        delegate: 'a', // the selector for gallery item
+                        type: 'image',
+                        gallery: {
+                            enabled: true
+                        },
+                        mainClass: 'mfp-fade'
+                    });
+                });
+            </script>
+            <!--===============================================================================================-->
+            <script src="vendor/isotope/isotope.pkgd.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/sweetalert/sweetalert.min.js"></script>
+            <script>
+                $('.js-addwish-b2, .js-addwish-detail').on('click', function (e) {
+                    e.preventDefault();
+                });
+
+                $('.js-addwish-b2').each(function () {
+                    var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
+                    $(this).on('click', function () {
+                        swal(nameProduct, "is added to wishlist !", "success");
+
+                        $(this).addClass('js-addedwish-b2');
+                        $(this).off('click');
+                    });
+                });
+
+                $('.js-addwish-detail').each(function () {
+                    var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
+
+                    $(this).on('click', function () {
+                        swal(nameProduct, "is added to wishlist !", "success");
+
+                        $(this).addClass('js-addedwish-detail');
+                        $(this).off('click');
+                    });
+                });
+
+                /*---------------------------------------------*/
+
+                $('.js-addcart-detail').each(function () {
+                    var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+                    $(this).on('click', function () {
+                        swal(nameProduct, "is added to cart !", "success");
+                    });
+                });
+
+            </script>
+            <!--===============================================================================================-->
+            <script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+            <script>
+                $('.js-pscroll').each(function () {
+                    $(this).css('position', 'relative');
+                    $(this).css('overflow', 'hidden');
+                    var ps = new PerfectScrollbar(this, {
+                        wheelSpeed: 1,
+                        scrollingThreshold: 1000,
+                        wheelPropagation: false,
+                    });
+
+                    $(window).on('resize', function () {
+                        ps.update();
+                    })
+                });
+            </script>
+            <!--===============================================================================================-->
+            <script src="/js/main.js"></script>
+            </body>
+
+            </html>

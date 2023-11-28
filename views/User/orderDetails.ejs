@@ -1,0 +1,260 @@
+<%- include('homeheader') %>
+
+<main class="main">
+
+    <section class="mt-30 mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table shopping-summery text-center clean">
+                            <thead>
+                                <tr class="main-heading">
+                                    <th scope="col">Image</th>
+                                    <th scope="col">Product name</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Brand</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                <tr>
+                            <%  var sum=0 %>
+                                <% for(let i=0;i<sortedProducts.length;i++){ %>
+                                
+                                    <td class="image product-thumbnail"><img src="/adminassets/images/productimg/<%= sortedProducts[i].image[0]%>" style="height:70px;width: 60px;"></td>
+                                    <td class="product-des product-name">
+                                        <h6 class="product-name"><a href=""></a><%= sortedProducts[i].productname %></h6>
+                                        
+                                    </td>
+                                    <td class="text-center" data-title="Cart" > <%= order.status %></td>
+                                    <td class="text-center" data-title="Cart" > <%= sortedProducts[i].brand %></td>
+                                       
+                                    
+                                    <td class="price" data-title="Price"><span>₹<%= sortedProducts[i].price %></span></td>
+                                    <td class="text-center" data-title="Stock">
+                                        <div class="">
+                                            <!-- <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a> -->
+                                            <span class="qty-val"><%= orderProducts[i].quantity %></span>
+                                            <!-- <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a> -->
+                                        </div>
+                                    </td>
+                                    <td class="text-right" data-title="Cart">
+                                        <span>₹<%= sortedProducts[i].price * orderProducts[i].quantity %></span>
+                                        <% sum=sum+sortedProducts[i].price * orderProducts[i].quantity %>
+                                    </td>
+
+                                </tr>
+                                <% } %>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="cart-action text-end">
+                        <a href="/" class="btn "><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
+                    </div>
+                    <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
+                    <div class="row mb-50">
+                       
+                        <div class="col-lg-6 col-md-12">
+                            <div class="border p-md-4 p-30 border-radius cart-totals">
+                                <div class="heading_s1 mb-3">
+                                    <h4>Totals</h4>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td class="cart_total_label">Cart Subtotal</td>
+                                                <td class="cart_total_amount"><span class="font-lg fw-900 text-brand">₹<%=sum %></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cart_total_label">Shipping</td>
+                                                <td class="cart_total_amount"> <i class="ti-gift mr-5"></i> Free Shipping</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cart_total_label">Total</td>
+                                                <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-brand">₹ <%=sum %></span></strong></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                               <% if(order.status==="CANCELLED") {%>
+                                       <h4 style="color: red;" style="margin-left: 100px;">Order cancelled</h4>
+                                     
+                                <% }else{ %>
+                              
+                                    <a type="button" class="btn " data-toggle="modal" data-target="#exampleModalCenter" style="background-color: black;color: aliceblue;">
+                                        Cancel Order
+                                </a>
+                              <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Button trigger modal -->
+    
+    
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Cancel order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    This action will cancel this order.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="/cancelOrder/<%= order._id%>">
+                    <button  type="button" class="btn btn-primary">Cancel order</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+
+
+
+
+
+<script src="/evarassets/js/vendor/modernizr-3.6.0.min.js"></script>
+<script src="/evarassets/js/vendor/jquery-3.6.0.min.js"></script>
+<script src="/evarassets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+<script src="/evarassets/js/vendor/bootstrap.bundle.min.js"></script>
+<script src="/evarassets/js/plugins/slick.js"></script>
+<script src="/evarassets/js/plugins/jquery.syotimer.min.js"></script>
+<script src="/evarassets/js/plugins/wow.js"></script>
+<script src="/evarassets/js/plugins/jquery-ui.js"></script>
+<script src="/evarassets/js/plugins/perfect-scrollbar.js"></script>
+<script src="/evarassets/js/plugins/magnific-popup.js"></script>
+<script src="/evarassets/js/plugins/select2.min.js"></script>
+<script src="/evarassets/js/plugins/waypoints.js"></script>
+<script src="/evarassets/js/plugins/counterup.js"></script>
+<script src="/evarassets/js/plugins/jquery.countdown.min.js"></script>
+<script src="/evarassets/js/plugins/images-loaded.js"></script>
+<script src="/evarassets/js/plugins/isotope.js"></script>
+<script src="/evarassets/js/plugins/scrollup.js"></script>
+<script src="/evarassets/js/plugins/jquery.vticker-min.js"></script>
+<script src="/evarassets/js/plugins/jquery.theia.sticky.js"></script>
+<!-- Template  JS -->
+<script src="/evarassets/js/main.js?v=3.4"></script>
+
+
+<!--===============================================================================================-->
+<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/bootstrap/js/popper.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/select2/select2.min.js"></script>
+<script>
+    $(".js-select2").each(function () {
+        $(this).select2({
+            minimumResultsForSearch: 20,
+            dropdownParent: $(this).next('.dropDownSelect2')
+        });
+    })
+</script>
+<!--===============================================================================================-->
+<script src="vendor/daterangepicker/moment.min.js"></script>
+<script src="vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/slick/slick.min.js"></script>
+<script src="js/slick-custom.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/parallax100/parallax100.js"></script>
+<script>
+    $('.parallax100').parallax100();
+</script>
+<!--===============================================================================================-->
+<script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+<script>
+    $('.gallery-lb').each(function () { // the containers for all your galleries
+        $(this).magnificPopup({
+            delegate: 'a', // the selector for gallery item
+            type: 'image',
+            gallery: {
+                enabled: true
+            },
+            mainClass: 'mfp-fade'
+        });
+    });
+</script>
+<!--===============================================================================================-->
+<script src="vendor/isotope/isotope.pkgd.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/sweetalert/sweetalert.min.js"></script>
+<script>
+    $('.js-addwish-b2, .js-addwish-detail').on('click', function (e) {
+        e.preventDefault();
+    });
+
+    $('.js-addwish-b2').each(function () {
+        var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
+        $(this).on('click', function () {
+            swal(nameProduct, "is added to wishlist !", "success");
+
+            $(this).addClass('js-addedwish-b2');
+            $(this).off('click');
+        });
+    });
+
+    $('.js-addwish-detail').each(function () {
+        var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
+
+        $(this).on('click', function () {
+            swal(nameProduct, "is added to wishlist !", "success");
+
+            $(this).addClass('js-addedwish-detail');
+            $(this).off('click');
+        });
+    });
+
+    /*---------------------------------------------*/
+
+    $('.js-addcart-detail').each(function () {
+        var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+        $(this).on('click', function () {
+            swal(nameProduct, "is added to cart !", "success");
+        });
+    });
+
+</script>
+<!--===============================================================================================-->
+<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script>
+    $('.js-pscroll').each(function () {
+        $(this).css('position', 'relative');
+        $(this).css('overflow', 'hidden');
+        var ps = new PerfectScrollbar(this, {
+            wheelSpeed: 1,
+            scrollingThreshold: 1000,
+            wheelPropagation: false,
+        });
+
+        $(window).on('resize', function () {
+            ps.update();
+        })
+    });
+</script>
+<!--===============================================================================================-->
+<script src="/js/main.js"></script>
+</body>
+
+</html>

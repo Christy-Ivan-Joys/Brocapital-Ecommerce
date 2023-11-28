@@ -1,0 +1,445 @@
+<%- include ('homeHeader')%>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
+
+
+
+  <link href="/proDetailassets/css/style2513.css?v=3.0.0" rel="stylesheet">
+  <style>
+
+  </style>
+
+  <main class="main" style="margin-top: -120px;">
+    <div class="section block-breadcrumb">
+      <div class="container">
+        <div class="breadcrumbs">
+          <ul>
+            <li> <a href="/">Home </a></li>
+            <li> <a href="/shop">Shop</a></li>
+            <li> <a href="#">
+                <%= product.category.name %>
+              </a></li>
+            <li> <a href="#">
+                <%= product.productname %>
+              </a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <section class="section block-product-single">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+
+            <div class="detail-gallery">
+              <div id="main-gallery-image" class="slider-nav-thumbnails slider-nav-thumbnails-1">
+                <% for( let i=0; i < product.image.length; i++ ) { %>
+                  <div>
+                    <div class="item-thumb"><img class="thumbnail"
+                        src="/adminassets/images/productimg/<%= product.image[i] %>" alt="kidify"></div>
+                  </div>
+                  <% } %>
+
+              </div>
+              <div class="box-main-gallery">
+                <div id="main-gallery-container" class="product-image-slider product-image-slider-1">
+                  <% for( let i=0; i < product.image.length; i++ ) { %>
+                    <figure class="border-radius-10">
+                      <a class="glightbox" href="/adminassets/images/productimg/<%= product.image[i] %>">
+                        <div class="magnify">
+                          <div class="large"
+                            style="background: url('/adminassets/images/productimg/<%= product.image[i] %>') no-repeat;">
+                          </div>
+                          <img class="small" style="height: 700px; width: 600px;"
+                            src="/adminassets/images/productimg/<%= product.image[i] %>" width="" />
+                        </div>
+                      </a>
+                    </figure>
+                    <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="box-product-info">
+              <h3 class="mb-5">
+                <%= product.productname %>
+              </h3>
+
+              <div class="block-price"><span class="price-main">₹<%= product.price%> </span><span class="price-line">₹
+                  <%= product.price %>
+                </span></div>
+              <div class="block-description">
+                <p class="body-p2 neutral-medium-dark">
+                  <%= product.description %>
+                </p>
+              </div>
+              <div class="block-color"><span>Brand:</span>
+                <label>
+                  <%= product.brand %>
+                </label>
+              </div>
+              <div class="block-color"><span>Category:</span>
+                <label>
+                  <%= product.category.name %>
+                </label>
+              </div>
+              <div class="size-selection">
+                <label for="sizeDropdown" style="font-size:20px ;">Select Size:</label>
+                <select id="sizeDropdown" name="size" style="size: 20px;width: 50px;height: 40px;">
+
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+
+                </select>
+              </div>
+              <div class="text-17 neutral-medium-dark mb-10">Stock: <% if (product.quantity<1) { %>
+                  <div class="text-17 neutral-medium-dark mb-10" style="color: red;">currently out of stock
+                  </div>
+                  <% }else{ %>
+                    <div class="text-17 neutral-medium-dark mb-10" style="color:blue; font-size: 20px;">currently
+                      available
+                    </div>
+                    <% } %>
+
+
+
+              </div>
+            </div>
+            <% if (product.quantity<1) { %>
+              <div class="text-17 neutral-medium-dark mb-10" style="color: red;">This product is currently out of stock
+              </div>
+              <% } else if (!product.status) { %>
+                <div class="text-17 neutral-medium-dark mb-10" style="color: red;">Currently Unavailable
+                </div>
+                <% } %>
+                  <% %>
+                    <div class="block-quantity">
+
+
+                      <div class="box-form-cart">
+
+                        <% if(locals.user){ %>
+                          <button class="btn btn-black" data-product-id="<%= product._id%>" onclick="addtoCart(this)"
+                            style="width: 200px;">Add to
+                            Cart</button>
+                          <!-- <a class="btn btn" style="background-color:orange;" href="">Buy Now</a><a
+                            class="btn btn-wishlist" href="#"></a> -->
+                          <% }else{%>
+                            <a class="btn btn-black" href="/loginpage">Add to Cart</a>
+                            <!-- <a class="btn btn"
+                              style="background-color:orange" href="/login">Buy Now</a><a class="btn btn-wishlist" href="#"></a> -->
+                            <% } %>
+
+
+
+
+
+                      </div>
+
+
+                    </div>
+                    <% if (product.quantity>1) { %>
+                      <div class="block-shipping">
+                        <div class="free-shipping">Free shipping</div>
+                        <div class="time-shipping">Fast delivery</div>
+                      </div>
+                      <% } %>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="box-detail-product">
+        <ul class="nav-tabs nav-tab-product" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews"
+              type="button" role="tab" aria-controls="reviews" aria-selected="false">Description</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link " id="description-tab" data-bs-toggle="tab" data-bs-target="#description"
+              type="button" role="tab" aria-controls="description" aria-selected="false">More details</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="sizechart-tab" data-bs-toggle="tab" data-bs-target="#sizechart" type="button"
+              role="tab" aria-controls="sizechart" aria-selected="false">Size Chart</button>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane fade  " id="description" role="tabpanel" aria-labelledby="description-tab">
+            <div class="block-color">
+              <span>Title:</span>
+              <label>
+                <%= product.productname %>
+              </label>
+            </div>
+
+            <div class="block-color">
+              <span>Brand:</span>
+              <label>
+                <%= product.brand %>
+              </label>
+            </div>
+
+            <div class="block-color">
+              <span>Category:</span>
+              <label>
+                <%= product.category.name %>
+              </label>
+            </div>
+
+            <div class="block-color">
+              <span>Regular Price:</span>
+              <label>
+                <%= product.price %>
+              </label>
+            </div>
+
+            <div class="block-color">
+              <span>Sales Price:</span>
+              <label>
+                <%= product.price %>
+              </label>
+            </div>
+
+            <div class="block-color">
+              <span>Stock left:</span>
+              <label>
+                <%= product.quantity %>
+              </label>
+            </div>
+
+
+            <div class="block-color">
+              <span>Size:</span>
+              <label>
+                <%= product.size %>
+              </label>
+            </div>
+
+          </div>
+
+          <div class="tab-pane fade " id="sizechart" role="tabpanel" aria-labelledby="sizechart-tab">
+            <div style="display: block;margin: 0 auto; text-align: center; ">
+              <img src="\assets2\imgs\template\size-chart.jpeg" alt="">
+
+            </div>
+          </div>
+
+          <div class="tab-pane fade show active" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+            <p>At Guza Shoes, we believe that shoes are not just a necessity, but a reflection of your style,
+              personality, and
+              aspirations. Our passion for footwear is at the heart of everything we do, and we're dedicated to bringing
+              you an
+              unmatched shopping experience.
+            </p>
+            <p> Our Vision:
+            </p>
+            <p>
+              We aspire to be your go-to destination for all things shoes. Whether you're shopping for everyday
+              essentials, a
+              special event, or the latest trends, Guza Shoes is here to make your shoe-buying experience enjoyable and
+              memorable.
+            </p>
+            <p>
+              Join us on this exciting journey as we explore the world of footwear together. Thank you for choosing Guza
+              Shoes as
+              your trusted shoe shopping partner.
+            </p>
+            <p>
+              Step into style, comfort, and quality at Guza Shoes.
+            </p>
+          </div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+  </main>
+
+
+
+
+
+
+  <%-include('footer') %>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/proDetailassets/js/main2513.js?v=3.0.0"></script>
+    <script src="/proDetailassets/js/vendors/modernizr-3.6.0.min.js"></script>
+    <script src="/proDetailassets/js/vendors/jquery-3.7.0.min.js"></script>
+    <script src="/proDetailassets/js/vendors/jquery-migrate-3.3.0.min.js"></script>
+    <script src="/proDetailassets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/proDetailassets/js/vendors/waypoints.js"></script>
+    <script src="/proDetailassets/js/vendors/wow.js"></script>
+    <script src="/proDetailassets/js/vendors/magnific-popup.js"></script>
+    <script src="/proDetailassets/js/vendors/perfect-scrollbar.min.js"></script>
+    <script src="/proDetailassets/js/vendors/select2.min.js"></script>
+    <script src="/proDetailassets/js/vendors/isotope.js"></script>
+    <script src="/proDetailassets/js/vendors/swiper-bundle.min.js"></script>
+    <script src="/proDetailassets/js/vendors/counterup.js"></script>
+    <script src="/proDetailassets/js/vendors/jquery.countdown.min.js"></script>
+    <script src="/proDetailassets/js/vendors/slick.js"></script>
+    <script src="/proDetailassets/js/vendors/jquery.timepicker.min.js"></script>
+
+
+    <script>
+      function addtoCart(button) {
+        const productId = button.getAttribute('data-product-id')
+     
+        const selectedSize = document.getElementById('sizeDropdown').value
+       
+        
+
+        $.ajax({
+          url: '/addtoCart/' + productId + '/' + selectedSize,
+          method: 'get',
+
+          success: (response) => {
+           
+       
+            if (response.success) {
+             
+              Swal.fire({
+
+                title: 'Product Added to Cart',
+                showConfirmButton: false,
+                icon: 'success',
+
+                timer: 1500,
+              });
+
+            }
+          }, error: function () {
+            Swal.fire({
+              title: " Failed",
+              text: 'product is out of stock !',
+              icon: 'error',
+              timer: 5000,
+            })
+          }
+        })
+      }
+    </script>
+
+
+
+
+
+
+
+    <!--===============================================================================================-->
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/animsition/js/animsition.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/bootstrap/js/popper.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/select2/select2.min.js"></script>
+
+
+
+    <script>
+      $(".js-select2").each(function () {
+        $(this).select2({
+          minimumResultsForSearch: 20,
+          dropdownParent: $(this).next('.dropDownSelect2')
+        });
+      })
+    </script>
+    <!--===============================================================================================-->
+    <script src="vendor/daterangepicker/moment.min.js"></script>
+    <script src="vendor/daterangepicker/daterangepicker.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/slick/slick.min.js"></script>
+    <script src="js/slick-custom.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/parallax100/parallax100.js"></script>
+    <script>
+      $('.parallax100').parallax100();
+    </script>
+    <!--===============================================================================================-->
+    <script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+    <script>
+      $('.gallery-lb').each(function () { // the containers for all your galleries
+        $(this).magnificPopup({
+          delegate: 'a', // the selector for gallery item
+          type: 'image',
+          gallery: {
+            enabled: true
+          },
+          mainClass: 'mfp-fade'
+        });
+      });
+    </script>
+    <!--===============================================================================================-->
+    <script src="vendor/isotope/isotope.pkgd.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/sweetalert/sweetalert.min.js"></script>
+    <script>
+      $('.js-addwish-b2, .js-addwish-detail').on('click', function (e) {
+        e.preventDefault();
+      });
+
+      $('.js-addwish-b2').each(function () {
+        var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
+        $(this).on('click', function () {
+          swal(nameProduct, "is added to wishlist !", "success");
+
+          $(this).addClass('js-addedwish-b2');
+          $(this).off('click');
+        });
+      });
+
+      $('.js-addwish-detail').each(function () {
+        var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
+
+        $(this).on('click', function () {
+          swal(nameProduct, "is added to wishlist !", "success");
+
+          $(this).addClass('js-addedwish-detail');
+          $(this).off('click');
+        });
+      });
+
+      /*---------------------------------------------*/
+
+      $('.js-addcart-detail').each(function () {
+        var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+        $(this).on('click', function () {
+          swal(nameProduct, "is added to cart !", "success");
+        });
+      });
+
+    </script>
+    <!--===============================================================================================-->
+    <script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script>
+      $('.js-pscroll').each(function () {
+        $(this).css('position', 'relative');
+        $(this).css('overflow', 'hidden');
+        var ps = new PerfectScrollbar(this, {
+          wheelSpeed: 1,
+          scrollingThreshold: 1000,
+          wheelPropagation: false,
+        });
+
+        $(window).on('resize', function () {
+          ps.update();
+        })
+      });
+    </script>
+    <!--===============================================================================================-->
+    <script src="/js/main.js"></script>
+
+    </body>
+
+    </html>

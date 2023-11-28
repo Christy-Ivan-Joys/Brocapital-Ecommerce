@@ -1,0 +1,271 @@
+<%- include('header') %>
+
+
+    <form action="/admin/addcoupon" method="post">
+
+        <!-- New Product Add Start -->
+        <div class="container-fluid" style="margin-top: 90px;">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-8 m-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-header-2">
+                                        <h5>Add coupon</h5>
+                                    </div>
+
+
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="form-label-title col-sm-3 mb-0">Coupon
+                                            Name</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="text" placeholder="Coupon Name"
+                                                name="couponname" id="couponname">
+                                            <p id="nameError" style="color:red;"></p>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="form-label-title col-sm-3 mb-0">Coupon code
+                                        </label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="text" placeholder="Description"
+                                                name="code" id="code">
+                                            <p id="codeError" style="color:red ;"></p>
+                                        </div>
+
+
+                                    </div>
+
+
+
+
+
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="form-label-title col-sm-3 mb-0">Description
+                                        </label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="text" placeholder="Description"
+                                                name="description" id="description">
+                                            <p id="descriptionError" style="color:red ;"></p>
+                                        </div>
+
+
+                                    </div>
+
+
+
+
+
+
+
+
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 form-label-title">Start date</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="date" name="startdate" id="startdate">
+                                            <p id="startdateError" style="color:red ;"></p>
+                                        </div>
+
+                                    </div>
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 form-label-title">End date</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="date" placeholder="0" name="enddate"
+                                                id="enddate">
+                                            <p id="enddateError" style="color:red ;"></p>
+                                        </div>
+
+                                    </div>
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 form-label-title">Discount percentage</label>
+
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="number" placeholder="0" name="discount"
+                                                min="0" max="90" id="discount">
+                                            <p id="discountError" style="color:red ;"></p>
+                                        </div>
+
+                                    </div>
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Minimum
+                                            price</label>
+                                        <div class="col-md-9 col-lg-10">
+                                            <input required name="minPrice" id="minPrice"
+                                                style="width: 500px; margin-left: 90px;" class="form-control"
+                                                type="number">
+                                            <p id="minpriceError" style="color:red ;margin-left: 100px;"></p>
+                                        </div>
+                                    </div>
+                                    <% if(couponexist===true){ %>
+                                        <p style="color:red ;margin-left:600px;font-size: 30px;">Coupon already exist !</p>
+                                        <% }else{ %>
+                                            <p style="color:red ;margin-left:600px;font-size: 30px;"></p>
+                                            <% } %>
+
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="title-header option-title" style="margin-bottom: 70px; margin-right: 350px;">
+            <h5></h5>
+
+            <button class="align-items-center btn btn-theme d-flex" type="submit" onclick="validateForm(event)"><i
+                    data-feather="plus"></i>Add coupon</button>
+
+        </div>
+
+
+
+
+    </form>
+    <script>
+        function validateForm() {
+
+            const name = document.getElementById('couponname').value
+            const nameRegex = /^[A-Z][a-zA-Z0-9]*( [a-zA-Z0-9]+)?$/;
+            if (nameRegex.test(name)) {
+                nameError.innerHTML = ''
+            } else {
+                nameError.innerHTML = 'Invalid coupon name !'
+                event.preventDefault()
+            }
+
+            const code = document.getElementById('code').value
+
+            const couponRegex = /^[A-Z][A-Za-z0-9]{0,11}(?:(?!00)[0-9])*$/
+            if (couponRegex.test(code)) {
+                codeError.innerHTML = ''
+                alert('if')
+            } else {
+
+                codeError.innerHTML = 'Enter a valid coupon code !'
+                event.preventDefault()
+            }
+
+            const description = document.getElementById('description').value
+            const descriptionRegex = /^[a-zA-Z0-9%$,.!?'"()\s][a-zA-Z0-9%$,.!?'"()\s]*( [a-zA-Z0-9%$,.!?'"()\s]+)?$/;
+
+
+            if (descriptionRegex.test(description)) {
+                descriptionError.innerHTML = ''
+            } else {
+                descriptionError.innerHTML = 'Enter a valid description !'
+                event.preventDefault()
+            }
+            const minPrice = document.getElementById('minPrice').value
+
+            const priceRegex = /^(?!0+(\.0+)?$)\d+(\.\d+)?$/;
+            if (priceRegex.test(minPrice)) {
+                minpriceError.innerHTML = ''
+                alert('if')
+            } else {
+                alert('else')
+                minpriceError.innerHTML = 'Enter a valid price !'
+                event.preventDefault()
+            }
+            const startdate = document.getElementById('startdate').value
+
+            const currentDate = new Date()
+            const startDate = new Date(startdate);
+            currentDate.setHours(0, 0, 0, 0);
+            startDate.setHours(0, 0, 0, 0);
+
+            if (startDate < currentDate) {
+                startdateError.innerHTML = 'Start date must be today or a future date.'
+                event.preventDefault()
+            } else {
+                startdateError.innerHTML = ''
+            }
+            const enddate = document.getElementById('enddate').value
+            const endDate = new Date(enddate)
+            endDate.setHours(0, 0, 0, 0)
+            if (endDate > startDate) {
+                enddateError.innerHTML = ''
+            } else {
+                enddateError.innerHTML = 'Enter a date after the start date !'
+                event.preventDefault()
+            }
+            const discount = document.getElementById('discount').value
+            discountRegex = /^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$/;
+            if (discountRegex.test(discount)) {
+                discountError.innerHTML = ''
+            } else {
+                discountError.innerHTML = 'Enter a valid discount between 1% and 100%'
+                event.preventDefault()
+            }
+
+
+
+
+        }
+    </script>
+
+    <script>
+
+        const currentDate = new Date().toISOString().split('T')[0];
+        document.getElementById('startdate').value = currentDate;
+    </script>
+
+
+    <!-- latest js -->
+    <script src="/adminassets/js/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap js -->
+    <script src="/adminassets/js/bootstrap/bootstrap.bundle.min.js"></script>
+
+    <!-- feather icon js -->
+    <script src="/adminassets/js/icons/feather-icon/feather.min.js"></script>
+    <script src="/adminassets/js/icons/feather-icon/feather-icon.js"></script>
+
+    <!-- scrollbar simplebar js -->
+    <script src="/adminassets/js/scrollbar/simplebar.js"></script>
+    <script src="/adminassets/js/scrollbar/custom.js"></script>
+
+    <!-- Sidebar js -->
+    <script src="/adminassets/js/config.js"></script>
+
+    <!-- bootstrap tag-input js -->
+    <script src="/adminassets/js/bootstrap-tagsinput.min.js"></script>
+    <script src="/adminassets/js/sidebar-menu.js"></script>
+
+    <!-- customizer js -->
+    <script src="/adminassets/js/customizer.js"></script>
+
+    <!--Dropzon js -->
+    <script src="/adminassets/js/dropzone/dropzone.js"></script>
+    <script src="/adminassets/js/dropzone/dropzone-script.js"></script>
+
+    <!-- Plugins js -->
+    <script src="/adminassets/js/notify/bootstrap-notify.min.js"></script>
+    <script src="/adminassets/js/notify/index.js"></script>
+
+    <!-- ck editor js -->
+    <script src="/adminassets/js/ckeditor.js"></script>
+    <script src="/adminassets/js/ckeditor-custom.js"></script>
+
+    <!-- select2 js -->
+    <script src="/adminassets/js/select2.min.js"></script>
+    <script src="/adminassets/js/select2-custom.js"></script>
+
+    <!-- sidebar effect -->
+    <script src="/adminassets/js/sidebareffect.js"></script>
+
+    <!-- Theme js -->
+    <script src="/adminassets/js/script.js"></script>
+
+    </body>
+
+
+    <!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/add-new-product.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 14 Oct 2023 04:08:59 GMT -->
+
+    </html>

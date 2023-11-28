@@ -1,0 +1,193 @@
+<%-include('header')%>
+
+    <div class="page-body">
+
+        <!-- New Product Add Start -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-8 m-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-header-2">
+                                        <h5>Add brand</h5>
+                                    </div>
+                                    <%if(locals.err){%>
+                                        <h6 style="color: red;">
+                                            <%=err%>
+                                        </h6>
+
+                                        <%}else{%>
+
+                                            <%}%>
+
+                                                <form class="theme-form theme-form-2 mega-form" method="post"
+                                                    action="/admin/AddBrand">
+                                                    <div class="mb-4 row align-items-center">
+                                                        <label class="form-label-title col-sm-3 mb-0">Brand
+                                                            Name</label>
+                                                        <div class="col-sm-9">
+                                                            <input class="form-control" type="text"
+                                                                placeholder="Brand Name" name="brandname"
+                                                                id="brandname">
+
+                                                        </div>
+                                                        <p id="nameError" style="color:red ; margin-left: 275px;"></p>
+                                                    </div>
+                                                    <div class="mb-4 row align-items-center">
+                                                        <label
+                                                            class="col-sm-3 col-form-label form-label-title">Status</label>
+                                                        <div class="col-sm-9">
+                                                            <select class="js-example-basic-single w-100" name="status"
+                                                                id="status">
+                                                                <option value="" disabled selected>Select status
+                                                                </option>
+                                                                <option>Active</option>
+                                                                <option>Inactive</option>
+                                                                <div class="" id=""></div>
+                                                            </select>
+                                                        </div>
+                                                        <p id="statusError" style="color:red ; margin-left: 275px;"></p>
+                                                    </div>
+                                                    <% if(locals.existError){ %>
+                                                        <p id="" style="color:red ; margin-left:350 px;">Brand already
+                                                            exist !</p>
+                                                        <% } %>
+
+
+
+                                                            <button class="align-items-center btn btn-theme d-flex"
+                                                                type="submit" style="margin-left: 700px;"
+                                                                onclick="return validateForm(event)"><i
+                                                                    data-feather="plus"></i>Add
+                                                                Brand</button>
+
+                                                </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- New Product Add End -->
+
+        <!-- footer Start -->
+        <div class="container-fluid">
+            <footer class="footer">
+                <div class="row">
+                    <div class="col-md-12 footer-copyright text-center">
+                        <p class="mb-0"></p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <!-- footer En -->
+    </div>
+    <!-- Container-fluid End -->
+    </div>
+    <!-- Page Body End -->
+    </div>
+    <!-- page-wrapper End -->
+
+    <!-- Modal Start -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5 class="modal-title" id="staticBackdropLabel">Logging Out</h5>
+                    <p>Are you sure you want to log out?</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                    <div class="button-box">
+                        <button type="button" class="btn btn--no" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn  btn--yes btn-primary">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function validateForm(event) {
+
+            const name = document.getElementById('brandname').value;
+            const status = document.getElementById('status').value;
+            const nameError = document.getElementById('nameError')
+            const statusError = document.getElementById('statusError')
+            const nameRegex =/^[A-Za-z]+(?: [A-Za-z]+)*$/
+
+            // /^[A-Z][A-Za-z]*$/
+            if (nameRegex.test(name)) {
+                nameError.innerHTML = ''
+            } else {
+                nameError.innerHTML = 'Enter a valid brand name !'
+                event.preventDefault()
+            }
+            if (status === '') {
+                statusError.innerHTML = 'Select the status of the brand !'
+                event.preventDefault()
+
+            } else {
+                statusError.innerHTML = ''
+            }
+
+
+
+
+
+
+
+
+        }
+    </script>
+
+    <!-- latest js -->
+    <script src="/adminassets/js/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap js -->
+    <script src="/adminassets/js/bootstrap/bootstrap.bundle.min.js"></script>
+
+    <!-- feather icon js -->
+    <script src="/adminassets/js/icons/feather-icon/feather.min.js"></script>
+    <script src="/adminassets/js/icons/feather-icon/feather-icon.js"></script>
+
+    <!-- scrollbar simplebar js -->
+    <script src="/adminassets/js/scrollbar/simplebar.js"></script>
+    <script src="/adminassets/js/scrollbar/custom.js"></script>
+
+    <!-- Sidebar js -->
+    <script src="/adminassets/js/config.js"></script>
+
+    <!-- bootstrap tag-input js -->
+    <script src="/adminassets/js/bootstrap-tagsinput.min.js"></script>
+    <script src="/adminassets/js/sidebar-menu.js"></script>
+
+    <!-- customizer js -->
+    <script src="/adminassets/js/customizer.js"></script>
+
+    <!--Dropzon js -->
+    <script src="/adminassets/js/dropzone/dropzone.js"></script>
+    <script src="/adminassets/js/dropzone/dropzone-script.js"></script>
+
+    <!-- Plugins js -->
+    <script src="/adminassets/js/notify/bootstrap-notify.min.js"></script>
+    <script src="/adminassets/js/notify/index.js"></script>
+
+    <!-- select2 js -->
+    <script src="/adminassets/js/select2.min.js"></script>
+    <script src="/adminassets/js/select2-custom.js"></script>
+
+    <!-- sidebar effect -->
+    <script src="/adminassets/js/sidebareffect.js"></script>
+
+    <!-- Theme js -->
+    <script src="/adminassets/js/script.js"></script>
+
+    </body>
+
+
+    <!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/add-new-category.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 14 Oct 2023 04:09:00 GMT -->
+
+    </html>

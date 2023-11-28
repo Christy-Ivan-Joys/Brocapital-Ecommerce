@@ -1,0 +1,322 @@
+
+
+<%-include('homeHeader') %>
+
+
+
+
+<div class="container" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+    <div class="row">
+      <div class="col-xs-6 " style="margin-bottom: 200px;max-height: 800px">
+       <div style="max-width: 80%; margin-left: 200px;"> 
+        <form class="form-horizontal" method="post" action="/editAddress/<%= address._id %>"  >
+  
+          <h2 style="margin-top: 40px;margin-left: 350px;">Edit Address</h2>
+  
+          <div class="form-group">
+            <label for="inputFullName" class="col-sm-2 control-label font-weight-bold display-10">Full name</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="name" name="name" value="<%= address.fullname %>" placeholder="Full Name">
+            </div>
+          </div>
+		  <p id="nameError" style="color:red">Invalid name(name
+			must start with capital letter)</p>
+          <div class="form-group">
+            <p class="col-sm-offset-2 col-sm-10 help-block  ">Street address, P.O. box, company name, c/o,appartment,suite</p>
+            <label for="inputAddressLine" class="col-sm-2 control-label font-weight-bold display-10">Address Line </label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="address" name="address" value="<%= address.addressline %>" placeholder="Address Line ">
+            </div>
+          </div>
+  
+         
+		  <p id="addressError" style="color:red">Invalid address !
+		</p>
+          <div class="form-group">
+            <label for="inputTown" class="col-sm-2 control-label font-weight-bold display-10">Town</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="town" name="town" value="<%= address.town %>" placeholder="City / Town">
+            </div>
+          </div>
+		  <p id="townError" style="color:red">Invalid name(name
+			must start with capital letter)</p>
+          <div class="form-group">
+            <label for="Phone" class="col-sm-2 control-label font-weight-bold display-10">Phone Number</label>
+            <div class="col-sm-10">
+              <input type="number" class="form-control" id="phone" name="phone" value="<%= address.mobile%>" placeholder="Phone Number">
+            </div>
+          </div>
+		  <p id="phoneError" style="color:red">Invalid
+			number(phone must contain 10 digits and non-negative
+			numbers)</p>
+          <div class="form-group">
+            <label for="inputStateProvinceRegion" class="col-sm-2 control-label font-weight-bold display-10">State / Province / Region</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="state" name="state" value="<%= address.state %>" placeholder="State / Province / Region">
+            </div>
+          </div>
+		  <p id="stateError" style="color:red">Invalid name(name
+			must start with capital letter)</p>
+          <div class="form-group">
+            <label for="inputZipPostalCode" class="col-sm-2 control-label font-weight-bold display-10">Zip / Postal Code</label>
+            <div class="col-sm-10">
+              <input type="number" class="form-control" id="pincode" name="pincode" value="<%= address.pincode %>" placeholder="Zip / Postal Code/ pincode">
+            </div>
+          </div>
+		  <p id="pinError" style="color:red">Invalid value</p>
+          <div class="form-group">
+            <label for="Country" class="col-sm-2 control-label font-weight-bold display-10">Country</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="country" name="country" value="<%= address.country %>" placeholder="Country">
+              
+            </div>
+			<p id="countryError" style="color:red">Invalid name !
+			</p>
+            <div class="form-group">
+                <label for="Landmark" class="col-sm-2 control-label font-weight-bold display-10">Landmark</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="landmark" name="landmark" value="<%= address.landmark %>" placeholder="Landmark">
+                  
+                </div>
+				<p id="landError" style="color:red">Invalid value</p>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-dark btn-lg pull-right float-right mt-15" onclick="validate()" >Edit Address</button>
+            </div>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+	  function clearErrorMessaages() {
+                    nameError.innerHTML = ''
+                    phoneError.innerHTML = ''
+                    addressError.innerHTML = ''
+                    landError.innerHTML = ''
+                    stateError.innerHTML = ''
+                    townError.innerHTML = ''
+                    pinError.innerHTML = ''
+                    countryError.innerHTML = ''
+
+                }
+	function validate(){
+		alert('hello')
+		
+		const name = document.getElementById('name').value
+             
+			 const phone = document.getElementById('phone').value
+const state = document.getElementById('state').value
+const town = document.getElementById('town').value
+			const pincode = document.getElementById('pincode').value
+			const address = document.getElementById('address').value
+			 const landmark = document.getElementById('landmark').value
+			 const country = document.getElementById('country').value
+			
+			 const nameRegex = /^\s*[A-Z]/
+			 const stateRegex = /^\s*[A-Za-z]/i
+			 const pincodeRegex = /^\d{6}$/;
+
+			 const addressRegex = /^(?!.*\s{2,})(?!.*0{3,})[a-zA-Z0-9\s]+$/;
+
+
+			 const phoneRegex = /^\s*(?!0{5,})[0-9]{10}\s*$/;
+
+
+			 if (nameRegex.test(name)) {
+			
+				 nameError.innerHTML = ''
+			 } else {
+				
+				 nameError.innerHTML = 'Invalid name format(Name must start with capital letter)'
+				 event.preventDefault()
+				}
+			 if (phoneRegex.test(phone)) {
+				
+				 phoneError.innerHTML = ''
+			 } else {
+				 phoneError.innerHTML = 'Enter a valid 10 digit Phonenumber'
+				 event.preventDefault()
+			 }
+			 if (stateRegex.test(state)) {
+				
+				 stateError.innerHTML = ''
+			 } else {
+				
+
+				 stateError.innerHTML = 'enter a valid state name'
+				 event.preventDefault()
+			 }
+			 if (stateRegex.test(town)) {
+				
+				 townError.innerHTML = ''
+			 } else {
+				
+
+				 townError.innerHTML = 'Enter a valid town name'
+				 event.preventDefault()
+			 }
+			 if (pincodeRegex.test(pincode)) {
+				
+				 pinError.innerHTML = ''
+			 } else {
+				 pinError.innerHTML = 'Enter a valid pincode !'
+				 event.preventDefault()
+			 }
+			 if (stateRegex.test(landmark)) {
+		
+				 landError.innerHTML = ''
+			 } else {
+				
+				 landError.innerHTML = 'Enter a valid landmark'
+				 event.preventDefault()
+			 }
+			 if (addressRegex.test(address)) {
+				 addressError.innerHTML = ''
+				
+			 } else {
+				
+				 addressError.innerHTML = 'Enter a valid address !'
+				 event.preventDefault()
+			 }
+			 if(addressRegex.test(country)){
+				
+				 countryError.innerHTML=''
+			 }else{
+			
+				 countryError.innerHTML='Enter a valid name !'
+				 event.preventDefault()
+			 }
+		
+	}
+	window.addEventListener('load', clearErrorMessaages)
+</script>
+<script src="/proDetailassets/js/vendors/modernizr-3.6.0.min.js"></script>
+<script src="/proDetailassets/js/vendors/jquery-3.7.0.min.js"></script>
+<script src="/proDetailassets/js/vendors/jquery-migrate-3.3.0.min.js"></script>
+<script src="/proDetailassets/js/vendors/bootstrap.bundle.min.js"></script>
+<script src="/proDetailassets/js/vendors/waypoints.js"></script>
+<script src="/proDetailassets/js/vendors/wow.js"></script>
+<script src="/proDetailassets/js/vendors/magnific-popup.js"></script>
+<script src="/proDetailassets/js/vendors/perfect-scrollbar.min.js"></script>
+<script src="/proDetailassets/js/vendors/select2.min.js"></script>
+<script src="/proDetailassets/js/vendors/isotope.js"></script>
+<script src="/proDetailassets/js/vendors/swiper-bundle.min.js"></script>
+<script src="/proDetailassets/js/vendors/counterup.js"></script>
+<script src="/proDetailassets/js/vendors/jquery.countdown.min.js"></script>
+<script src="/proDetailassets/js/vendors/slick.js"></script>
+<script src="/proDetailassets/js/vendors/jquery.timepicker.min.js"></script>
+<script src="/proDetailassets/js/vendors/glightbox.min.js"></script>
+<script src="/proDetailassets/js/main2513.js?v=3.0.0"></script>
+	
+	
+
+<!--===============================================================================================-->	
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/bootstrap/js/popper.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/select2/select2.min.js"></script>
+	<script>
+		$(".js-select2").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect2')
+			});
+		})
+	</script>
+<!--===============================================================================================-->
+	<script src="vendor/daterangepicker/moment.min.js"></script>
+	<script src="vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/slick/slick.min.js"></script>
+	<script src="js/slick-custom.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/parallax100/parallax100.js"></script>
+	<script>
+        $('.parallax100').parallax100();
+	</script>
+<!--===============================================================================================-->
+	<script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+	<script>
+		$('.gallery-lb').each(function() { // the containers for all your galleries
+			$(this).magnificPopup({
+		        delegate: 'a', // the selector for gallery item
+		        type: 'image',
+		        gallery: {
+		        	enabled:true
+		        },
+		        mainClass: 'mfp-fade'
+		    });
+		});
+	</script>
+<!--===============================================================================================-->
+	<script src="vendor/isotope/isotope.pkgd.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/sweetalert/sweetalert.min.js"></script>
+	<script>
+		$('.js-addwish-b2, .js-addwish-detail').on('click', function(e){
+			e.preventDefault();
+		});
+
+		$('.js-addwish-b2').each(function(){
+			var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
+			$(this).on('click', function(){
+				swal(nameProduct, "is added to wishlist !", "success");
+
+				$(this).addClass('js-addedwish-b2');
+				$(this).off('click');
+			});
+		});
+
+		$('.js-addwish-detail').each(function(){
+			var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
+
+			$(this).on('click', function(){
+				swal(nameProduct, "is added to wishlist !", "success");
+
+				$(this).addClass('js-addedwish-detail');
+				$(this).off('click');
+			});
+		});
+
+		/*---------------------------------------------*/
+
+		$('.js-addcart-detail').each(function(){
+			var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+			$(this).on('click', function(){
+				swal(nameProduct, "is added to cart !", "success");
+			});
+		});
+	
+	</script>
+<!--===============================================================================================-->
+	<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script>
+		$('.js-pscroll').each(function(){
+			$(this).css('position','relative');
+			$(this).css('overflow','hidden');
+			var ps = new PerfectScrollbar(this, {
+				wheelSpeed: 1,
+				scrollingThreshold: 1000,
+				wheelPropagation: false,
+			});
+
+			$(window).on('resize', function(){
+				ps.update();
+			})
+		});
+	</script>
+<!--===============================================================================================-->
+	<script src="/js/main.js"></script>
+
+</body>      
+</html>
+

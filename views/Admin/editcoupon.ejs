@@ -1,0 +1,180 @@
+<%-include('header') %>
+
+
+<form action="/admin/editcoupon?id=<%= coupon._id %>" method="post">
+
+    <!-- New Product Add Start -->
+    <div class="container-fluid" style="margin-top: 90px;">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-sm-8 m-auto">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-header-2">
+                                    <h5>Edit coupon</h5>
+                                </div>
+
+
+                                <div class="mb-4 row align-items-center">
+                                    <label class="form-label-title col-sm-3 mb-0">Coupon
+                                        Name</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" placeholder="Coupon Name"
+                                            name="couponname" id="couponname" value="<%= coupon.name %>">
+                                        <p id="nameError" style="color:red;"></p>
+                                    </div>
+
+                                </div>
+
+                                <div class="mb-4 row align-items-center">
+                                    <label class="form-label-title col-sm-3 mb-0">Coupon code
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" placeholder="Description"
+                                            name="code" id="code" value="<%= coupon.code %>">
+                                        <p id="codeError" style="color:red ;"></p>
+                                    </div>
+
+
+                                </div>
+
+
+
+
+
+                                <div class="mb-4 row align-items-center">
+                                    <label class="form-label-title col-sm-3 mb-0">Description
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" placeholder="Description"
+                                            name="description" id="description" value="<%= coupon.description%>">
+                                        <p id="descriptionError" style="color:red ;"></p>
+                                    </div>
+
+
+                                </div>
+
+
+
+
+
+
+
+
+                                <div class="mb-4 row align-items-center">
+                                    <label class="col-sm-3 form-label-title">Start date</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text"  name="startdate"
+                                            id="startdate" value="<%= coupon.startdate %>">
+                                        <p id="dateError" style="color:red ;"></p>
+                                    </div>
+
+                                </div>
+                                <div class="mb-4 row align-items-center">
+                                    <label class="col-sm-3 form-label-title">End date</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" placeholder="0" name="enddate"
+                                            id="enddate" value="<%= coupon.Enddate %>">
+                                        <p id="dateError" style="color:red ;"></p>
+                                    </div>
+
+                                </div>
+                                <div class="mb-4 row align-items-center">
+                                    <label class="col-sm-3 form-label-title">Discount percentage</label>
+
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="number" placeholder="0" name="discount" min="0" max="100"
+                                            id="discount" value="<%= coupon.discount %>">
+                                        <p id="discountError" style="color:red ;"></p>
+                                    </div>
+
+                                </div>
+                                <div class="mb-4 row align-items-center">
+                                    <label class="col-lg-2 col-md-3 col-form-label form-label-title">Minimum
+                                        price</label>
+                                    <div class="col-md-9 col-lg-10">
+                                        <input required name="minPrice" style="width: 500px; margin-left: 90px;"
+                                            class="form-control" type="number" value="<%= coupon.minprice %>">
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="title-header option-title" style="margin-bottom: 70px; margin-right: 350px;">
+        <h5></h5>
+
+        <button class="align-items-center btn btn-theme d-flex" type="submit"><i
+                data-feather="plus"></i>Edit coupon</button>
+
+    </div>
+
+
+
+
+</form>
+
+
+
+    <!-- latest js -->
+    <script src="/adminassets/js/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap js -->
+    <script src="/adminassets/js/bootstrap/bootstrap.bundle.min.js"></script>
+
+    <!-- feather icon js -->
+    <script src="/adminassets/js/icons/feather-icon/feather.min.js"></script>
+    <script src="/adminassets/js/icons/feather-icon/feather-icon.js"></script>
+
+    <!-- scrollbar simplebar js -->
+    <script src="/adminassets/js/scrollbar/simplebar.js"></script>
+    <script src="/adminassets/js/scrollbar/custom.js"></script>
+
+    <!-- Sidebar js -->
+    <script src="/adminassets/js/config.js"></script>
+
+    <!-- bootstrap tag-input js -->
+    <script src="/adminassets/js/bootstrap-tagsinput.min.js"></script>
+    <script src="/adminassets/js/sidebar-menu.js"></script>
+
+    <!-- customizer js -->
+    <script src="/adminassets/js/customizer.js"></script>
+
+    <!--Dropzon js -->
+    <script src="/adminassets/js/dropzone/dropzone.js"></script>
+    <script src="/adminassets/js/dropzone/dropzone-script.js"></script>
+
+    <!-- Plugins js -->
+    <script src="/adminassets/js/notify/bootstrap-notify.min.js"></script>
+    <script src="/adminassets/js/notify/index.js"></script>
+
+    <!-- ck editor js -->
+    <script src="/adminassets/js/ckeditor.js"></script>
+    <script src="/adminassets/js/ckeditor-custom.js"></script>
+
+    <!-- select2 js -->
+    <script src="/adminassets/js/select2.min.js"></script>
+    <script src="/adminassets/js/select2-custom.js"></script>
+
+    <!-- sidebar effect -->
+    <script src="/adminassets/js/sidebareffect.js"></script>
+
+    <!-- Theme js -->
+    <script src="/adminassets/js/script.js"></script>
+
+    </body>
+
+
+    <!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/add-new-product.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 14 Oct 2023 04:08:59 GMT -->
+
+    </html>
