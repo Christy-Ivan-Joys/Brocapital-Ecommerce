@@ -144,7 +144,7 @@
 <script>
 
   function validate() {
-    alert('hello')
+   
 
     event.preventDefault()
 
@@ -195,66 +195,39 @@
 
   }
 
-  // Function to handle OTP timer
-  function startOtpTimer() {
-    let otpExpireTime = 60; // Set your desired expiration time in seconds
-    const countdownTimerElement = document.getElementById('countdown-timer'); // Replace with your timer element ID
-    const resendLink = document.querySelector('.text-decoration-none');
 
-    function updateCountdownTimer() {
-      const minutes = Math.floor(otpExpireTime / 60);
-      const seconds = otpExpireTime % 60;
 
-      // Display the countdown in the specified container
-      countdownTimerElement.innerHTML = `Time remaining: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
-      // If the timer has not expired, decrement the time
-      if (otpExpireTime > 0) {
-        otpExpireTime--;
-        if (otpExpireTime <= 0) {
 
-        }
-        // Update the countdown every second
-        setTimeout(updateCountdownTimer, 1000);
-      } else {
-resendLink.style.display='inline'
-        countdownTimerElement.innerHTML = 'OTP expired';
 
-      }
 
-    }
 
-    // Start the countdown when the function is called
-    updateCountdownTimer();
-
-  }
-
-  // Call the OTP timer function when the window loads
-  window.addEventListener('load', startOtpTimer);
-
-  // Existing input handling logic
   const inputs = document.querySelectorAll('input');
   const button = document.querySelector('button');
 
   inputs.forEach((input, index1) => {
-    input.addEventListener('keyup', (e) => {
+    input.addEventListener('input', (e) => {
       const currentInput = input,
         nextInput = input.nextElementSibling,
         prevInput = input.previousElementSibling;
+
+      // Your existing input handling logic here...
 
       // if the value has more than one character then clear it
       if (currentInput.value.length > 1) {
         currentInput.value = "";
         return;
       }
+
       // if the next input is disabled and the current value is not empty
-      //  enable the next input and focus on it
+      // enable the next input and focus on it
       if (nextInput && nextInput.hasAttribute("disabled") && currentInput.value !== "") {
         nextInput.removeAttribute("disabled");
         nextInput.focus();
       }
+
       // if the backspace key is pressed
-      if (e.key === "Backspace") {
+      if (e.inputType === "deleteContentBackward") {
         // iterate over all inputs again
         inputs.forEach((input, index2) => {
           // if the index1 of the current input is less than or equal to the index2 of the input in the outer loop
@@ -267,10 +240,8 @@ resendLink.style.display='inline'
         });
       }
 
-      // Your existing input handling logic here...
-
       // Call startOtpTimer when the fourth input is not empty
-      if (!inputs[3].disabled && inputs[3].value !== "") {
+      if (!inputs[3].hasAttribute("disabled") && inputs[3].value !== "") {
         startOtpTimer();
         button.classList.add("active");
         return;
@@ -282,6 +253,51 @@ resendLink.style.display='inline'
 
   // Focus the first input when the window loads
   window.addEventListener('load', () => inputs[0].focus());
+
+  function startOtpTimer() {
+    let otpExpireTime = 60;
+    const countdownTimerElement = document.getElementById('countdown-timer');
+    const resendLink = document.querySelector('.text-decoration-none');
+
+    function updateCountdownTimer() {
+      const minutes = Math.floor(otpExpireTime / 60);
+      const seconds = otpExpireTime % 60;
+
+
+      countdownTimerElement.innerHTML = `Time remaining: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+      // If the timer has not expired, decrement the time
+      if (otpExpireTime > 0) {
+        otpExpireTime--;
+
+        // Update the countdown every second
+        setTimeout(updateCountdownTimer, 1000);
+      } else {
+        // OTP expired
+        resendLink.style.display = 'inline';
+        countdownTimerElement.innerHTML = 'OTP expired';
+        verifyButton.disabled = true;
+      }
+
+    }
+
+
+    updateCountdownTimer();
+
+  }
+
+  const resendLink = document.querySelector('.text-decoration-none');
+  const verifyButton = document.querySelector('.verify-button');
+
+ 
+  resendLink.addEventListener('click', function () {
+  
+    otpExpireTime = 60;
+    resendLink.style.display = 'none';
+    verifyButton.disabled = false;
+
+    startOtpTimer();
+  });
 
 
 </script>

@@ -14,12 +14,12 @@
                                         <h5>Category Information</h5>
                                     </div>
                                     <%if(locals.err){%>
-                                        <h6 style="color: red;">
-                                            <%=err%>
+                                        <h6 style="color: red;font-size: 20px;">
+                                            Category already exist
                                         </h6>
 
                                         <%}else{%>
-
+                                            <h6></h6>
                                             <%}%>
 
                                                 <form class="theme-form theme-form-2 mega-form" method="post"
@@ -39,7 +39,8 @@
                                                         <label
                                                             class="col-sm-3 col-form-label form-label-title">Status</label>
                                                         <div class="col-sm-9">
-                                                            <select class="js-example-basic-single w-100" name="status" id="status">
+                                                            <select class="js-example-basic-single w-100" name="status"
+                                                                id="status">
                                                                 <option value="" disabled selected>Select status
                                                                 </option>
                                                                 <option>Active</option>
@@ -60,7 +61,7 @@
                                                                     <p>Choose an image file or drag it here.</p>
                                                                 </div>
                                                                 <input id="formFile" class="" name="image" type="file">
-                                                                
+
                                                             </div>
                                                         </div>
                                                         <p id="imageError" style="color:red ; margin-left: 275px;"></p>
@@ -68,7 +69,8 @@
 
                                                     <button class="align-items-center btn btn-theme d-flex"
                                                         type="submit" style="margin-left: 800px;"
-                                                        onclick="return validateForm(event)"><i data-feather="plus"></i>Add
+                                                        onclick="return validateForm(event)"><i
+                                                            data-feather="plus"></i>Add
                                                         category</button>
 
                                                 </form>
@@ -119,46 +121,49 @@
     </div>
     <script>
         function validateForm(event) {
-
-            alert('hello')
-
             const name = document.getElementById('categoryname').value;
-            alert(name)
-            
+
+
             const status = document.getElementById('status').value;
-            alert(status)
             const image = document.getElementById('formFile').value
-            alert('lenght',image.length)
+            const Image = document.getElementById('formFile')
             const nameError = document.getElementById('nameError')
-            alert('helloooo 1')
+
             const statusError = document.getElementById('statusError')
-            alert('helloooo 2')
+
             const nameRegex = /^[A-Z][A-Za-z]*$/
             if (nameRegex.test(name)) {
-                alert('if')
+
                 nameError.innerHTML = ''
             } else {
-                alert('else')
+
                 nameError.innerHTML = 'Enter a valid category name !'
                 event.preventDefault()
             }
-            if(status===''){
-                statusError.innerHTML='Select the status of category !'
+            if (status === '') {
+                statusError.innerHTML = 'Select the status of category !'
                 event.preventDefault()
 
-            }else{
-                statusError.innerHTML=''
+            } else {
+                statusError.innerHTML = ''
             }
+            var validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            var fileType = Image.files[0].type
+           
 
-            if(image===''){
-                alert('if')
-                imageError.innerHTML='Upload category image to continue ! '
+            if (image === '') {
+                    
+                imageError.innerHTML = 'Upload category image to continue ! '
                 event.preventDefault()
-            }else{
-                imageError.innerHTML=''
+            }else if(!validImageTypes.includes(fileType)){
+                imageError.innerHTML='Upload a valid image  '
+                event.preventDefault()
+            }else {
+                imageError.innerHTML = ''
             }
+            
 
-          
+
 
 
 

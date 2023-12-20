@@ -58,11 +58,7 @@
 
                                                 <td>
                                                     <ul>
-                                                        <li>
-                                                            <a href="order-detail.html" >
-                                                                <i class="ri-eye-line"></i>
-                                                            </a>
-                                                        </li>
+                                                        
 
                                                         <li>
                                                             <a href="/admin/editcategorypage/<%=category[i]._id%>">
@@ -80,32 +76,6 @@
                                                     </ul>
                                                 </td>
                                               </tr>
-
-                                              <!-- <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-                                              aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                              <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content">
-                                                  <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLongTitle">Confirm delete </h5>
-                                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                      <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                  </div>
-                                                  <div class="modal-body">
-                                              
-                                                      <h5 style="padding: 80px 0px;margin-left: 150px;">are you sure ?</h5>
-                              
-                                                 
-                                                  </div>
-                                                  <div class="modal-footer">
-                                                     
-                                                    <a   data-cat-id="" onclick="deleteCategory()" id="categorydelete"   type="button" class="btn btn-border" >Yes</a>
-                                                    <button type="button" class="btn btn-border" data-bs-dismiss="modal">No</button>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div> -->
-                                           
                                             <%}%>
                                             <%}%>
                                         </tbody>
@@ -236,8 +206,8 @@
     
 
     function deleteCategory(id){
-        //const categoryid=document.getElementById('categorydelete').getAttribute('data-cat-id')
-alert(id)
+      
+
         Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",

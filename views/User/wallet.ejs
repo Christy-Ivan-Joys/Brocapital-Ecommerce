@@ -49,10 +49,6 @@
                                                 aria-controls="walley" aria-selected="false"><i
                                                     class="fi-rs-settings-sliders mr-10"></i>Wallet</a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link " id="dashboard-tab" href="/account/referrals" role="tab"
-                                                aria-controls="dashboard" aria-selected="false"><i
-                                                    class="fi fi-rs-share mr-10"></i>Referrals</a>
 
                                         <li class="nav-item">
                                             <a class="nav-link" href="/logout"><i
@@ -150,13 +146,15 @@
                                                     placeholder="Enter amount">
 
                                             </div>
+                                            <p id="amountError" style="color:red ; margin-left: 275px;"></p>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
                                             data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" id="addMoneyButton">Add
-                                            Money</button>
+                                        <button type="button" onclick="validate(event)" class="btn btn-primary"
+                                            id="addMoneyButton">Add
+                                            Money </button>
                                     </div>
                                 </div>
                             </div>
@@ -184,12 +182,34 @@
                 integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyA7HdmyLzA2Q6CygF/J9LdCkST5Un/sW"
                 crossorigin="anonymous"></script>
             <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-            
-            <script>
 
+            <script>
+                function validate(event) {
+                    const amountRegex = /^(?!0[0-9]*$)\d+(\.\d+)?$/
+
+
+                    const amount = document.getElementById('moneyAmount').value
+                    if(amount===''){
+                        amountError.innerHTML='Enter the amount to continue'
+                        event.preventDefault()
+                        return false
+                    }
+                    
+                    if(amountRegex.test(amount)){
+                     
+                        amountError.innerHTML=''
+                        return true
+                    }else{
+                        event.preventDefault()
+                       
+                        amountError.innerHTML='Enter a valid amount'
+                       return false
+                    }
+
+                }
 
                 function verifyPayment(response, order) {
-                    alert(JSON.stringify(response))
+                   
                     $.ajax({
                         url: '/verifyRazWalletPayment',
                         method: 'post',
@@ -198,17 +218,16 @@
                             order
                         }, success: function (response) {
                             if (response) {
-                                alert('finisged')
+                                
                                 Swal.fire({
                                     title: "Transaction success",
                                     text: "Your amout has been succesfully credited",
                                     icon: "success",
                                     showCancelButton: true,
-                                    // confirmButtonText: "View Orders",
-                                    // cancelButtonText: "Continue shopping",
+                                   
                                     reverseButtons: true
                                 }).then(() => {
-                                    alert('indkssf2222')
+                                   
                                     location.href = '/walletPage'
                                 })
                             } else {
@@ -225,10 +244,9 @@
 
 
                 function razorpay(order) {
-                    alert(JSON.stringify(order,))
+                   
 
-                    alert(JSON.stringify(order.amout))
-                    alert('hello')
+                    
                     var options = {
 
                         "key": 'rzp_test_WIH73aEGVkDEmV',
@@ -239,7 +257,7 @@
                         "image": "http://localhost:3000/images/icons/BroCapital1.png",
                         "order_id": order.id,
                         "handler": function (response) {
-                            alert('eglakjkjslfkjklj')
+                          
                             verifyPayment(response, order)
                         },
                         "prefill": {
@@ -263,12 +281,9 @@
                 $(document).ready(function () {
                     $("#addMoneyButton").click(function () {
                         var amount = $("#moneyAmount").val()
-                        alert(amount)
-                        if (amount.trim() === "") {
-                            alert("enter a valid amount")
-                            return
+                        if(validate(event)){
+                    
 
-                        }
                         $("#addMoneyModal").modal("hide")
                         $("walletBalance").text("₹" + amount)
                         $.ajax({
@@ -277,12 +292,13 @@
                             data: {
                                 amount: amount
                             }, success: function (response) {
-                                alert('hello')
-                                alert(JSON.stringify(response))
+                                
+                               
 
                                 razorpay(response.order)
                             }
                         })
+                    }
                     })
                 })
 

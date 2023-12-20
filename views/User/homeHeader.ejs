@@ -26,29 +26,37 @@
     <link rel="stylesheet" type="text/css" href="/css/util.css">
     <link rel="stylesheet" type="text/css" href="/css/main.css">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
     <link rel="shortcut icon" type="image/x-icon" href="/proDetailassets/imgs/template/favicon.svg">
+
+    <!-- style for prodetails page -->
+
+
+    <!-- --------------------------------------------------------------------------- -->
+
+
    
-       <!-- style for prodetails page -->
-
-
-       <!-- --------------------------------------------------------------------------- -->   
-       
-
-    <link rel="stylesheet" href="/stylesheets/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-   
+
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
         
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+        }
+
         .wrap-menu-desktop {
             position: fixed;
             top: 0;
@@ -79,6 +87,11 @@
 
 
         .zmdi.zmdi-account {
+            color: black;
+            font-size: 35px;
+            text-decoration: none;
+        }
+        .zmdi.zmdi-power {
             color: black;
             font-size: 35px;
             text-decoration: none;
@@ -120,6 +133,22 @@
             background-color: #333;
             /* Darker shade when hovered */
         }
+
+        .search-button {
+            background-color: black;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: -50px;
+            height: 40px;
+        }
+
+        .search-icon {
+            font-size: 24px;
+
+        }
     </style>
 
 
@@ -157,70 +186,58 @@
                                 <a href="/shop" style="text-decoration: none;">Shop</a>
                             </li>
 
-                           
-                           
-                           
-                           
-                                <!-- <li class="label1" data-label1="hot">
-                                <a href="shoping-cart.html">Features</a>
-                                   </li> -->
+
+
+
 
                             <li>
-                                <a href="blog.html" style="text-decoration: none;">Blog</a>
+                                <a href="/" style="text-decoration: none;">Blog</a>
                             </li>
 
                             <li>
-                                <a href="about.html" style="text-decoration: none;">About</a>
+                                <a href="/" style="text-decoration: none;">About</a>
                             </li>
 
                             <li>
-                                <a href="contact.html" style="text-decoration: none;">Contact</a>
+                                <a href="/" style="text-decoration: none;">Contact</a>
                             </li>
                         </ul>
                     </div>
                     <% if(locals.user) {%>
-                        <!-- Icon header -->
+                        
                         <div class="wrap-icon-header flex-w flex-r-m">
-                            <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
-                                <i class="zmdi zmdi-search"></i>
+                            <div class="flex-w flex-c-m m-tb-10 " style="margin-left: 100px;">
                             </div>
 
 
-                            <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
-                                data-notify="2">
+
+                            <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-cart"
+                                data-notify="">
                                 <a href="/cart" class="zmdi zmdi-shopping-cart"
                                     style="font-size: 35px; color: black;"></a>
                             </div>
 
-                            <a href="#" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
-                                data-notify="0">
-                                <i class="zmdi zmdi-favorite-outline" style="font-size: 35px;"></i>
-                            </a>
 
                             <div class="flex-c-m h-full p-r-25 bor6">
-                                <div class="icon-header-item cl0 hov-cl1 trans-04 p-lr-11 js-show-user-profile" style>
-                                    <!-- Trigger the dropdown menu -->
-                                    <a href="/profile"  class="zmdi zmdi-account" data-toggle="dropdown"></a>
+                                <div class="" style>
 
-                                    <!-- Dropdown menu -->
-                                    <ul class="dropdown-menu" role="menu">
+                                    <a href="/profile" class="zmdi zmdi-account" style="margin-left: 20px;"></a>
+                                    <a class="zmdi zmdi-power" style="margin-left: 20px;" data-target=".bs-example-modal-sm" data-toggle="modal"></a>
 
-                                        <li>
-                                            <a href="/profile" id="profileLink"
-                                                class="dropdown-item btn btn-outline-dark">
-                                                Profile
-                                            </a>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li>
-                                            <a href="/logout" class="dropdown-item btn btn-outline-dark" onclick="alert('hello')">
-                                                Logout
-                                            </a>
-                                        </li>
-                                    </ul>
+                                    <div tabindex="-1" class="modal bs-example-modal-sm" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-sm modal-dialog-centered">
+                                          <div class="modal-content">
+                                            <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
+                                            <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to logout?</div>
+
+                                            <div class="modal-footer"><a class="btn btn-danger btn-block" href="/logout">Logout</a></div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    
                                 </div>
                             </div>
-                        
+
                             <% }else{ %>
                                 <a href="/loginpage"
                                     class="btn btn-outline-dark btn-lg px-5 ml-auto mr-50 rounded-pill "
@@ -232,3 +249,9 @@
             </div>
         </div>
     </header>
+    <script>
+        function logout(){
+            
+        }
+    </script>
+    

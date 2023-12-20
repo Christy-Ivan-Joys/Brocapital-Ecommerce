@@ -31,7 +31,7 @@
                                         <label class="form-label-title col-sm-3 mb-0">Coupon code
                                         </label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" type="text" placeholder="Description"
+                                            <input class="form-control" type="text" placeholder="Code"
                                                 name="code" id="code">
                                             <p id="codeError" style="color:red ;"></p>
                                         </div>
@@ -101,7 +101,7 @@
                                     </div>
                                     <% if(couponexist===true){ %>
                                         <p style="color:red ;margin-left:600px;font-size: 30px;">Coupon already exist !</p>
-                                        <% }else{ %>
+                                        <% }else { %>
                                             <p style="color:red ;margin-left:600px;font-size: 30px;"></p>
                                             <% } %>
 
@@ -132,7 +132,7 @@
         function validateForm() {
 
             const name = document.getElementById('couponname').value
-            const nameRegex = /^[A-Z][a-zA-Z0-9]*( [a-zA-Z0-9]+)?$/;
+            const nameRegex = /^[A-Z][a-zA-Z0-9]*( [a-zA-Z0-9]+)*$/;
             if (nameRegex.test(name)) {
                 nameError.innerHTML = ''
             } else {
@@ -145,7 +145,7 @@
             const couponRegex = /^[A-Z][A-Za-z0-9]{0,11}(?:(?!00)[0-9])*$/
             if (couponRegex.test(code)) {
                 codeError.innerHTML = ''
-                alert('if')
+               
             } else {
 
                 codeError.innerHTML = 'Enter a valid coupon code !'
@@ -167,9 +167,9 @@
             const priceRegex = /^(?!0+(\.0+)?$)\d+(\.\d+)?$/;
             if (priceRegex.test(minPrice)) {
                 minpriceError.innerHTML = ''
-                alert('if')
+               
             } else {
-                alert('else')
+               
                 minpriceError.innerHTML = 'Enter a valid price !'
                 event.preventDefault()
             }
@@ -213,7 +213,8 @@
     <script>
 
         const currentDate = new Date().toISOString().split('T')[0];
-        document.getElementById('startdate').value = currentDate;
+ 
+        document.getElementById('startdate').value = currentDate;   
     </script>
 
 

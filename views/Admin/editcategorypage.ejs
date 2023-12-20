@@ -12,56 +12,70 @@
                                     <div class="card-header-2">
                                         <h5>Edit category</h5>
                                     </div>
+                                    <%if(locals.err){%>
+                                        <h6 style="color: red;font-size: 15px;">
+                                            Category already exist !
+                                        </h6>
 
-                                    <form class="theme-form theme-form-2 mega-form" method="post"
-                                        action="/admin/editcategory/<%= category._id %>" enctype="multipart/form-data">
-                                        <div class="mb-4 row align-items-center">
-                                            <label class="form-label-title col-sm-3 mb-0">Category Name</label>
-                                            <div class="col-sm-9">
-                                                <input class="form-control" required="true" type="text"
-                                                    placeholder="Category" value="<%= category.name %>" name="name" id="categoryname">
-                                                <div class="error-message" id="name-error"></div>
-                                            </div>
-                                            <p id="nameError" style="color:red ; margin-left: 275px;"></p>
-                                        </div>
-                                        <div class="mb-4 row align-items-center">
-                                            <label class="col-sm-3 col-form-label form-label-title">Status</label>
-                                            <div class="col-sm-9">
-                                                <select class="js-example-basic-single w-100" id="status" name="status" type="text"
-                                                    value="<%= category.status %>">
-                                                    <option>Active</option>
-                                                    <option>Inactive</option>
-                                                    <div class="error-message" id="status-error"></div>
-
-                                                </select>
-                                            </div>
-                                            <p id="statusError" style="color:red ; margin-left: 275px;"></p>
-                                        </div>
-
-                                        <div class="mb-4 row align-items-center">
-                                            <label class="col-sm-3 col-form-label form-label-title">Category
-                                                Image</label>
-                                            <div class="form-group col-sm-9">
-                                                <div class="dropzone-wrapper">
-                                                    <div class="dropzone-desc">
-                                                        <i class="ri-upload-2-line"></i>
-                                                        <p>Choose an image file or drag it here.</p>
+                                        <%}else{%>
+                                            <h6></h6>
+                                            <%}%>
+                                                <form class="theme-form theme-form-2 mega-form" method="post"
+                                                    action="/admin/editcategory/<%= category._id %>"
+                                                    enctype="multipart/form-data">
+                                                    <div class="mb-4 row align-items-center">
+                                                        <label class="form-label-title col-sm-3 mb-0">Category
+                                                            Name</label>
+                                                        <div class="col-sm-9">
+                                                            <input class="form-control" required="true" type="text"
+                                                                placeholder="Category" value="<%= category.name %>"
+                                                                name="name" id="categoryname">
+                                                            <div class="error-message" id="name-error"></div>
+                                                        </div>
+                                                        <p id="nameError" style="color:red ; margin-left: 275px;"></p>
                                                     </div>
-                                                    <img src="/adminassets/images/product/<%= category.image%>"
-                                                        width="100" height="100">
-                                                    <input id="formFile" class="form-control" name="image" type="file">
-                                                    <div class="error-message" id="image-error"></div>
-                                                </div>
-                                            </div>
-                                            <p id="imageError" style="color:red ; margin-left: 275px;"></p>
-                                        </div>
+                                                    <div class="mb-4 row align-items-center">
+                                                        <label
+                                                            class="col-sm-3 col-form-label form-label-title">Status</label>
+                                                        <div class="col-sm-9">
+                                                            <select class="js-example-basic-single w-100" id="status"
+                                                                name="status" type="text"
+                                                                value="<%= category.status %>">
+                                                                <option>Active</option>
+                                                                <option>Inactive</option>
+                                                                <div class="error-message" id="status-error"></div>
+
+                                                            </select>
+                                                        </div>
+                                                        <p id="statusError" style="color:red ; margin-left: 275px;"></p>
+                                                    </div>
+
+                                                    <div class="mb-4 row align-items-center">
+                                                        <label class="col-sm-3 col-form-label form-label-title">Category
+                                                            Image</label>
+                                                        <div class="form-group col-sm-9">
+                                                            <div class="dropzone-wrapper">
+                                                                <div class="dropzone-desc">
+                                                                    <i class="ri-upload-2-line"></i>
+                                                                    <p>Choose an image file or drag it here.</p>
+                                                                </div>
+                                                                <img src="/adminassets/images/product/<%= category.image%>"
+                                                                    width="100" height="100">
+                                                                <input id="formFile" class="form-control" name="image"
+                                                                    type="file">
+                                                                <div class="error-message" id="image-error"></div>
+                                                            </div>
+                                                        </div>
+                                                        <p id="imageError" style="color:red ; margin-left: 275px;"></p>
+                                                    </div>
 
 
-                                        <button class="align-items-center btn btn-theme d-flex" type="submit"
-                                            style="margin-left: 800px; margin-top:150px ;" onclick="return validateForm(event)"><i
-                                                data-feather="plus"></i>UPDATE</button>
+                                                    <button class="align-items-center btn btn-theme d-flex"
+                                                        type="submit" style="margin-left: 800px; margin-top:150px ;"
+                                                        onclick="return validateForm(event)"><i
+                                                            data-feather="plus"></i>UPDATE</button>
 
-                                    </form>
+                                                </form>
                                 </div>
                             </div>
                         </div>
@@ -92,25 +106,19 @@
     <script>
         function validateForm(event) {
 
-            alert('hello')
-
             const name = document.getElementById('categoryname').value;
-            alert(name)
-
             const status = document.getElementById('status').value;
-            alert(status)
             const image = document.getElementById('formFile').value
-            alert('lenght', image.length)
             const nameError = document.getElementById('nameError')
-            alert('helloooo 1')
             const statusError = document.getElementById('statusError')
-            alert('helloooo 2')
+            const Image = document.getElementById('formFile')
+
             const nameRegex = /^[A-Z][A-Za-z]*$/
             if (nameRegex.test(name)) {
-                alert('if')
+
                 nameError.innerHTML = ''
             } else {
-                alert('else')
+
                 nameError.innerHTML = 'Enter a valid category name !'
                 event.preventDefault()
             }
@@ -121,14 +129,20 @@
             } else {
                 statusError.innerHTML = ''
             }
-
+            var validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            var fileType=Image.files[0].type
+           
             if (image === '') {
-                alert('if')
-                imageError.innerHTML = 'Upload category image to continue ! '
-                event.preventDefault()
-            } else {
-                imageError.innerHTML = ''
-            }
+                    
+                    imageError.innerHTML = 'Upload category image to continue ! '
+                    event.preventDefault()
+                }else if(!validImageTypes.includes(fileType)){
+                    imageError.innerHTML='Upload a valid image  '
+                    event.preventDefault()
+                }else {
+                    imageError.innerHTML = ''
+                }
+                
 
 
 

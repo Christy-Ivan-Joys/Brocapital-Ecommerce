@@ -4756,34 +4756,7 @@ button:focus:not(:focus-visible) {
   min-width: 170px;
 }
 
-.dropdown-item {
-  font-size: 16px;
-  font-weight: 500;
-  color: #111111;
-}
-.dropdown-item.active, .dropdown-item:active, .dropdown-item:hover {
-  color: #DDDDDD;
-  text-decoration: none;
-  background-color: #999999;
-}
 
-.dropdown-sort .dropdown-menu {
-  padding: 0px;
-}
-.dropdown-sort .dropdown-item {
-  font-weight: 400;
-  padding: 10px 15px;
-  color: #111111;
-}
-.dropdown-sort .dropdown-item.active, .dropdown-sort .dropdown-item:active, .dropdown-sort .dropdown-item:hover {
-  color: #fff;
-  text-decoration: none;
-  background-color: #555555;
-}
-
-.dropdown-language .dropdown-item img {
-  margin-right: 5px;
-}
 
 .box-dropdown-cart {
   position: relative;

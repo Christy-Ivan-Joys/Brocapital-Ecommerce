@@ -1,17 +1,19 @@
 const Order = require('../model/ordermodel')
 const db = require('../Config/connection')
 const User = require('../model/usermodel')
-const easyinvoice=require('easyinvoice')
-const fs=require('fs')
-const {Readable}=require("stream")
-const mongoose=require('mongoose')
-const mongodb=require('mongodb')
+const Product=require('../model/productmodel')
+const easyinvoice = require('easyinvoice')
+const fs = require('fs')
+const { Readable } = require("stream")
+const mongoose = require('mongoose')
+const mongodb = require('mongodb')
 module.exports = {
     invoice: async (req, res) => {
         try {
+            console.log(req.body)
             const id = req.query.id
             console.log(id)
-            const result = await Order.findOne({ _id:id })
+            const result = await Order.findOne({ _id: id })
             console.log(result)
             const userData = await User.findOne({ _id: result.user })
             const address = result.Address[0]
@@ -32,65 +34,54 @@ module.exports = {
             }
             console.log(order)
             const oid = new mongoose.Types.ObjectId(order.id);
-            let pname = await Order.aggregate([
-                
-                { $match: { _id: oid } },
-                { $unwind: '$products' },
-                {
-                    $project: {
-                        proId: '$products.productId',
-                        quantity: '$products.quantity',
-                        price: '$products.price',
-                        total: {
-                            $multiply: ['$products.quantity', '$products.price']
-                        }
+ 
+            const pname = await Order.findById(oid)
+                .populate({
+                    path: 'products.productId',
+                    model: 'Product',
+                    select: 'productname price',
+                })
+                .exec();
+        
+            
+            const products = await Promise.all(result.products.map(async (product) => {
+                console.log('product.productId:', product.productId);
+            
+              
+                try {
+                    const foundProduct = await Product.findById(product.productId);
+            
+                    if (foundProduct) {
+                        return {
+                            quantity: product.quantity,
+                            description: foundProduct.productname,
+                            price: product.price,
+                            total: product.quantity * product.price,
+                            "tax-rate": 0,
+                        };
+                    } else {
+                        console.error(`Product with ID ${product.productId} not found.`);
+                        return null; 
                     }
+                } catch (error) {
+                    console.error(`Error retrieving product with ID ${product.productId}: ${error}`);
+                    return null; 
                 }
-                ,
-                {
-                    
-                    $lookup: {
-                        from: 'products',
-                        localField: 'proId',
-                        foreignField: '_id',
-                        as: 'ProductDetails'
-                    }
-                },
-                {
-                    $project: {
-                        quantity: '$quantity',
-                        description: { $arrayElemAt: ['$ProductDetails.productname', 0] },
-                        price: { $arrayElemAt: ['$ProductDetails.price', 0] },
-                        total: {
-                            $multiply: ['$quantity', '$ProductDetails.price']
-                        },
-                        "tax-rate": '1',
-                        _id: 0,
-                    }
-                }
-            ])
-            console.log(pname)
-            console.log(result.products)
-            const products = result.products.map((product, i) => ({
-                quantity: product.quantity,
-                description: pname[i].description,
-                price: product.price,
-                total: order.total,
-                "tax-rate": 0,
+            }));
 
 
+            console.log(products);
 
-            }))
             const options = { year: "numeric", month: "long", day: "numeric" }
             const data = {
                 customize: {
 
                 },
                 images: {
-                    background: "https://public.easyinvoice.cloud/img/watermark-draft.jpg",
+                    background: "",
                 },
                 sender: {
-                    company: "Brototype",
+                    company: "BROCAPITAL",
                     address: "Kakkanad PO,Ernakulam",
                     city: "Kochi",
                     country: "India",
@@ -98,9 +89,11 @@ module.exports = {
                 },
                 client: {
                     company: "Customer Address",
+                    "Name":order.name,
                     "zip": order.pincode,
                     "city": order.town,
                     "address": order.state,
+                    "Phone":order.phone,
                     // "custom1": "custom value 1",
                     // "custom2": "custom value 2",
                     // "custom3": "custom value 3"
@@ -114,7 +107,7 @@ module.exports = {
                 },
                 products: products,
                 data: "This is dataaaa",
-                "bottom-notice": "Happy shoping and visit Cycle shop again",
+                "bottom-notice": "Happy shoping and visit Brocapital again",
 
             }
 

@@ -3,6 +3,7 @@ const ISadmin = async (req, res,next) => {
         if (req.session.isAdmin) {
             next()
         } else {
+            console.log('ehlloooo')
             res.redirect('/admin')
         }
 
@@ -10,8 +11,23 @@ const ISadmin = async (req, res,next) => {
         console.log('error in admin auth in middleware', error)
     }
 }
-
+const isLogout=async(req,res,next)=>{
+    try{
+        if(req.session.isAdmin){
+            res.redirect("/admin/dashboard");
+            
+        }else{
+            next();
+        }
+        
+        
+        
+    } catch(error){
+        console.log(error.message);
+    }
+};
 
 module.exports={
-    ISadmin
+    ISadmin,
+    isLogout
 }

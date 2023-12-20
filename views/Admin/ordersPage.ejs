@@ -9,12 +9,7 @@
                         <div class="title-header option-title d-sm-flex d-block">
                             <h5>Orders List</h5>
                             <div class="right-options">
-                                <!-- <ul>
-                                   
-                                    <li>
-                                        <a class="btn btn-solid" href="">Add Product</a>
-                                    </li>
-                                </ul> -->
+                               
                             </div>
                         </div>
                         <div>
@@ -45,7 +40,7 @@
                                         <tr>
                                            
 
-                                            <td><%= orders[i].createdOn %></td>
+                                            <td><%=new Date(orders[i].createdOn.getTime() - (5 * 60 * 60 * 1000)).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })%></td>
                                        
                                             <td><%= orders[i].user.name %></td>
 
@@ -76,10 +71,6 @@
         </div>
     </div>
     
-
-    
-
-</div>
 <!-- page-wrapper End-->
 <% if (locals.totalPages) { %>
     <!-- Bootstrap Pagination -->
@@ -124,6 +115,10 @@
         </ul>
     </nav>
     <% } %>
+    
+
+</div>
+
 
 
 
@@ -146,61 +141,8 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
 </div>
 </div>
 <!-- Modal End -->
-
-<!-- Delete Modal Box Start -->
-<div class="modal fade theme-modal remove-coupon" id="exampleModalToggle" aria-hidden="true" tabindex="-1">
-<div class="modal-dialog modal-dialog-centered">
-<div class="modal-content">
-    <div class="modal-header d-block text-center">
-        <h5 class="modal-title w-100" id="exampleModalLabel22">Are You Sure ?</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-    <div class="modal-body">
-        <div class="remove-box">
-            <p>The permission for the use/group, preview is inherited from the object, object will create a
-                new permission for this object</p>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
-        <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-target="#exampleModalToggle2"
-            data-bs-toggle="modal" data-bs-dismiss="modal">Yes</button>
-    </div>
-</div>
-</div>
-</div>
-
-<div class="modal fade theme-modal remove-coupon" id="exampleModalToggle2" aria-hidden="true" tabindex="-1">
-<div class="modal-dialog modal-dialog-centered">
-<div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title text-center" id="exampleModalLabel12">Done!</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-    <div class="modal-body">
-        <div class="remove-box text-center">
-            <div class="wrapper">
-                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
-                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-                </svg>
-            </div>
-            <h4 class="text-content">It's Removed.</h4>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">Close</button>
-    </div>
-</div>
-</div>
-</div>
-<!-- Delete Modal Box End -->
-
-<!-- latest js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone-with-data-10-year-range.min.js"></script>
 <script src="/adminassets/js/jquery-3.6.0.min.js"></script>
 
 <!-- Bootstrap js -->
@@ -237,5 +179,5 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
 </body>
 
 
-<!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/products.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 14 Oct 2023 04:08:58 GMT -->
+
 </html>

@@ -3,44 +3,43 @@
 
   <link href="/proDetailassets/css/style2513.css?v=3.0.0" rel="stylesheet">
   <style>
-    /* Add this CSS to change text color to black on hover */
     .btn.btn-black:hover {
       color: black;
     }
 
     .coupon-left {
       display: flex;
-      /* Use flexbox for layout */
+
       align-items: center;
-      /* Align items vertically */
+
     }
 
     .input-coupon {
       border: 1px solid #ddd;
-      /* Add a border to the input field */
+
       padding: 8px;
-      /* Add padding for spacing within the input */
+
       width: 200px;
-      /* Set a fixed width for the input */
+
     }
 
     .btn-border {
       border: 1px solid #007bff;
-      /* Add a border to the button */
+
       padding: 8px 12px;
-      /* Add padding for spacing within the button */
+
       cursor: pointer;
-      /* Add a pointer cursor on hover */
+
 
     }
 
     .btn-border1 {
       border: 1px solid rgb(0, 0, 0);
-      /* Add a border to the button */
+
       padding: 2px 8px;
-      /* Add padding for spacing within the button */
+
       cursor: pointer;
-      /* Add a pointer cursor on hover */
+
       background-color: rgb(11, 172, 11);
       color: aliceblue;
 
@@ -49,11 +48,11 @@
     .btn-border12 {
       background-color: aqua;
       border: 1px solid #007bff;
-      /* Add a border to the button */
+
       padding: 14px 30px;
-      /* Add padding for spacing within the button */
+
       cursor: pointer;
-      /* Add a pointer cursor on hover */
+
       margin-left: 20px;
 
     }
@@ -62,26 +61,26 @@
       display: flex;
       align-items: center;
       margin-bottom: 10px;
-      /* Adjust the margin as needed */
+
       border: 1px solid #ccc;
-      /* Add a border for better visibility */
+
       padding: 10px;
-      /* Add padding for spacing within the entry */
+
     }
 
     .coupon-details {
       flex: 1;
-      /* Allow the details to take up the remaining space */
+
     }
 
     h {
       margin-bottom: 5px;
-      /* Adjust the margin as needed */
+
     }
 
     p {
       margin: 0;
-      /* Remove default margin for better alignment */
+
     }
   </style>
 
@@ -113,17 +112,17 @@
                                 </span></p>
                               <p class="box-size"> <span class="body-p2 neutral-medium-dark">Size: </span><span
                                   class="body-p2 neutral-dark">
-                                  <%= cart[i].size %>
+                                  <%= Cart[i].size %>
                                 </span></p>
                               <p class="box-size"> <span class="body-p2 neutral-medium-dark">Quantity: </span><span
                                   class="body-p2 neutral-dark">
-                                  <%= cart[i].quantity %>
+                                  <%= Cart[i].quantity %>
                                 </span></p>
 
                             </div>
                             <div class="item-cart-info-2">
                               <p class="body-p2" style="margin-left: 50px;font-weight: bold;">₹<%=
-                                  sortedCartItems[i].price*cart[i].quantity%>
+                                  sortedCartItems[i].price*Cart[i].quantity%>
                               </p>
                             </div>
                           </div>
@@ -164,17 +163,23 @@
                     <div class="box-coupon" style="margin-left:20 px; display: flex;">
                       <div class="coupon-left">
 
-                        <input class="form-control input-coupon" type="text" placeholder="Coupon code" id="couponinput">
-                        <button class="btn btn-border" onclick="applycoupon()" style="margin-left: px;"
+                        <input class="form-control input-coupon" type="text" required="true" placeholder="Coupon code"
+                          id="couponinput">
+                        <button type="button" class="btn btn-border" onclick="applycoupon()" style="margin-left: px;"
                           id="coupon-btn">Apply</button>
-                        <button class="btn btn-border12" data-toggle="modal" data-target="#walletModal"
+
+
+                        <button type="button" class="btn btn-border12" data-toggle="modal" data-target="#walletModal"
                           style="margin-left: px;font-size: 15px;font-weight: bold;">Apply wallet</button>
 
                       </div>
 
                     </div>
-                    <button class="btn btn-border1" style="margin-left: px;margin-top:10px;" data-toggle="modal"
-                      data-target="#couponsModal">show coupons</button>
+                    <button type="button" class="btn btn-border1 " style="margin-left: px;margin-top:10px;"
+                      data-toggle="modal" data-target="#couponsModal">show coupons</button>
+                    <p id="codeError" style="color: red;font-size: 15px;margin-left: 150px;"></p>
+                    <p id="couponError" style="color: red;font-size: 15px;margin-left: 200px;"></p>
+                    <p id="AppliedError" style="color: red;font-size: 15px;margin-left: 180px;"></p>
                     <br>
 
 
@@ -236,7 +241,7 @@
                             </button>
                           </div>
                           <div class="modal-body">
-                            <!-- Display the user's wallet balance here -->
+
                             <p class="text-center" style="font-size: 25px;font-weight: bolder;">Your current wallet
                               balance:₹ <%= userDetails.wallet %>
                             </p>
@@ -244,7 +249,7 @@
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary text-center"
                               data-dismiss="modal">Close</button>
-                            <!-- Add a button or form to use the wallet balance for a purchase -->
+
                             <button type="button" class="btn btn-primary " style="font-display: centre;"
                               onclick="applywallet()">Use Wallet</button>
                           </div>
@@ -254,13 +259,10 @@
 
 
                     <div class="box-payment-method">
-                      <!-- <p class="text-17-medium text-uppercase mb-15 neutral-medium-dark">Shipping</p> -->
+
                       <div class="list-radio">
                         <div class="item-radio">
-                          <!-- <label>
-                        <input type="radio" name="payment" checked="checked">Direct bank transfer
-                      </label> -->
-                          <!-- <p class="body-p2 neutral-medium-dark extra-info active">Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p> -->
+
                         </div>
                         <div class="item-radio">
 
@@ -276,22 +278,10 @@
                           </label>
 
                         </div>
-                        <!-- <div class="item-radio">
-                          <label>
-                            <input type="radio" class="radio" value="paypal" name="payment">Paypal
-                          </label>
 
-                        </div> -->
                       </div>
                     </div>
-                    <!-- <div class="box-desc-checkout"> 
-                  <p class="body-p2 neutral-medium-dark mb-20">Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.</p>
-                  <div class="form-group"> 
-                    <label>
-                      <input class="cb-left" type="checkbox">I agree to the website <a href="#">terms and conditions *</a>
-                    </label>
-                  </div>
-                </div> -->
+
                     <div class="box-button-checkout"> <a class="btn btn-black" style="color: aliceblue;"
                         onclick="placeOrder()">Place Order</a></div>
               </div>
@@ -361,18 +351,30 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+     
 
+    </script>
 
     <script>
 
       const storedTotal = localStorage.getItem('total')
       const walletused = localStorage.getItem('walletApplied')
+      sessionStorage.setItem('CouponApplied', 'false')
+      sessionStorage.setItem('CouponName', JSON.stringify(null));
+
+
 
       if (walletused === 'true') {
         total.textContent = `${storedTotal}`;
         const paymentMethodRadios = document.querySelectorAll('.box-payment-method input[type="radio"]');
         paymentMethodRadios.forEach(radio => {
           radio.disabled = true;
+          const error = document.getElementById('couponError')
+
+          const couponBtn = document.getElementById('coupon-btn')
+          couponBtn.disabled = true
+
         });
       }
 
@@ -387,8 +389,7 @@
 
 
       function verifyPayment(response, order) {
-        alert(JSON.stringify(response))
-        alert(JSON.stringify(order))
+
         $.ajax({
           url: '/verifyRazPayment',
           method: 'post',
@@ -412,7 +413,7 @@
                   location.href = '/shop'
                 }
               })
-            } else {
+            } else if (response.RazorpayFailure === true) {
               swal.fire(
                 "PAYMENT ERROR !",
                 "Something went wrong while processing the payment",
@@ -424,8 +425,7 @@
       }
 
       function razorpay(order) {
-        alert(JSON.stringify(order))
-        alert(order.totalprice)
+
         var options = {
           "key": 'rzp_test_WIH73aEGVkDEmV',
           "amount": order.amount,
@@ -435,7 +435,7 @@
           "image": "http://localhost:3000/images/icons/BroCapital1.png",
           "order_id": order.id,
           "handler": function (response) {
-            alert('eglakjkjslfkjklj')
+
             verifyPayment(response, order)
           },
           "prefill": {
@@ -459,32 +459,39 @@
 
 
       function placeOrder() {
+        var couponName = JSON.parse(sessionStorage.getItem('CouponName'))
+
         var payment = $(".radio:checked").val();
-        alert(payment)
+
         const total = document.getElementById('total')
         var currentTotal = total.textContent.trim();
         var currentTotalNumber = currentTotal.replace('₹', '');
-        alert(currentTotalNumber)
+
         const addressId = document.getElementById('address').getAttribute('data-address-id');
         const addressStatus = localStorage.getItem('noAddress')
         const walletPay = localStorage.getItem('walletApplied')
+
         if (walletPay === 'true') {
           payment = 'wallet'
+          const grandtotal = document.getElementById('grandtotal')
+          const next = grandtotal.textContent.trim()
+          currentTotalNumber = parseInt(next.replace("₹", ''))
+
         }
-        alert(payment)
-        alert('noooooooooooo')
+
 
         $.ajax({
-          url: 'placeOrder',
+          url: '/placeOrder',
           method: 'post',
           data: {
             payment,
             currentTotalNumber,
             addressId,
+            couponName,
           },
           success: function (response) {
             if (response.status) {
-              alert('sucesss')
+
               Swal.fire({
                 title: 'Order Placed!',
                 text: 'Your order has been successfully placed.',
@@ -520,13 +527,40 @@
         });
 
       }
+
+
       function applycoupon() {
-        alert('helo')
+
+
+
+
+      
+     
+
+        const isCouponApplied = sessionStorage.getItem('CouponApplied') === 'true';
+
+        if (isCouponApplied) {
+         const AppliedError=document.getElementById('AppliedError')
+        AppliedError.innerHTML = 'Coupon is already applied!';
+        } else {
+          
+        
+   
+
+
+
         const code = document.getElementById('couponinput').value
         const grandtotalElement = document.getElementById('grandtotal')
         const grandtotal = grandtotalElement.getAttribute('data-grand-id')
+        if (code === '') {
+          codeError.innerHTML = 'Enter a coupon code to apply !'
+          return
 
-        alert(grandtotal)
+        } else {
+          codeError.innerHTML = ''
+
+        }
+
 
 
         $.ajax({
@@ -536,10 +570,10 @@
             couponCode: code,
             grandtotal: grandtotal
           }, success: function (response) {
-           
+
             if (response.status == true) {
 
-              document.getElementById('coupon-btn').disabled = true;
+             
               Swal.fire({
                 title: 'Coupon applied!',
                 text: 'Coupon has applied successfully',
@@ -552,12 +586,15 @@
                 discoutElement.innerHTML = `-₹ ${discount}`
                 const totalElement = document.getElementById('total')
                 totalElement.innerHTML = `₹ ${total}`
+                sessionStorage.setItem('CouponApplied', 'true')
 
+                var CouponName = response.coupon
+                sessionStorage.setItem('CouponName', JSON.stringify(response.coupon))
               })
             } else {
-            
+
               if (response.alreadyUsed === true) {
-               
+
                 Swal.fire({
                   title: 'Coupon already used!',
                   text: 'This coupon has already been used.',
@@ -571,11 +608,34 @@
                   icon: 'error',
                   confirmButtonText: 'OK'
                 });
+              } else if (response.Invalidcoupon === true) {
+                Swal.fire({
+                  title: 'Invalid coupon!',
+                  text: 'Cannot apply coupon',
+                  icon: 'error',
+                  confirmButtonText: 'OK'
+                });
+              } else if (response.MinpurchaseError === true) {
+                const minPrice = response.minPrice
+                Swal.fire({
+                  title: `purchase for minimum ₹${minPrice} to apply this coupon!`,
+                  text: 'Cannot apply coupon',
+                  icon: 'info',
+                  confirmButtonText: 'OK'
+                });
               }
+
+
             }
           }
         })
       }
+      }
+
+
+
+
+
       function applywallet() {
         const walletused = localStorage.getItem('walletApplied')
         if (walletused === 'true') {
@@ -593,7 +653,8 @@
         var total = document.getElementById('total')
         const currenttotal = total.textContent.trim()
         const finaltotal = parseInt(currenttotal.replace("₹", ''))
-        alert(finaltotal)
+
+
         $.ajax({
           url: '/applywallet',
           method: 'post',
@@ -615,9 +676,12 @@
                   radio.disabled = true;
 
                 });
+                const GrandTotalElement = document.getElementById('grandtotal')
+                const GrandTotal = GrandTotalElement.getAttribute('data-grand-id')
 
                 localStorage.setItem('total', '₹ 0')
                 localStorage.setItem('walletApplied', 'true')
+                localStorage.setItem('WalletAmount', `${GrandTotal}`)
 
               });
 

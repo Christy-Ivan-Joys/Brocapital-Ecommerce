@@ -5,63 +5,67 @@ const Product = require('../model/productmodel')
 const Category = require('../model/categorymodel')
 const Order = require('../model/ordermodel')
 const Brand = require('../model/brandmodel')
+const Banner = require('../model/bannermodel')
 const easyinvoice = require('easyinvoice');
 const fs = require('fs');
 const { Readable } = require("stream");
-const invoice=require('../utils/invoice')
+const invoice = require('../utils/invoice')
 
 
 
-const addproductpage = async (req, res) => {
-    try {
-        const brand = await Brand.find()
-        const category = await Category.find()
+const addproductpage = async (req, res , next) => {
+    if (req.session.isAdmin) {
+        try {
 
-        res.render('Admin/addproduct', { category, brand })
+            const brand = await Brand.find()
+            const category = await Category.find()
 
-    } catch (error) {
-        console.log('Error in add product in product ctlr', error)
+            res.render('Admin/addproduct', { category, brand })
+
+        } catch (error) {
+            console.log('Error in add product in product ctlr', error)
+            next(error)
+        }
+    } else {
+        res.redirect('/admin')
     }
+
 }
 
 
-const addproduct = async (req, res) => {
+const addproduct = async (req, res,next) => {
     console.log('iam here');
     const files = req.files
     const admin = req.session.isAdmin
-    console.log(files)
-    console.log(req.body, 'req.bdoyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
-    try {
-        if (admin) {
-
-
-
-
-
+    console.log(files.length)
+    if (admin) {
+        try {
             const name = req.body.productname
             const product = req.body
             const categoryname = req.body.category
 
             const category = await Category.findOne({ name: categoryname })
-            console.log(category)
-            const categoryId = category._id
-            console.log(req.body)
 
-            console.log('filesssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', files)
+            const categoryId = category._id
+
+
             const existingpro = await Product.findOne({ productname: name })
             if (existingpro) {
-                console.log(existingpro)
+
                 res.redirect('/admin/addproductpage')
             } else {
+
                 if (files.length !== 0) {
-                    const file = [req.files[0].filename, req.files[1].filename, req.files[2].filename, req.files[3].filename]
+                    console.log(files.length)
+                    const file = [req.files[0]?.filename, req.files[1]?.filename, req.files[2]?.filename, req.files[3]?.filename]
+
                     const newproduct = new Product({
                         productname: product.productname,
                         price: product.price,
                         quantity: product.quantity,
                         size: product.size,
                         color: product.color,
-                        category: categoryId,
+                        category: category,
                         brand: product.brand,
                         description: product.description,
                         image: file,
@@ -71,33 +75,29 @@ const addproduct = async (req, res) => {
 
                     })
                     const savedpro = await newproduct.save()
-                    console.log(savedpro, 'thiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
+
                     res.redirect('/admin/productpage')
                 } else {
                     res.redirect('/admin/addproductpage')
                 }
-                console.log(req.body)
-
-
-
+            
             }
 
-        } else {
-            res.redirect('/admin')
+        } catch (error) {
+
+            console.log('Error happend in addproduct at produc cntlr', error)
+            next(error)
         }
-
-    } catch (error) {
-
-
-        console.log('Error happend in addproduct at produc cntlr', error)
+    } else {
+        res.redirect('/admin')
     }
 }
-const productpage = async (req, res) => {
+const productpage = async (req, res,next) => {
     try {
         const brand = await Brand.find()
 
         const products = await Product.find()
-        console.log(products)
+
         const itemsperPage = 5
         const currentPage = parseInt(req.query.page) || 1
         const startIndex = (currentPage - 1) * itemsperPage
@@ -108,18 +108,20 @@ const productpage = async (req, res) => {
         res.render('Admin/productpage', { product, brand, currentPage, totalPages, })
     } catch (error) {
         console.log('error in product controller show products', error)
+        next(error)
     }
 }
-const categorypage = async (req, res) => {
+const categorypage = async (req, res,next) => {
     try {
         const category = await Category.find()
         res.render('Admin/categorypage', { category })
     } catch (error) {
         console.log('error in productcnrlr in categorypage');
+        next(error)
     }
 }
 
-const addcategorypage = async (req, res) => {
+const addcategorypage = async (req, res,next) => {
     try {
         if (req.session.err) {
             req.session.err = false;
@@ -132,23 +134,22 @@ const addcategorypage = async (req, res) => {
 
     } catch (error) {
         console.log('Error in procntrl in addcategorypage render', error);
+        next(error)
     }
 }
-const addcategory = async (req, res) => {
-    console.log("Req boyd ==>", req.body)
-
+const addcategory = async (req, res,next) => {
     try {
         const name = req.body.categoryname
         const category = req.body
         const file = req.file
         const existingcat = await Category.findOne({ name: name })
-        console.log(existingcat)
+       
         if (existingcat) {
 
             req.session.err = true;
             res.redirect('/admin/addcategorypage')
         } else {
-            console.log('category adding.........')
+          
             const newcategory = new Category({
                 name: category.categoryname,
                 status: category.status,
@@ -161,61 +162,75 @@ const addcategory = async (req, res) => {
 
     } catch (error) {
         console.log('error happend in procontrl addcategory', error);
+        next(error)
     }
 }
-const editcategorypage = async (req, res) => {
+const editcategorypage = async (req, res,next) => {
     try {
         const categoryId = req.params.id
-
-
         const category = await Category.findById(categoryId)
+        if (req.session.err) {
+            req.session.err = false
 
-        console.log(category)
-        res.render('Admin/editcategorypage', { category })
+            res.render('Admin/editcategorypage', { category, err: 'Category already exist !' })
+        } else {
+            res.render('Admin/editcategorypage', { category, err: '' })
+        }
+
     } catch (error) {
         console.log('error happend in procontrl editcatpage render', error);
+        next(error)
     }
 
 }
 
-const editCategory = async (req, res) => {
+const editCategory = async (req, res,next) => {
 
     try {
         const categoryId = req.params.id
-        const newImg = req.file ? req.file.filename : null
-        if (newImg) {
-            const updated = await Category.findByIdAndUpdate(categoryId, {
-                name: req.body.name,
-                status: req.body.status,
-                image: req.file.filename,
-            }, { new: true })
+        const category = await Category.findById(categoryId)
+        const name = req.body.name
+        const ExistingCat = await Category.findOne({ _id: { $ne: categoryId }, name: name })
+        if (ExistingCat) {
+            req.session.err = true
+            res.redirect(`/admin/editcategorypage/${categoryId}`)
         } else {
+            const newImg = req.file ? req.file.filename : null
+            if (newImg) {
+                const updated = await Category.findByIdAndUpdate(categoryId, {
+                    name: req.body.name,
+                    status: req.body.status,
+                    image: req.file.filename,
+                }, { new: true })
+            } else {
 
-            const update = await Category.findByIdAndUpdate(categoryId, {
-                name: req.body.name,
-                status: req.body.status,
+                const update = await Category.findByIdAndUpdate(categoryId, {
+                    name: req.body.name,
+                    status: req.body.status,
 
-            }, { new: true })
+                }, { new: true })
 
+            }
+            res.redirect('/admin/categorypage')
         }
-        res.redirect('/admin/categorypage')
     } catch (error) {
 
         console.log('error happend in procontrl editcategory', error);
+        next(error)
     }
 }
 
-const deleteCategory = async (req, res) => {
+const deleteCategory = async (req, res,next) => {
     try {
-        console.log('hello')
-        console.log(req.body)
+
+
         const catId = req.body.categoryid
         const categoryId = new mongoose.Types.ObjectId(catId);
-        console.log(categoryId)
+
         const category = await Category.findById(categoryId)
         const name = category.name
 
-        console.log(category)
+
         const products = await Product.find({ 'category._id': categoryId });
 
 
@@ -225,16 +240,17 @@ const deleteCategory = async (req, res) => {
 
         } else {
             const deleteCategory = await Category.findByIdAndDelete(categoryId)
-            console.log(deleteCategory)
+
 
             res.status(200).send({ status: true })
         }
     } catch (error) {
         console.log('error happend in procontrl in delecategory', error)
+        next(error)
 
     }
 }
-const BrandPage = async (req, res) => {
+const BrandPage = async (req, res, next) => {
     try {
 
         const brand = await Brand.find()
@@ -247,28 +263,28 @@ const BrandPage = async (req, res) => {
         const totalPages = Math.ceil(brand.length / 7)
 
         const currentBrands = brand.slice(startIndex, endIndex)
-
-        console.log(brand)
         res.render('Admin/brandPage', { currentPage, totalPages, brand: currentBrands })
 
     } catch (error) {
         console.log('error happend in pro contrl in brandPage', error)
+        next(error)
 
     }
 }
-const AddbrandPage = async (req, res) => {
+const AddbrandPage = async (req, res,next) => {
     try {
 
         res.render('Admin/addbrandpage')
 
     } catch (error) {
         console.log('error happend in pro contrl in addbrand page', error)
+        next(error)
 
     }
 }
-const AddBrand = async (req, res) => {
+const AddBrand = async (req, res,next) => {
     try {
-        console.log(req.body)
+       
         const Brandname = req.body.brandname
         const brand = await Brand.findOne({ name: Brandname })
         if (brand) {
@@ -285,25 +301,24 @@ const AddBrand = async (req, res) => {
 
     } catch (error) {
         console.log('error happend in pro contrl in addBrand', error)
+        next(error)
     }
 }
-const editbrandPage = async (req, res) => {
+const editbrandPage = async (req, res,next) => {
     try {
-        console.log(req.body)
+        
         const brandId = req.params.id
-        console.log(brandId)
-        const brand = await Brand.findById(brandId)
+         const brand = await Brand.findById(brandId)
         res.render('Admin/editbrandPage', { brand })
     } catch (error) {
         console.log('error happend in user contrl in editbrandPage', error)
+        next(error)
     }
 }
-const editBrand = async (req, res) => {
+const editBrand = async (req, res,next) => {
     try {
         let brandId = req.params.id
         const data = req.body
-        console.log(data)
-        console.log('idis', brandId)
         const update = await Brand.findByIdAndUpdate(brandId, {
             name: req.body.name,
             status: req.body.status,
@@ -314,33 +329,33 @@ const editBrand = async (req, res) => {
 
     } catch (error) {
         console.log('error happend in procontrl in editbrand'.error)
-
+        next(error)
     }
 }
-const deleteBrand = async (req, res) => {
+const deleteBrand = async (req, res,next) => {
     try {
 
         const brandId = req.body.brandId
-        console.log(brandId)
+      
         const brand = await Brand.findById(brandId)
-        console.log(brand)
+      
         const brandname = brand.name
-        console.log(brandname)
+       
         const product = await Product.find({ brand: brandname })
-        console.log(product)
+       
         if (product.length) {
             res.status(500).send({ status: false })
         } else {
             const deleteBrand = await Brand.findByIdAndDelete(brandId)
-            console.log(deleteBrand)
+        
             res.status(200).send({ status: true })
         }
     } catch (error) {
         console.log('error happend in procontrl in deleteBrand ', error)
-
+        next(error)
     }
 }
-const UnlistProduct = async (req, res) => {
+const UnlistProduct = async (req, res,next) => {
     try {
 
         const productId = req.query.id
@@ -355,19 +370,20 @@ const UnlistProduct = async (req, res) => {
 
     } catch (error) {
         console.log('error happend in procontrl unlistpro', error)
+        next(error)
     }
 }
-const listproduct = async (req, res) => {
+const listproduct = async (req, res,next) => {
     try {
         const productId = req.query.id
         const productlisted = await Product.findByIdAndUpdate(productId, { status: true }, { new: true })
         res.redirect('/admin/productpage')
     } catch (error) {
         console.log('error happend in procontrl in listpro', error);
-
+        next(error)
     }
 }
-const editProductpage = async (req, res) => {
+const editProductpage = async (req, res,next) => {
     try {
 
         const productId = req.query.id
@@ -381,19 +397,19 @@ const editProductpage = async (req, res) => {
     } catch (error) {
 
         console.log('error happend in procontrl in editpropage render', error);
-
+        next(error)
     }
 }
-const editProduct = async (req, res) => {
+const editProduct = async (req, res,next) => {
     try {
         const categoryname = req.body.category
         const categoryId = await Category.findOne({ name: categoryname })
 
         const productId = req.params.id
         var ImportedImage = req.body.imageImport
-        console.log(ImportedImage)
+       
         let currentImages = ImportedImage.split(',')
-        console.log(currentImages)
+      
 
         let newfilenames = []
         let imageArray = []
@@ -406,9 +422,6 @@ const editProduct = async (req, res) => {
         } else {
             imageArray = req.body.imageImport.split(',')
         }
-
-
-        console.log(imageArray)
 
         const product = req.body
 
@@ -437,20 +450,20 @@ const editProduct = async (req, res) => {
     } catch (error) {
 
         console.log('error happend in procontrl in editproduct', error);
-
+        next(error)
     }
 }
 
-const OrdersPage = async (req, res) => {
+const OrdersPage = async (req, res,next) => {
     try {
-        const order = await Order.find()
+        const order = await Order.find().sort({ createdOn: -1 })
+       
 
-
-        const itemsperPage = 5
+        const itemsperPage = 10
         const currentPage = parseInt(req.query.page) || 1
         const startIndex = (currentPage - 1) * itemsperPage
         const endIndex = startIndex + itemsperPage
-        const totalPages = Math.ceil(order.length / 8)
+        const totalPages = Math.ceil(order.length / 10)
 
 
         const orders = order.slice(startIndex, endIndex)
@@ -468,55 +481,62 @@ const OrdersPage = async (req, res) => {
         res.render('Admin/ordersPage', { orders: ordersWithUserDetails, currentPage, totalPages, })
     } catch (error) {
         console.log('error happend in procontrl in orderspage', error)
-
+        next(error)
     }
 }
-const orderDetailsPage = async (req, res) => {
+const orderDetailsPage = async (req, res,next) => {
     try {
 
         const orderId = req.params.id
-        console.log('idissssssssssssssss', orderId)
+
         const order = await Order.findById(orderId)
         const user = await User.findById(order.user)
-console.log(user)
+
         const orderProducts = order.products
         let productIDs = orderProducts.map(item => item.productId)
         const products = await Product.find({ _id: { $in: productIDs } })
         const productMap = new Map(products.map(product => [product._id.toString(), product]));
 
         const sortedProducts = productIDs.map(id => productMap.get(id.toString()));
-        console.log('orderssssss')
+
         res.render('Admin/orderDetailsPage', { order, sortedProducts, orderProducts, user })
     } catch (error) {
         console.log('error happend in procontrl in ordrdetailsPage', error)
+        next(error)
     }
 }
 
-const updateOrderStatus = async (req, res) => {
+const updateOrderStatus = async (req, res,next) => {
     try {
 
         let allowedStatus = []
         const orderId = req.params.id
-        console.log(orderId)
-        console.log(req.body.status)
-        console.log(req.body)
+        
+
         if (req.body.status === 'pending') {
             allowedStatus = ['pending', 'placed', 'shipped', 'delivered', 'cancelled'];
         } else if (req.body.status === 'placed') {
             allowedStatus = ['placed', 'shipped', 'delivered', 'cancelled'];
         } else if (req.body.status === 'shipped') {
             allowedStatus = ['shipped', 'delivered', 'cancelled'];
-        }else if(req.body.status==='delivered'){
-            allowedStatus=['delivered']
+        } else if (req.body.status === 'delivered') {
+            allowedStatus = ['delivered']
         }
 
         if (allowedStatus.length > 0 && allowedStatus.includes(req.body.status)) {
-            console.log('hello iam hereeeeee');
-            const order = await Order.findByIdAndUpdate(orderId, { $set: { status: req.body.status } });
-            res.redirect('/admin/orderDetailsPage/' + orderId);
+            if (req.body.status === 'delivered') {
+
+                const order = await Order.findByIdAndUpdate(orderId, { $set: { status: req.body.status } });
+                res.redirect('/admin/orderDetailsPage/' + orderId);
+            } else {
+
+                const order = await Order.findByIdAndUpdate(orderId, { $set: { status: req.body.status } });
+                res.redirect('/admin/orderDetailsPage/' + orderId);
+            }
+
         } else {
-            console.log(allowedStatus);
-            console.log('error in status update in admin side');
+        
+            
             let Wrongstatus = true;
             res.redirect('/admin/orderDetailsPage/' + orderId);
         }
@@ -524,9 +544,10 @@ const updateOrderStatus = async (req, res) => {
 
     } catch (error) {
         console.log('error happend in user contrl procontrl in cancelorder', error)
+        next(error)
     }
 }
-const deleteImage = async (req, res) => {
+const deleteImage = async (req, res,next) => {
     let productId = req.params.id
     let imgId = req.params.img
     try {
@@ -540,15 +561,61 @@ const deleteImage = async (req, res) => {
 
     } catch (error) {
         console.log('error happend in procontlr in deleteImg', error)
+        next(error)
     }
 }
-const downloadinvoice=async(req,res)=>{
+const downloadinvoice = async (req, res) => {
     try {
-        await invoice.invoice(req,res)
+        await invoice.invoice(req, res)
     } catch (error) {
-       console.log('error happend in procontlr in downloadinvoice',error)        
+        console.log('error happend in procontlr in downloadinvoice', error)
     }
 }
+const BannerPage = async (req, res) => {
+    try {
+        const banner = await Banner.find({ isDeleted: false })
+        console.log(banner)
+        res.render('Admin/Banner', { banner })
+    } catch (error) {
+        console.log('error happend in procontlr in BannerPage', error)
+    }
+}
+const addBannerPage = async (req, res) => {
+    try {
+        res.render('Admin/addBannerPage')
+    } catch (error) {
+        console.log('error happend in procontrl in addBanner', error)
+    }
+}
+const addBanner = async (req, res) => {
+    try {
+        console.log(req.body)
+        const file = req.file
+        const banner = new Banner({
+            name: req.body.name,
+            image: file.filename,
+            status: req.body.status
+        })
+        banner.save()
+        res.redirect('/admin/addBanner')
+    } catch (error) {
+        console.log('error happend in procontlr in addBanner', error)
+
+    }
+}
+const deleteBanner = async (req, res) => {
+    try {
+        console.log(req.params.id)
+        const bannerId = req.params.id
+        const bannerUpdate = await Banner.findByIdAndUpdate(bannerId, { $set: { isDeleted: true } }, { new: true })
+        
+        res.redirect('/admin/banner')
+    } catch (error) {
+        console.log('error happend in procontrl in deleteBanner', error)
+
+    }
+}
+
 module.exports = {
 
     addproductpage,
@@ -574,5 +641,9 @@ module.exports = {
     orderDetailsPage,
     updateOrderStatus,
     deleteImage,
-    downloadinvoice
+    downloadinvoice,
+    BannerPage,
+    addBannerPage,
+    addBanner,
+    deleteBanner
 }

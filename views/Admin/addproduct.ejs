@@ -1,15 +1,92 @@
 <%-include('header')%>
 
+    <style>
+        #modal {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        #modal-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 80%;
+            /* Adjust the width as needed */
+            max-height: 80vh;
+            /* Adjust the height as needed */
+            overflow: auto;
+        }
+
+        #cropper-container {
+            max-width: 100%;
+            max-height: 60vh;
+            /* Adjust the height as needed */
+            overflow: hidden;
+        }
+
+        #crop-confirm {
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        #galleryImages,
+        #cropper {
+            width: 100%;
+            float: left;
+        }
+
+        canvas {
+            max-width: 100%;
+            display: inline-block;
+        }
+
+        #cropperImg {
+            max-width: 0;
+            max-height: 0;
+        }
+
+        #cropImageBtn {
+            display: none;
+        }
+
+        img {
+            width: 100%;
+        }
+
+        .img-preview {
+            float: left;
+        }
+
+        .singleImageCanvasContainer {
+            max-width: 300px;
+            display: inline-block;
+            position: relative;
+            margin: 2px;
+        }
+
+        .singleImageCanvasCloseBtn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+    </style>
 
 
-
-
+    <link rel="stylesheet" href="/node_modules/cropperjs/dist/cropper.min.css">
+    <script src="/node_modules/cropperjs/dist/cropper.min.js"></script>
 
     <br>
     <h1>hii</h1>
     <form action="/admin/addproduct" method="post" enctype="multipart/form-data">
 
-        <!-- New Product Add Start -->
+
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
@@ -28,11 +105,11 @@
                                         <div class="col-sm-9">
                                             <input class="form-control" type="text" placeholder="Product Name"
                                                 name="productname" id="productname">
-                                                <p id="nameError" style="color:red;"></p>
+                                            <p id="nameError" style="color:red;"></p>
                                         </div>
-                                        
+
                                     </div>
-                                   
+
 
 
 
@@ -94,9 +171,9 @@
                                         <div class="col-sm-9">
                                             <input class="form-control" type="number" placeholder="0" name="quantity"
                                                 id="quantity">
-                                                <p id="quantityError" style="color:red ;"></p>
+                                            <p id="quantityError" style="color:red ;"></p>
                                         </div>
-                                       
+
                                     </div>
 
 
@@ -116,48 +193,28 @@
                                         <div class="col-sm-9">
                                             <input class="form-control" type="text" placeholder="Description"
                                                 name="description" id="description">
-                                                <p id="descriptionError" style="color:red ;"></p>
+                                            <p id="descriptionError" style="color:red ;"></p>
                                         </div>
-                                      
+
 
                                     </div>
-
-                                    <!-- <div class="row">
-                                                    <div class="col-12">
-                                                        <div class="row">
-                                                            <label class="form-label-title col-sm-3 mb-0"  name="description">Product
-                                                                Description</label>
-                                                            <div class="col-sm-9"  name="description">
-                                                                <div id="editor"  name="description"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div> -->
-
                                 </div>
                             </div>
 
-                            <!-- <div class="card">
-                                <div class="card-body">
-                                    <div class="card-header-2">
-                                        <h5>Product Images</h5>
-                                    </div> -->
 
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="col-sm-3 col-form-label form-label-title">Images</label>
-                                        <div class="col-sm-9">
-                                            <div class="field" >
-                                            <h3>Upload your images</h3>
-                                            <input type="file" id="formFile" name="image" multiple />
-                                            </div>
-                                            <!-- <input required name="image"
-                                                class="form-control form-choose" type="file"
-                                                id="formFile" accept="image/*" multiple> -->
-                                        </div>
-                                      <p id="ImageError" style="color:red ; margin-left: 275px;"></p>
+                            <div class="mb-4 row align-items-center">
+                                <label class="col-sm-3 col-form-label form-label-title">Images</label>
+                                <div class="col-sm-9">
+                                    <div class="field">
+                                        <h3>Upload your images</h3>
+                                        <input type="file" id="formFile" name="image" multiple />
                                     </div>
-                                <!-- </div>
-                            </div> -->
+
+                                </div>
+                                <p id="ImageError" style="color:red ; margin-left: 275px;"></p>
+                            </div>
+
+                            <div id="image-preview-container" style="display: flex; flex-wrap: wrap;"></div>
 
 
 
@@ -178,15 +235,6 @@
                                         </div>
                                         <p id="priceError" style="color:red ; margin-left: 275px;"></p>
                                     </div>
-                                    <!-- <div class="mb-4 row align-items-center">
-                                                    <label class="col-sm-3 form-label-title">Offer
-                                                        price</label>
-                                                    <div class="col-sm-9">
-                                                        <input class="oninput" type="number" placeholder="0" name="offerprice">
-                                                    </div>
-                                                </div> -->
-
-
                                 </div>
                             </div>
 
@@ -249,49 +297,52 @@
     </div>
     <style>
         input[type="file"] {
-      display: block;
-    }
-    .imageThumb {
-      max-height: 75px;
-      border: 2px solid;
-      padding: 1px;
-      cursor: pointer;
-    }
-    .pip {
-      display: inline-block;
-      margin: 10px 10px 0 0;
-    }
-    
+            display: block;
+        }
+
+        .imageThumb {
+            max-height: 75px;
+            border: 2px solid;
+            padding: 1px;
+            cursor: pointer;
+        }
+
+        .pip {
+            display: inline-block;
+            margin: 10px 10px 0 0;
+        }
     </style>
     <script>
-  
+
     </script>
+
     <script>
-        
+
         function validateForm(event) {
-                 
-           
+
+
             const name = document.getElementById('productname').value
-            
+
             const category = document.getElementById('category').value
-           
+
             const size = document.getElementById('size').value
-          
+
             const brand = document.getElementById('brand').value
-           
+
             const description = document.getElementById('description').value
-            
+
             const quantity = document.getElementById('quantity').value
-             
+
             const price = document.getElementById('price').value
-          
-            const stock=document.getElementById('stock').value
-            
-            const image=document.getElementById('formFile').value
-          
-           
-            
+
+            const stock = document.getElementById('stock').value
+
+            const image = document.getElementById('formFile')
+
+            var totalImages = parseInt(image.files.length)
+
             const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+
 
 
 
@@ -299,10 +350,10 @@
             const brandRegex = /^[A-Z][A-Za-z0-9]*[^\d]$/
 
             const quantityRegex = /^(?!0\d*$)\d+(\.\d+)?$/
-
+            const descriptionRegex = /^(?!\s)[\s\S]*\S$/;
 
             if (nameRegex.test(name)) {
-                   nameError.innerHTML = ''
+                nameError.innerHTML = ''
             } else {
 
                 nameError.innerHTML = 'Invalid name'
@@ -310,13 +361,13 @@
             }
 
             if (category === '') {
-               
+
 
                 catError.innerHTML = ' Category is empty ,Enter a category name starting with capital letter'
                 event.preventDefault()
 
             } else if (!catRegex.test(category)) {
-               
+
                 categoryError.innerHTML = 'Enter a category name starting with a capital letter.'
                 event.preventDefault()
             } else {
@@ -325,22 +376,22 @@
 
 
             if (brandRegex.test(brand)) {
-                
+
                 brandError.innerHTML = ''
             } else {
-              
+
                 brandError.innerHTML = 'Enter a brand start with capital letter !'
                 event.preventDefault()
             }
 
             if (size === '') {
-               
+
 
                 sizeError.innerHTML = ' Size is empty ,select a size'
                 event.preventDefault()
 
             } else if (!catRegex.test(category)) {
-              
+
                 sizeError.innerHTML = 'Size is empty ,select a size'
                 event.preventDefault()
             } else {
@@ -352,41 +403,170 @@
                 quantityError.innerHTML = 'Enter a valid quantity (non-zero & non-negative number)'
                 event.preventDefault()
             }
-            if(quantityRegex.test(price)){
-                priceError.innerHTML=''
-            }else{
-                priceError.innerHTML='Enter a valid price'
+            if (quantityRegex.test(price)) {
+                priceError.innerHTML = ''
+            } else {
+                priceError.innerHTML = 'Enter a valid price'
                 event.preventDefault()
             }
-            if(nameRegex.test(description)){
-                descriptionError.innerHTML=''
-              }else{
-            descriptionError.innerHTML='Enter a valid description'
+            if (descriptionRegex.test(description)) {
+                descriptionError.innerHTML = ''
+            } else {
+                descriptionError.innerHTML = 'Enter a valid description'
             }
 
             if (stock === '') {
-               
+
 
                 stockError.innerHTML = ' stock is empty ,Enter the stock status'
                 event.preventDefault()
 
             } else if (!catRegex.test(category)) {
-              
+
                 stockError.innerHTML = 'stock is empty ,Enter the stock status'
                 event.preventDefault()
             } else {
-                stockError.innerHTML = ''     
+                stockError.innerHTML = ''
             }
-            if(image.files.length===0 ){
-                ImageError.innerHTML='Upload product images to continue'
+            var validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            for (var i = 0; i < image.files.length; i++) {
+                var fileType = image.files[i].type
+
+                if (!validImageTypes.includes(fileType)) {
+
+                    ImageError.innerHTML = 'Upload images with jpeg / png / gif formats '
+                    event.preventDefault()
+                    return
+                }
+            }
+
+            if (totalImages < 4) {
+
+                ImageError.innerHTML = 'Upload atleast 1 image !'
                 event.preventDefault()
-            }else if( image.files.length<4){
-                ImageError.innerHTML='Upload product images to continue'
+            } else if (totalImages > 4) {
+
+                ImageError.innerHTML = 'Maximum 4 product images is allowed !'
                 event.preventDefault()
-            }else{
-                ImageError.innerHTML=''
+            } else {
+
+                ImageError.innerHTML = ''
+
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var input = document.getElementById('formFile');
+            var imagePreviewContainer = document.getElementById('image-preview-container');
+
+            input.addEventListener('change', function () {
+                displayImages(input);
+            })
+
+            function displayImages(input) {
+                var files = input.files;
+
+                for (var i = 0; i < files.length; i++) {
+
+                    var reader = new FileReader();
+
+                    reader.onload = (function (file, index) {
+
+                        return function (e) {
+                            var image = new Image();
+                            image.src = e.target.result;
+                            image.style.maxWidth = '200px';
+
+                            var cropButton = document.createElement('button')
+                            cropButton.className = 'crop-button';
+                            cropButton.textContent = 'Crop Image';
+                            cropButton.addEventListener('click', function (event) {
+                                event.preventDefault()
+                                openSingleCropper(image, cropButton, input, index);
+                                cropButton.style.display = 'none'
+                            });
+
+
+                            var imageContainer = document.createElement('div');
+                            imageContainer.style.marginRight = '10px';
+                            imageContainer.appendChild(image);
+                            imageContainer.appendChild(cropButton);
+                            imagePreviewContainer.appendChild(imageContainer);
+                        };
+                    })(files[i], i);
+
+                    reader.readAsDataURL(files[i]);
+                }
+            }
+
+            function openSingleCropper(image, cropButton, input, index) {
+
+                var cropper = new Cropper(image, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    crop: function (event) {
+
+                    }
+                })
+                cropButton.style.display = 'none';
+                var saveButton = document.createElement('button');
+                saveButton.className = 'save-button';
+                saveButton.textContent = 'Save';
+                saveButton.addEventListener('click', function (event) {
+
+                    event.preventDefault()
+                    saveCroppedImage(cropper, image, cropButton, saveButton, input, index);
+                });
+
+                var imageContainer = image.parentElement
+                imageContainer.appendChild(saveButton);
+
+            }
+            function saveCroppedImage(cropper, originalImage, cropButton, saveButton, input, imageIndex) {
+
+                var canvas = cropper.getCroppedCanvas();
+                var croppedImageDataURL = canvas.toDataURL();
+
+
+                console.log('Cropped Image Data URL:', croppedImageDataURL)
+                cropper.destroy();
+
+                saveButton.style.display = 'none'
+                cropButton.style.display = ''
+
+                try {
+
+                    var blob = dataURLtoBlob(croppedImageDataURL)
+
+                    var file = new File([blob], 'cropped_img.png', { type: 'image/png' })
+
+
+
+                    originalImage.src = croppedImageDataURL
+
+
+                } catch (error) {
+                    alert('error in changing the input image', error)
+                }
+              
+            }
+    
+          
+
+            function dataURLtoBlob(dataURL) {
+                var arr = dataURL.split(','),
+                    mime = arr[0].match(/:(.*?);/)[1],
+                    bstr = atob(arr[1]),
+                    n = bstr.length,
+                    u8arr = new Uint8Array(n);
+
+                while (n--) {
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+
+                return new Blob([u8arr], { type: mime });
+            }
+        });
     </script>
 
 

@@ -23,9 +23,7 @@ const addMoneytoWallet = async (req, res) => {
     try {
 
         const amount = req.body.amount * 100
-        console.log(amount)
-
-        const orderID = generateUniqueOrderId()
+      const orderID = generateUniqueOrderId()
         var options = {
             amount: amount,
             currency: "INR",
@@ -35,7 +33,7 @@ const addMoneytoWallet = async (req, res) => {
             if (err) {
                 console.log('error happend in addmoneytowallet', err)
             } else {
-                console.log(order)
+              
                 res.json({ order: order })
             }
         })
@@ -54,7 +52,7 @@ function generateUniqueOrderId() {
 const verifywalletPayment = async (req, res) => {
     try {
         const userId = req.session.user
-        console.log(req.body)
+        
         const details = req.body
         const crypto = require('crypto')
         let hmac = crypto.createHmac('sha256', process.env.RAZORPAY_SECRET_KEY)
@@ -66,7 +64,7 @@ const verifywalletPayment = async (req, res) => {
                     { wallet: parseInt(details['order[amount]']) / 100 }
             }, { new: true }).
                 then((status) => {
-                    console.log('successsssss')
+                    
                     res.json(true)
 
                 }).catch((err) => {
@@ -92,10 +90,10 @@ const applywallet = async (req, res) => {
 
         const data = req.body
         console.log(data)
-
+          
         if (wallet >= req.body.total) {
             const balance = wallet - req.body.total
-            // await User.findByIdAndUpdate(userId, { $set: { wallet: balance } })
+            await User.findByIdAndUpdate(userId, { $set: { wallet: balance } })
             
             res.json({ status: true })
         } else {

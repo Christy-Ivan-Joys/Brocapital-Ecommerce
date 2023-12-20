@@ -4,23 +4,24 @@
 			color: #222;
 
 		}
-		
-  .cardProduct {
-	height: 450px;
-    width: 300px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adjust the values as needed */
-    transition: box-shadow 0.3s ease-in-out; /* Add a smooth transition effect */
-  }
 
-  .cardProduct:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Adjust the values for the hover effect */
-  }
+		.cardProduct {
+			height: 450px;
+			width: 300px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			transition: box-shadow 0.3s ease-in-out;
+		}
 
+		.cardProduct:hover {
+			box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+		}
 	</style>
 
-
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
 	<link href="/proDetailassets/css/style2513.css?v=3.0.0" rel="stylesheet">
-	
+
 	<section class="section-slide">
 		<div class="wrap-slick1 rs2-slick1">
 			<div class="slick1">
@@ -229,21 +230,6 @@
 
 				</div>
 
-				<!-- <div class="flex-w flex-c-m m-tb-10">
-					<div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter" >
-						<i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list" ></i>
-						<i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
-						 Filter
-					</div>
-
-					<div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search" >
-						<i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search" ></i>
-						<i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
-						Search
-					</div>
-				</div> -->
-
-				<!-- Search product -->
 				<div class="dis-none panel-search w-full p-t-10 p-b-15">
 					<div class="bor8 dis-flex p-l-15">
 						<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
@@ -348,33 +334,6 @@
 
 
 
-						<!-- <div class="filter-col4 p-b-27">
-							<div class="mtext-102 cl2 p-b-15">
-								Tags
-							</div>
-
-							<div class="flex-w p-t-4 m-r--5">
-								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-									Fashion
-								</a>
-
-								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-									Lifestyle
-								</a>
-
-								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-									Denim
-								</a>
-
-								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-									Streetstyle
-								</a>
-
-								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-									Crafts
-								</a>
-							</div>
-						</div> -->
 					</div>
 				</div>
 			</div>
@@ -382,55 +341,72 @@
 			<div class="box-list-products">
 				<!-- product -->
 				<div class="container">
-				  <div class="row">
-					<% if (!product.length) { %>
-					  <img src="" alt="">
-					<% } %>
-			  
-					<% product.forEach(product => { %>
-					  <div class="col-md-3 mb-4">
-						<div class="cardProduct wow fadeInUp">
-						  <div class="cardImage">
-							<a href="/product/<%= product._id %>">
-							  <img style="height: 380px; width: 100%;" class="imageMain"
-								src="/adminassets/images/productimg/<%= product.image[0] %>" alt="guza">
-							  <img style="height: 410px; width: 100%;" class="imageHover"
-								src="/adminassets/images/productimg/<%= product.image[1] %>" alt="guza">
-							</a>
-							<form action="/add-to-cart" method="post">
-							  <input type="hidden" name="productId" value="<%= product._id %>">
-							  <input type="hidden" name="quantity" value="1">
-							  <button class="btn btn-black button-select" type="submit">Add to Cart</button>
-							</form>
-							<div class="box-quick-button">
-								<a class="btn" href="/wishuu">
-									<svg id="wishlist-icon" xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 512 512">	
-										<path
-										d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />									
-									</svg>
-								  </a>
-							  <a class="btn" href="/product/<%= product._id %>">
-								<!-- Your SVG code for product icon -->
-							  </a>
-							</div>
-						  </div>
-						  <div class="cardInfo">
-							<a href="#">
-							  <h6 class="text-16-medium cardTitle">
-								<%= product.productname %>
-							  </h6>
-							</a>
-							<p class="body-p2 cardDesc">₹ <%= product.price %></p>
-						  </div>
-						</div>
-					  </div>
-					<% }) %>
-				  </div>
+					<div class="row">
+						<% if (!product.length) { %>
+							<img src="" alt="">
+							<% } %>
+
+								<% product.forEach(product=> { %>
+									<div class="col-md-3 mb-4">
+										<div class="cardProduct wow fadeInUp">
+											<div class="cardImage">
+												<a href="/product/<%= product._id %>">
+													<img style="height: 380px; width: 100%;" class="imageMain"
+														src="/adminassets/images/productimg/<%= product.image[0] %>"
+														alt="guza">
+													<a href="/productDetails/<%=product._id%>"><img
+															style="height: 410px; width: 100%;" class="imageHover"
+															src="/adminassets/images/productimg/<%= product.image[1] %>"
+															alt="guza"></a>
+												</a>
+
+												<input type="hidden" name="productId">
+												<input type="hidden" name="quantity" value="1">
+												<% if(locals.user){ %>
+													<button class="btn btn-black button-select"
+														data-product-id="<%= product._id%>"
+														onclick="addtoCart(this)">Add to Cart</button>
+													<% }else{%>
+														<a href="/loginpage"> <button
+																class="btn btn-black button-select">Add to Cart</button>
+														</a>
+														<% } %>
+
+															<div class="box-quick-button">
+																<a class="btn" href="/wishuu">
+																	<svg id="wishlist-icon"
+																		xmlns="http://www.w3.org/2000/svg" height="2em"
+																		viewBox="0 0 512 512">
+																		<path
+																			d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
+																	</svg>
+																</a>
+
+																</a>
+															</div>
+											</div>
+											<div class="cardInfo">
+												<a href="/productDetails/<%=product._id%>">
+													<h6 class="text-16-medium cardTitle">
+														<%= product.productname %>
+													</h6>
+												</a>
+												<p class="body-p2 cardDesc">₹ <%= product.price %>
+												</p>
+											</div>
+										</div>
+									</div>
+									<% }) %>
+					</div>
 				</div>
 				<!-- product end-->
-			  </div>
-			  
+			</div>
 
+			<div class="flex-c-m flex-w w-full p-t-45">
+				<a href="/shop" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
+					Load More
+				</a>
+			</div>
 
 	</section>
 
@@ -579,6 +555,55 @@
 			</div>
 		</div>
 	</footer>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		function addtoCart(button) {
+			
+			const productId = button.getAttribute('data-product-id')
+
+			const selectedSize = 'S'
+
+
+
+			$.ajax({
+				url: '/addtoCart/' + productId + '/' + selectedSize,
+				method: 'get',
+
+				success: (response) => {
+
+
+					if (response.success) {
+
+						Swal.fire({
+
+							title: 'Product Added to Cart',
+							showConfirmButton: false,
+							icon: 'success',
+
+							timer: 1500,
+						});
+
+					} else if (response.alreadyExist) {
+						Swal.fire({
+
+							title: 'Product already added to cart',
+							showConfirmButton: true,
+							icon: 'info',
+
+							timer: 1500,
+						});
+					}
+				}, error: function () {
+					Swal.fire({
+						title: " Failed",
+						text: 'product is out of stock !',
+						icon: 'error',
+						timer: 5000,
+					})
+				}
+			})
+		}
+	</script>
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="/proDetailassets/js/main2513.js?v=3.0.0"></script>

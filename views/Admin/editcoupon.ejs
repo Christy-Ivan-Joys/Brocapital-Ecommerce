@@ -1,130 +1,238 @@
 <%-include('header') %>
 
 
-<form action="/admin/editcoupon?id=<%= coupon._id %>" method="post">
+    <form action="/admin/editcoupon?id=<%= coupon._id %>" method="post">
 
-    <!-- New Product Add Start -->
-    <div class="container-fluid" style="margin-top: 90px;">
-        <div class="row">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-sm-8 m-auto">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="card-header-2">
-                                    <h5>Edit coupon</h5>
-                                </div>
+        <!-- New Product Add Start -->
+        <div class="container-fluid" style="margin-top: 90px;">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-8 m-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-header-2">
+                                        <h5>Edit coupon</h5>
+                                    </div>
+                                    <%if(locals.Err){%>
+                                        <h6 style="color: red;font-size: 20px;">
+                                            <%=Err%>
+                                        </h6>
 
+                                        <%}else{%>
+                                            <h6></h6>
+                                            <%}%>
 
-                                <div class="mb-4 row align-items-center">
-                                    <label class="form-label-title col-sm-3 mb-0">Coupon
-                                        Name</label>
-                                    <div class="col-sm-9">
-                                        <input class="form-control" type="text" placeholder="Coupon Name"
-                                            name="couponname" id="couponname" value="<%= coupon.name %>">
-                                        <p id="nameError" style="color:red;"></p>
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="form-label-title col-sm-3 mb-0">Coupon
+                                            Name</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="text" placeholder="Coupon Name"
+                                                name="couponname" id="couponname" value="<%= coupon.name %>">
+                                            <p id="nameError" style="color:red;"></p>
+                                        </div>
+
                                     </div>
 
-                                </div>
-
-                                <div class="mb-4 row align-items-center">
-                                    <label class="form-label-title col-sm-3 mb-0">Coupon code
-                                    </label>
-                                    <div class="col-sm-9">
-                                        <input class="form-control" type="text" placeholder="Description"
-                                            name="code" id="code" value="<%= coupon.code %>">
-                                        <p id="codeError" style="color:red ;"></p>
-                                    </div>
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="form-label-title col-sm-3 mb-0">Coupon code
+                                        </label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="text" placeholder="Description"
+                                                name="code" id="code" value="<%= coupon.code %>">
+                                            <p id="codeError" style="color:red ;"></p>
+                                        </div>
 
 
-                                </div>
-
-
-
-
-
-                                <div class="mb-4 row align-items-center">
-                                    <label class="form-label-title col-sm-3 mb-0">Description
-                                    </label>
-                                    <div class="col-sm-9">
-                                        <input class="form-control" type="text" placeholder="Description"
-                                            name="description" id="description" value="<%= coupon.description%>">
-                                        <p id="descriptionError" style="color:red ;"></p>
                                     </div>
 
 
-                                </div>
 
 
 
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="form-label-title col-sm-3 mb-0">Description
+                                        </label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="text" placeholder="Description"
+                                                name="description" id="description" value="<%= coupon.description%>">
+                                            <p id="descriptionError" style="color:red ;"></p>
+                                        </div>
 
 
-
-
-
-                                <div class="mb-4 row align-items-center">
-                                    <label class="col-sm-3 form-label-title">Start date</label>
-                                    <div class="col-sm-9">
-                                        <input class="form-control" type="text"  name="startdate"
-                                            id="startdate" value="<%= coupon.startdate %>">
-                                        <p id="dateError" style="color:red ;"></p>
                                     </div>
 
-                                </div>
-                                <div class="mb-4 row align-items-center">
-                                    <label class="col-sm-3 form-label-title">End date</label>
-                                    <div class="col-sm-9">
-                                        <input class="form-control" type="text" placeholder="0" name="enddate"
-                                            id="enddate" value="<%= coupon.Enddate %>">
-                                        <p id="dateError" style="color:red ;"></p>
+
+
+
+
+
+
+
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 form-label-title">Start date</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="date" name="startdate" id="startdate"
+                                                value="<%= coupon.startdate %>" data-sdate="<%= coupon.startdate %>">
+                                            <p id="dateError" style="color:red ;"></p>
+                                        </div>
+
+                                    </div>
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 form-label-title">End date</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" data-edate="<%= coupon.Enddate%>" type="date"
+                                                placeholder="0" name="enddate" id="enddate"
+                                                value="<%= coupon.Enddate%>">
+                                            <p id="endDateError" style="color:red ;"></p>
+                                        </div>
+
+                                    </div>
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 form-label-title">Discount percentage</label>
+
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="number" placeholder="0" name="discount"
+                                                min="0" max="100" id="discount" value="<%= coupon.discount %>">
+                                            <p id="discountError" style="color:red ;"></p>
+                                        </div>
+
+                                    </div>
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-lg-2 col-md-3 col-form-label form-label-title">Minimum
+                                            price</label>
+                                        <div class="col-md-9 col-lg-10">
+                                            <input required name="minPrice" id="minPrice"
+                                                style="width: 500px; margin-left: 90px;" class="form-control"
+                                                type="number" value="<%= coupon.minprice %>">
+                                        </div>
+                                        <p id="minpriceError" style="color:red ;"></p>
                                     </div>
 
-                                </div>
-                                <div class="mb-4 row align-items-center">
-                                    <label class="col-sm-3 form-label-title">Discount percentage</label>
 
-                                    <div class="col-sm-9">
-                                        <input class="form-control" type="number" placeholder="0" name="discount" min="0" max="100"
-                                            id="discount" value="<%= coupon.discount %>">
-                                        <p id="discountError" style="color:red ;"></p>
-                                    </div>
+
 
                                 </div>
-                                <div class="mb-4 row align-items-center">
-                                    <label class="col-lg-2 col-md-3 col-form-label form-label-title">Minimum
-                                        price</label>
-                                    <div class="col-md-9 col-lg-10">
-                                        <input required name="minPrice" style="width: 500px; margin-left: 90px;"
-                                            class="form-control" type="number" value="<%= coupon.minprice %>">
-                                    </div>
-                                </div>
-
-
-
-
                             </div>
-                        </div>
 
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="title-header option-title" style="margin-bottom: 70px; margin-right: 350px;">
-        <h5></h5>
+        <div class="title-header option-title" style="margin-bottom: 70px; margin-right: 350px;">
+            <h5></h5>
 
-        <button class="align-items-center btn btn-theme d-flex" type="submit"><i
-                data-feather="plus"></i>Edit coupon</button>
+            <button onclick="validateForm()" class="align-items-center btn btn-theme d-flex" type="submit"><i
+                    data-feather="plus"></i>Edit
+                coupon</button>
 
-    </div>
-
-
+        </div>
 
 
-</form>
 
 
+    </form>
+
+
+    <script>
+
+        var StartdateElement = document.getElementById('startdate')
+        var StartdateString = StartdateElement.getAttribute('data-sdate')
+
+        var startDate = new Date(StartdateString)
+        var startDateLocal = new Date(startDate.getTime() - startDate.getTimezoneOffset() * 60000)
+
+        var endDateElement = document.getElementById('enddate')
+        var endDateString = endDateElement.getAttribute('data-edate')
+        
+        var endDate = new Date(endDateString)
+        var endDateLocal = new Date(endDate.getTime() - endDate.getTimezoneOffset() * 60000)
+
+        document.getElementById('startdate').value = startDateLocal.toISOString().split('T')[0]
+       
+        document.getElementById('enddate').value = endDateLocal.toISOString().split('T')[0]
+
+        function validateForm() {
+
+            const nameRegex = /^[A-Z][a-zA-Z0-9]*( [a-zA-Z0-9]+)?$/;
+            const name = document.getElementById('couponname').value
+            if (nameRegex.test(name)) {
+                nameError.innerHTML = ''
+            } else {
+                nameError.innerHTML = 'Invalid coupon name !'
+                event.preventDefault()
+            }
+
+            const couponRegex = /^[A-Z][A-Za-z0-9]{0,11}(?:(?!00)[0-9])*$/
+            const code = document.getElementById('code').value
+              if (couponRegex.test(code)) {
+                codeError.innerHTML = ''
+               
+            } else {
+
+                codeError.innerHTML = 'Enter a valid coupon code !'
+                event.preventDefault()
+            }
+
+            const description = document.getElementById('description').value
+            const descriptionRegex = /^[a-zA-Z0-9%$,.!?'"()\s][a-zA-Z0-9%$,.!?'"()\s]*( [a-zA-Z0-9%$,.!?'"()\s]+)?$/;
+
+
+            if (descriptionRegex.test(description)) {
+                descriptionError.innerHTML = ''
+            } else {
+                descriptionError.innerHTML = 'Enter a valid description !'
+                event.preventDefault()
+            }
+
+            const priceRegex = /^(?!0+(\.0+)?$)\d+(\.\d+)?$/;
+            const minPrice = document.getElementById('minPrice').value
+            if (priceRegex.test(minPrice)) {
+                minpriceError.innerHTML = ''
+              
+            } else {
+               
+                minpriceError.innerHTML = 'Enter a valid price !'
+                event.preventDefault()
+            }
+
+            const startdate = document.getElementById('startdate').value
+            const currentDate = startDateLocal.toISOString().split('T')[0]
+
+            if (startdate < currentDate) {
+              
+                dateError.innerHTML = 'start date must be the created date or after the created date'
+                event.preventDefault()
+            } else {
+              
+                dateError.innerHTML = ''
+            }
+           
+            const enddate = document.getElementById('enddate').value
+            const EndDate = endDateLocal.toISOString().split('T')[0]
+
+            if (enddate > startdate ) {
+               
+                endDateError.innerHTML = ''
+            } else {
+               
+                endDateError.innerHTML = 'Enter a date after the start date !'
+                event.preventDefault()
+            }
+            const discount = document.getElementById('discount').value
+          
+            discountRegex = /^(100(\.0{1,2})?|\d{1,2}(\.\d{1,2})?)$/;
+            if (discountRegex.test(discount)) {
+                discountError.innerHTML = ''
+            } else {
+                discountError.innerHTML = 'Enter a valid discount between 1% and 100%'
+                event.preventDefault()
+            }
+
+        }
+    </script>
 
     <!-- latest js -->
     <script src="/adminassets/js/jquery-3.6.0.min.js"></script>

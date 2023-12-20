@@ -29,18 +29,27 @@
 
 		.page-item:last-child .page-link {
 			background-color: #fff;
-			/* Set the background color to white for the last button */
+		
 			color: #000;
-			/* Set the text color to black for the last button */
+			
 		}
 
 		.page-item:first-child .page-link {
 			background-color: #fff;
-			/* Set the background color to white for the first button (Previous) */
+			
 			color: #000;
-			/* Set the text color to black for the first button (Previous) */
+			
 		}
 
+.brand-label {
+    font-weight: bold;
+    color: #aa0505;
+    
+}
+.bg0 {
+        padding-left:130px;  
+        padding-right: 150px;
+    }
 
 
 	</style>
@@ -56,7 +65,7 @@
 					<form action="/shop">
 					<div class="search-section flex-c-m" style="display: flex;">
 					  <input type="text" value="<%= searchword %>" class="form-control" name="search" placeholder="Search..." aria-label="Search" aria-describedby="search-button" style="width: 350px; height: 45px;">
-					  <button class="btn btn-dark lens-button" type="submit" id="search-button" style="height: 40px; width: 80px;">Search</button>
+					  <button class="btn btn-dark lens-button" type="submit" id="search-button" style="height: 44px; width:60px;"> <i class="zmdi zmdi-search search-icon"></i></button>
 					</div>
 				</form>
 				  </div>
@@ -110,49 +119,7 @@
 							</ul>
 						</div>
 
-						<!-- <div class="filter-col2 p-r-15 p-b-27" style="margin-left:-100px ;">
-							<div class="mtext-102 cl2 p-b-15">
-								Price
-							</div>
-
-							<ul>
-								<li class="p-b-6">
-									<a href="/shop" class="filter-link stext-106 trans-04 filter-link-active">
-										All
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="/shop" class="filter-link stext-106 trans-04">
-										500 - 1000
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										1000 - 
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										$100.00 - $150.00
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										$150.00 - $200.00
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										$200.00+
-									</a>
-								</li>
-							</ul>
-						</div> -->
+						
 
 						<div class="filter-col3 p-r-15 p-b-27" style="margin-left:-100px ;">
 							<div class="mtext-102 cl2 p-b-15">
@@ -189,7 +156,7 @@
 							</div>
 
 							<div class="flex-w p-t-4 m-r--5">
-								<a href="#"
+								<a href="/shop"
 									class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
 									
 								</a>
@@ -234,10 +201,7 @@
 								<a href="/productDetails/<%=product[i]._id%>"><img
 										src="/adminassets/images/productimg/<%= product[i].image[0] %>"
 										alt="IMG-PRODUCT"></a>
-								<!-- 
-								<a onclick="dlt()" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1" data-product-id="<%= product[i].id %>">
-									Quick View
-								</a> -->
+							
 
 							</div>
 
@@ -251,7 +215,8 @@
 										<div class="block2-txt-child1 flex-col-l ">
 											<a href="" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6"
 												style="margin-left: 15px; margin-bottom: 5px; color: #1a0357; ">
-												<%= product[i].brand %>
+												<div class="brand-label"><%= product[i].brand %></div>
+												
 											</a>
 
 											<span class="stext-105 cl3"

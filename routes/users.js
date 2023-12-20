@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const usercontrols=require('../controller/usercontroller');
 const userAuth=require('../middleware/userAuth')
+const{
+isLogged,
+isUser
+}=require('../middleware/userAuth')
 const {
   homepage,
   Loginpage,
@@ -32,13 +36,11 @@ const {
   deleteAddress,
   search,
   PrimaryAddress,
+  UserInvoice,
  
   
 }=require('../controller/usercontroller')
 
-const {
-isLogged,
-}=require('../middleware/userAuth')
 
 const {
   addtoCart,
@@ -49,7 +51,8 @@ const {
   placeOrder,
   cancelOrder,
   verifyRazPayment,
-  
+  ReturnProduct,
+
 }=require('../controller/cartcontroller')
 const {
   getAllproducts
@@ -64,9 +67,9 @@ const {
   applywallet,
 } = require('../controller/walletcontroller');
 
-router.get('/', homepage)
-router.get('/loginpage',Loginpage)
-router.get('/signup',signuppage)
+router.get('/',homepage)
+router.get('/loginpage',isLogged,Loginpage)
+router.get('/signup',isLogged,signuppage)
 router.post('/login',Dologin)
 router.post('/signup',Dosignup)
 router.post('/verifySignup',verifySignup)
@@ -80,32 +83,34 @@ router.get('/shop',Shoppage)
 router.post('/searchShop',search)
 router.get('/getAllproducts',getAllproducts)
 router.get('/logout',Logout)
-router.get('/profile',profile)
-router.get('/ordersPage',orderPage)    
-router.get('/orderDetails/:id',orderDetailsPage)
+router.get('/profile',isUser,profile)
+router.get('/ordersPage',isUser,orderPage)    
+router.get('/orderDetails/:id',isUser,orderDetailsPage)
 router.get('/UserAddress',UserAddressPage)
-router.get('/ManageAddress',ManageAddress)
+router.get('/ManageAddress',isUser,ManageAddress)
 router.post('/edituserDetails',edituserDetails)
 router.get('/productDetails/:id',productDetails)
 router.get('/addtoCart/:id/:size',addtoCart)
-router.get('/cart',cartPage)
+router.get('/cart',isUser,cartPage)
 router.post('/updateCart',updateCart)
-router.get('/checkoutPage',checkoutPage)
+router.get('/checkoutPage',isUser,checkoutPage)
 router.post('/placeOrder',placeOrder)
 router.get('/addAddressPage',addAddressPage)
 router.post('/addAddress',addAddress)
 router.get('/editAddressPage/:id',editAddressPage)
-router.get('/walletPage',walletPage)
+router.get('/walletPage',isUser,walletPage)
 router.post('/addMoneytoWallet',addMoneytoWallet)
 router.post('/editAddress/:id',editAddress)
-router.get('/deleteAddress/:id',deleteAddress)
+router.get('/deleteAddress/:id',isUser,deleteAddress)
 router.get('/primaryAddress/:id',PrimaryAddress)
 router.post('/deleteCartItem/',deleteCartItem)
 router.get('/cancelOrder/:id',cancelOrder)
-
+router.get('/UserInvoice',UserInvoice)
 router.post('/applyCoupon',applyCoupon)
+
 
 router.post('/verifyRazPayment',verifyRazPayment)
 router.post('/verifyRazWalletPayment',verifywalletPayment)
 router.post('/applywallet',applywallet)
+router.get('/ReturnProduct/:id/:orderId',ReturnProduct)
 module.exports = router;

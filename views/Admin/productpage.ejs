@@ -31,16 +31,16 @@
 
     .page-item:last-child .page-link {
         background-color: #fff;
-        /* Set the background color to white for the last button */
+       
         color: #000;
-        /* Set the text color to black for the last button */
+      
     }
 
     .page-item:first-child .page-link {
         background-color: #fff;
-        /* Set the background color to white for the first button (Previous) */
+     
         color: #000;
-        /* Set the text color to black for the first button (Previous) */
+       
     }
     </style>
 
@@ -56,7 +56,7 @@
                                 <ul>
                                    
                                     <li>
-                                        <a class="btn btn-solid" href="">Add Product</a>
+                                        <a class="btn btn-solid" href="/admin/addproductpage">Add Product</a>
                                     </li>
                                 </ul>
                             </div>
@@ -113,11 +113,7 @@
                                                 <% } %>
                                             <td>
                                                 <ul>
-                                                    <!-- <li>
-                                                        
-                                                            <i class="ri-eye-line"></i>
-                                                    
-                                                    </li> -->
+                                                 
 
                                                     <li>
                                                         <a href="/admin/editProductpage?id=<%= product[i]._id %>">
@@ -126,10 +122,7 @@
                                                     </li>
 
                                                     <li>
-                                                        <!-- <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a> -->
+                                                     
                                                     </li>
                                                 </ul>
                                             </td>

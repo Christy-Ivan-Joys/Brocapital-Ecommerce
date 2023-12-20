@@ -6,7 +6,7 @@ const Product = require('../model/productmodel')
 const Category = require('../model/categorymodel')
 const Order = require('../model/ordermodel')
 const nodemailer = require('../node_modules/nodemailer')
-
+const invoice = require('../utils/invoice')
 function GenerateOtp() {
     var numbers = "1234567890"
     var otp = ""
@@ -130,13 +130,13 @@ const search = async (req, res) => {
 const Loginpage = async (req, res) => {
 
     try {
-        if (req.session.user) {
-            res.redirect('/')
-        } else {
+        // if (req.session.user) {
+        //     res.redirect('/')
+        // } else {
 
-            res.render('User/login')
-        }
-
+        //     res.render('User/login')
+        // }
+        res.render('User/login')
     } catch (error) {
         res.render('Error happend in login page render loginpage', error)
     }
@@ -450,7 +450,7 @@ const ResetPassword = async (req, res) => {
 
 const Logout = async (req, res) => {
     try {
-        console.log('hello')
+      
         req.session.user = null
         res.redirect('/loginpage')
     } catch (error) {
@@ -460,7 +460,7 @@ const Logout = async (req, res) => {
 
 const profile = async (req, res) => {
     try {
-        console.log('helo profile');
+        
         const userId = req.session.user
         const user = await User.findById(userId)
         let currentPassError
@@ -480,25 +480,19 @@ const profile = async (req, res) => {
 const orderPage = async (req, res) => {
     try {
        
-        const order = await Order.find()
-        console.log(order)
-        const itemsperPage = 5
+        const order = await Order.find().sort({createdOn:-1})
+      
+        
+        const itemsperPage = 8
         const currentPage = parseInt(req.query.page) || 1
         const startIndex = (currentPage - 1) * itemsperPage
         const endIndex = startIndex + itemsperPage
-        const totalPages = Math.ceil(order.length / 5)
-
-
-
+        const Orders=order.length
+        const totalPages = Math.ceil(Orders / itemsperPage)
         const orders = order.slice(startIndex, endIndex)
-
-
         const user = req.session.user
-        console.log('hello orders')
-
+       
         res.render('User/orders', { user, orders, currentPage, totalPages, })
-
-
 
     } catch (error) {
         console.log('error happend in user contrl in order page', error)
@@ -508,24 +502,19 @@ const orderPage = async (req, res) => {
 const orderDetailsPage = async (req, res) => {
     try {
         const orderId = req.params.id
-        console.log(orderId)
+       
         const userId = req.session.user
         const user = await User.findById(userId)
         const order = await Order.findOne({ _id: orderId })
-        console.log(order)
-        
         let orderProducts = order.products      
-        console.log(orderProducts)
         let productIDs = orderProducts.map(item => item.productId)
-        console.log(productIDs)
         const products = await Product.find({ _id: { $in: productIDs } })
 
-        console.log(products)
         const productMap = new Map(products.map(product => [product._id.toString(), product]));
-        console.log(productMap)
+       
         const sortedProducts = productIDs.map(id => productMap.get(id.toString()));
      
-        console.log(sortedProducts)
+        
         //sending the final sorted product to get the same order of the quatity placed inside the products inside the order
        res.render('User/orderDetails', { user, sortedProducts, orderProducts, order })
 
@@ -546,8 +535,6 @@ const UserAddressPage = async (req, res) => {
         } else {
             res.redirect('/')
         }
-
-
     } catch (error) {
         console.log('error happend in user contrl in userAddressPage', error)
 
@@ -577,14 +564,14 @@ const productDetails = async (req, res) => {
         const products = await Product.find()
         const id = req.params.id
         const product = await Product.findById(id)
-        console.log(product)
+   
 
         const user = req.session.user
 
         if (product) {
             if (user) {
                 res.render('User/productDetail', { product, products, user })
-                console.log(product)
+             
 
             } else {
                 res.render('User/productDetail', { product, products })
@@ -619,7 +606,7 @@ const addAddress = async (req, res) => {
         const address = req.body
         id = req.session.user
         const user = await User.findById(id)
-        console.log(address)
+    
 
         if (user.address.length === 3) {
             let limiterror = true
@@ -671,16 +658,13 @@ const editAddressPage = async (req, res) => {
 
 const editAddress = async (req, res) => {
     try {
-        console.log(req.body)
+       
         const userId = req.session.user
         const addressId = req.params.id
-        console.log('addressid', addressId)
         const user = await User.findById(userId)
-        console.log(user)
+        
         const address = user.address.id(addressId)
-        console.log('addressisssss', address)
         const newAddess = req.body
-
         const updated = await User.findOneAndUpdate(
             { _id: userId, 'address._id': addressId }, {
             $set: {
@@ -694,9 +678,6 @@ const editAddress = async (req, res) => {
                 'address.$.addressline': req.body.addressline
             }
         }, { new: true })
-        console.log(updated)
-
-
         res.redirect('/profile')
 
 
@@ -708,7 +689,7 @@ const deleteAddress = async (req, res) => {
     try {
         const userId = req.session.user
         const user = await User.findById(userId)
-        console.log('user addressssss')
+        
         const addressId = req.params.id
         const deleteAddress = await User.findOneAndUpdate(
             { _id: userId }, {
@@ -717,7 +698,7 @@ const deleteAddress = async (req, res) => {
             }
         }, { new: true }
         )
-        console.log(deleteAddress)
+        
         res.redirect('/ManageAddress')
 
     } catch (error) {
@@ -731,14 +712,14 @@ const edituserDetails = async (req, res) => {
         const userId = req.query.id
         const user = await User.findById(userId)
         const Address = user.address
-        console.log(req.body)
+       
         const password = req.body.password ? req.body.password : null
 
         if (password !== null) {
             let currentPassword = req.body.password
             let newPassword = req.body.npassword
             newPassword = await bcrypt.hash(newPassword, 10)
-            console.log(newPassword)
+            
             const status = await bcrypt.compare(currentPassword, user.password)
             if (status) {
                 const { name, email, phonenumber } = req.body
@@ -754,13 +735,13 @@ const edituserDetails = async (req, res) => {
                             password: newPassword,
                         }
                     }, { new: true })
-                console.log(update)
+                
                 res.redirect('/profile')
             } else {
                 let currentPassError = true
                 res.render('User/profile', { currentPassError, user, Address })
                 currentPassError = false
-                console.log('password compare failed')
+                
             }
         } else {
 
@@ -776,7 +757,7 @@ const edituserDetails = async (req, res) => {
                         phonenumber: phonenumber
                     }
                 }, { new: true })
-            console.log(update1)
+           
             res.redirect('/profile')
         }
 
@@ -791,21 +772,16 @@ const edituserDetails = async (req, res) => {
 
 const PrimaryAddress = async (req, res) => {
     const userId = req.session.user
-    console.log('request')
+    
     try {
         if (userId) {
 
 
             const userData = await User.findById(userId)
-
             const addressId = req.params.id
-            console.log(addressId)
-
             const address = userData.address.find((address) => address._id == addressId)
 
             const addressIds = userData.address.map(item => item._id)
-            console.log(addressIds)
-
             const update = await User.updateMany({ _id: userId, 'address._id': { $in: addressIds } }, {
                 $set: {
                     'address.$[elem].primary': false,
@@ -829,9 +805,6 @@ const PrimaryAddress = async (req, res) => {
             res.redirect('/')
         }
 
-
-
-
     } catch (error) {
         console.log('error happend in user contrl in primaryaddress', error)
     }
@@ -847,7 +820,15 @@ const walletPage=async(req,res)=>{
         
     }
 }
-
+const UserInvoice=async(req,res)=>{
+    try {
+        console.log(req.query.id)
+        await invoice.invoice(req,res)
+    } catch (error) {
+        console.log('error happend in UserInvoice',error)
+        
+    }
+}
 module.exports = {
     homepage,
     Loginpage,
@@ -878,4 +859,5 @@ module.exports = {
     deleteAddress,
     search,
     PrimaryAddress,
+    UserInvoice,
 }

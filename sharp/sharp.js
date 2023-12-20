@@ -1,34 +1,39 @@
-const sharp=require('sharp')
-const fs=require('fs')
-const path=require('path')
+const sharp = require('sharp')
+const fs = require('fs')
+const path = require('path')
+const fsPromises = require('fs').promises;
+
+const imageCrop = async (req, res, next) => {
+
+    let inputImgPath= req.files[0]?.path || null
+   
+
+    console.log(inputImgPath)
+    console.log(req.body.imageImport)
 
 
-function imageCrop(req,res,next){
-    
-    console.log(req.files,'thdi is fiels');
-    console.log(req.file,'this is file');
+    if (inputImgPath === null) {
+      return next()
+    }
+    try {
 
-    const inputImgpath=req.files[0].path
-    console.log(inputImgpath,'thid is input image ath');
-    sharp(inputImgpath)
-        .resize(440,380)
-        .toFormat('webp')
-        .toBuffer((err,processedImg)=>{
-            if(err){
-                console.log('error happend in image crop ',err)
-                next(err)
-            }else{
-                fs.writeFile(inputImgpath,processedImg,(writeErr)=>{
-                    if(writeErr){
-                        console.log('error while saving the sharped img',writeErr)
-                        next(writeErr)
-                    }else{
-                        console.log('successfully saved sharped img to file path',inputImgpath)
-                        next()
-                    }
-                })
-            }
-        })
-    
-}
-module.exports=imageCrop
+        const inputImgBuffer = await fsPromises.readFile(inputImgPath);
+
+        // Process the image with sharp
+        const processedImg = await sharp(inputImgBuffer)
+            .resize(440, 700)
+            .toFormat('webp')
+            .toBuffer();
+
+        // Write the processed image back to the original file
+        await fsPromises.writeFile(inputImgPath, processedImg);
+
+        console.log('Successfully saved sharpened image to file path', inputImgPath);
+        next();
+    } catch (err) {
+        console.error('Error while processing or saving the image:', err);
+        next(err);
+    }
+};
+
+module.exports = imageCrop

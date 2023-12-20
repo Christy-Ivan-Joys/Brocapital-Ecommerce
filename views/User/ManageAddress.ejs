@@ -65,9 +65,7 @@
                                         <a class="nav-link" id="wallet-tab" href="/walletPage" role="tab" aria-controls="walley"
                                             aria-selected="false"><i class="fi-rs-settings-sliders mr-10"></i>Wallet</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link " id="dashboard-tab" href="/account/referrals" role="tab" aria-controls="dashboard"
-                                            aria-selected="false"><i class="fi fi-rs-share mr-10"></i>Referrals</a>
+                                 
                                     <li class="nav-item">
                                         <a class="nav-link" href="/logout"><i class="fi-rs-sign-out mr-10"></i>Logout</a>                                    </li>
                                 </ul>
@@ -96,11 +94,7 @@
                                                           </button>
 
 
-                                                         <% if(address[i].primary===true){ %>
-                                                            <button class="btn btn-dark" data-address-id="<%= address[i]._id %>" onclick="changeStatus(this)" style="margin-left: 20px;font-size: 12px; padding: 5px 10px;">primary</button>
-                                                            <%} else{ %>
-                                                                <button class="btn btn-dark" data-address-id="<%= address[i]._id %>" onclick="changeStatus(this)" style="margin-left: 10px;font-size: 12px; padding: 5px 9px;margin-top: -60px;">Make primary</button>
-                                                            <% } %>
+                                                        
                                                         </div>
                                                         <h5 class="mb-0">Address <%= i+1 %></h5>
                                                         

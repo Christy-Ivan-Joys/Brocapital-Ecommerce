@@ -9,8 +9,6 @@ const showUserPage = async (req, res) => {
   
         res.render('Admin/UsersPage', { users })
 
-        console.log('no users in database');
-
     } catch (error) {
         console.log('error happend in adminUser contrl in showuserpage', error)
 

@@ -5,6 +5,7 @@ const db = require('../Config/connection')
 const mongoose = require('mongoose')
 const Coupon = require('../model/couponmodel')
 const Razorpay = require('razorpay')
+const { constants } = require('buffer')
 require('dotenv').config()
 
 var instance = new Razorpay({
@@ -26,10 +27,20 @@ const cartPage = async (req, res) => {
 
             const productMap = new Map(cartItems.map(product => [product._id.toString(), product]));
             const sortedCartItems = cartItemsId.map(id => productMap.get(id));
+            let cart = user.cart
 
-            const cart = user.cart
+            const ShortQuanitityUpdate = sortedCartItems.filter(async product => {
+                const cartItem = cart.find(cartItem => cartItem.productId.toString() === product._id.toString())
+                if (product.quantity < cartItem.quantity) {
+                    const update = await User.updateOne({ _id: Id, 'cart.productId': cartItem._id }, { $set: { 'cart.$.quantity': product.quantity } })
+                    console.log(update)
+                }
+            })
+
             const subtotal = cart.reduce((total, item) => total + (item.quantity * item.price), 0)
             const grandtotal = subtotal
+
+
 
             if (user) {
 
@@ -51,53 +62,61 @@ const cartPage = async (req, res) => {
 
 const addtoCart = async (req, res) => {
     try {
-        console.log('button call')
+   
         const size = req.params.size
+      
         const Id = req.params.id
         const product = await Product.findById(Id)
         const user = req.session.user
-        if (product.quantity >= 1) {
-            const userData = await User.findById(user)
-            if (userData) {
-                const Proexist = userData.cart.find(product => product.productId === Id)
-                console.log(Proexist)
-                if (Proexist) {
+        const AlreadyInCart = await User.findOne({ _id: user }, { cart: { $elemMatch: { productId: Id } } })
 
-                    const ProUpdate = await User.updateOne({
-                        _id: user, 'cart.productId': Id
-                    },
-                        {
-                            $inc: {
-
-                                'cart.$.quantity': 1,
+        if (AlreadyInCart.cart.length === 0) {
 
 
+            if (product.quantity >= 1) {
+                const userData = await User.findById(user)
+                if (userData) {
+                    const Proexist = userData.cart.find(product => product.productId === Id)
+                
+                    if (Proexist) {
 
-                            }
+                        const ProUpdate = await User.updateOne({
+                            _id: user, 'cart.productId': Id
+                        },
+                            {
+                                $inc: {
+
+                                    'cart.$.quantity': 1,
+
+
+
+                                }
+                            })
+                        res.status(200).json({ success: true })
+
+                    } else {
+
+                        userData.cart.push({
+                            productId: Id,
+                            quantity: 1,
+                            price: product.price,
+                            size: size
+
                         })
-                    res.status(200).json({ success: true })
-                    console.log(ProUpdate);
-                    console.log(user);
-                } else {
-                    console.log('else worked', user)
-                    userData.cart.push({
-                        productId: Id,
-                        quantity: 1,
-                        price: product.price,
-                        size: size
+                        await userData.save()
+                        res.status(200).json({ success: true })
+                    }
 
-                    })
-                    await userData.save()
-                    res.status(200).json({ success: true })
                 }
 
+
+            } else {
+                res.status(500).send({ status: false })
             }
-
-
         } else {
-            res.status(500).send({ status: false })
+            
+            res.json({ alreadyExist: true })
         }
-
 
 
     } catch (error) {
@@ -107,7 +126,7 @@ const addtoCart = async (req, res) => {
 }
 const updateCart = async (req, res) => {
     try {
-        console.log('i am in here')
+       
         const Id = req.body.productId
         const count = req.body.count
         const userId = req.session.user
@@ -138,7 +157,7 @@ const updateCart = async (req, res) => {
                         res.status(400).send({ status: false, error: 'Unexpected error !' })
                     }
                 if (newQty > 0 && newQty <= product.quantity) {
-                    console.log('hyyyyyyyyyyy')
+                   
                     const update = await User.updateOne(
                         {
                             _id: userId, 'cart.productId': Id
@@ -153,8 +172,7 @@ const updateCart = async (req, res) => {
                         })
 
                     const updatedCart = await user.save()
-                    console.log(update)
-                    console.log(updatedCart);
+                   
 
                     res.status(200).send({ status: true, quantityInput: newQty })
 
@@ -182,34 +200,29 @@ const checkoutPage = async (req, res) => {
             const userDetails = await User.findById(user)
             const cart = userDetails.cart
             const Address = userDetails.address
-            
+
             const cartItemsId = userDetails.cart.map(item => item.productId)
             const cartItems = await Product.find({ _id: { $in: cartItemsId } })
             const productMap = new Map(cartItems.map(product => [product._id.toString(), product]));
-            const sortedCartItems = cartItemsId.map(id => productMap.get(id));
+            const sortedCartItems = cartItemsId.map(id => productMap.get(id))
 
+            await Promise.all(cart.map(async (cartItem) => {
+                const item = await Product.findById(cartItem.productId)
+                if (item && item.quantity < cartItem.quantity) {
+                    const update = await User.updateOne({ _id: user, 'cart.productId': item._id.toString() }, { $set: { 'cart.$.quantity': item.quantity } })
+                }
+            }))
 
-            console.log(cartItems)
-            const filteredCartItems = cartItems.filter(item => {
-                console.log(item)
-                const cartItem = cart.find(cartItem => cartItem.productId.toString() === item._id.toString());
+        
 
-                console.log(cartItem.quantity);
-                console.log(cartItem)
-
-                return item.quantity < cartItem.quantity;
-            });
-
-            console.log(filteredCartItems)
-            if (filteredCartItems) {
-
-            }
-
+            const details = await User.findById(user)
+            const Cart = details.cart
+           
             let grandtotal = 0;
-            for (let i = 0; i < cart.length; i++) {
-                grandtotal += cartItems[i].price * cart[i].quantity;
+            for (let i = 0; i < Cart.length; i++) {
+                grandtotal += cartItems[i].price * Cart[i].quantity;
             }
-            res.render('User/checkout', { user, sortedCartItems, cart, Address, grandtotal, coupons, userDetails })
+            res.render('User/checkout', { user, sortedCartItems, Cart, Address, grandtotal, coupons, userDetails })
 
         } else {
             res.redirect('/')
@@ -223,15 +236,21 @@ const checkoutPage = async (req, res) => {
 }
 const deleteCartItem = async (req, res) => {
     try {
-        console.log('i am herer')
-        const itemId = req.body.cartItemId
-
         const userId = req.session.user
+        const itemId = req.body.cartItemId
+        const walletAmount=req.body.walletAmountApplied
+        if(walletAmount!==undefined){
+            const ID= new mongoose.Types.ObjectId(userId);
+           const  walletAppliedReturn=await User.findByIdAndUpdate(ID,{$inc:{wallet:walletAmount}})
+          
+        }
+
+       
         const user = await User.findById(userId)
 
         const cartItem = user.cart.findIndex(item => item.productId === itemId)
         const cartquatity = user.cart[cartItem].quantity
-        console.log(cartquatity)
+        
         if (cartItem !== -1) {
             user.cart.splice(cartItem, 1)
             await user.save()
@@ -252,45 +271,55 @@ const placeOrder = async (req, res) => {
 
         let userID = req.session.user
         const data = req.body
-        console.log(req.body)
         var grandtotal = parseInt(req.body.currentTotalNumber)
         const paymentMethod = req.body.payment
         const user = await User.findById(userID)
         const addressid = req.body.addressId
         const cart = user.cart
-        console.log(grandtotal)
 
+        var couponId = data['couponName[_id]'] ?? null
+        
+        if (couponId !== null) {
+            var coupon = await Coupon.findById(couponId)
+        
+        }
 
 
         const cartItemsId = user.cart.map(item => item.productId)
         const cartItems = await Product.find({ _id: { $in: cartItemsId } })
-        const cartQuantity = cart.map(item => item.quantity)
+        const productMap=new Map(cartItems.map(product=>[product._id.toString(),product]))
+        const sortedCartItems=cartItems.map(id=>productMap.get(id))
+       
+      await Promise.all(cart.map(async(cartItem)=>{
+        const item=await Product.findById(cartItem.productId)
+        if(item && item.quantity<cartItem.quantity){
+            const update=await User.updateOne({_id:userID,'cart.productId':item._id.toString()},
+            {$set:{'cart.$.quantity':item.quantity}},{new:true})
+           
+        }
+        
+      }))
 
-        const productsWithInsufficientStock = cartItems.filter((item, index) => {
-            const stockQuantity = item.quantity
-            return stockQuantity < cartQuantity[index]
-        })
-        console.log(productsWithInsufficientStock)
-
+const AfterUpdateUser=await User.findById(userID)
+const Cart=AfterUpdateUser.cart
 
         const address = user.address.id(addressid)
-        console.log(data)
-
         if (paymentMethod == 'cod') {
             paymentstatus = 'completed'
         } else if (paymentMethod == 'wallet') {
             paymentstatus = 'completed'
-        } else {
-            paymentStatus == 'pending'
+            grandtotal = req.body.currentTotalNumber
+
+        } else if (paymentMethod === 'razorpay') {
+            paymentstatus = 'pending'
         }
 
 
         var order = new Order({
             user: userID,
             totalprice: grandtotal,
-            products: cart,
-
-            date: Date.now(),
+            products: Cart,
+            createdOn:new Date(),
             Address: address,
             status: 'pending',
             paymentMethod: paymentMethod,
@@ -298,33 +327,59 @@ const placeOrder = async (req, res) => {
         })
         order.save()
 
-        console.log(order)
+
         if (order) {
             if (paymentMethod == 'cod' || paymentMethod == 'wallet') {
-                for (const cartItem of user.cart) {
+                for (const cartItem of Cart) {
                     var product = await Product.findById(cartItem.productId)
                     if (product) {
-                        product.quantity -= cartItem.quantity
-                        // await product.save()
+                        if (coupon) {
+                            const update = await Coupon.findByIdAndUpdate(coupon._id, { $push: { user: userID } }, { new: true })
+                           
+                            product.quantity -= cartItem.quantity
+                            await product.save()
+                        } else {
+                            product.quantity -= cartItem.quantity
+                            await product.save()
+                        }
+
                     }
                 }
                 res.status(200).send({ status: true })
-                // await User.updateOne({ _id: userID }, { $unset: { cart: 1 } })
+                await User.updateOne({ _id: userID }, { $unset: { cart: 1 } })
 
             } else if (paymentMethod == 'razorpay') {
-                console.log(req.body.grandtotal)
+
                 var options = {
 
                     amount: grandtotal * 100,
                     currency: "INR",
                     receipt: "" + order._id
                 }
-                instance.orders.create(options, function (err, order) {
+                instance.orders.create(options, async function (err, order) {
                     if (err) {
+
                         console.log('error happend in creating order in razorpay', err)
                     } else {
-                        console.log(order)
+                        for (const cartItem of Cart) {
+                            var product = await Product.findById(cartItem.productId)
+                            if (product) {
+                                if (coupon) {
+                                    const update = await Coupon.findByIdAndUpdate(coupon._id, { $push: { user: userID } }, { new: true })
+                                    product.quantity -= cartItem.quantity
+                                    await product.save()
+                                } else {
+                                    product.quantity -= cartItem.quantity
+                                    await product.save()
+                                }
+
+                            }
+                        }
+
                         res.json({ order: order, razorpay: true })
+                        const razorpayCart = await User.updateOne({ _id: userID }, { $unset: { cart: 1 } })
+                        
+
                     }
                 })
             }
@@ -345,7 +400,7 @@ const placeOrder = async (req, res) => {
 const verifyRazPayment = async (req, res) => {
     try {
 
-        console.log(req.body)
+        
         const details = req.body
         const crypto = require('crypto')
         let hmac = crypto.createHmac('sha256', process.env.RAZORPAY_SECRET_KEY)
@@ -356,13 +411,9 @@ const verifyRazPayment = async (req, res) => {
 
                 then((status) => {
                     res.json(true)
-                    try {
 
-                    } catch (error) {
-                        console.log('erorr happend in cartcontrl in verifypayment', error)
-                    }
                 }).catch((err) => {
-                    res.json(false)
+                    res.json({ RazorpayFailure: true })
 
                 })
         }
@@ -374,13 +425,88 @@ const verifyRazPayment = async (req, res) => {
 const cancelOrder = async (req, res) => {
     try {
 
-        res.redirect('/OrdersPage')
+        const userId = req.session.user
+        const orderId = req.params.id
+        const order = await Order.findById(orderId)
+        const orderProducts = order.products
+
+        const paymentMethod = order.paymentMethod
+        const productIds = orderProducts.map(item => item.productId)
+        const orderProductsQuantity = order.products.map(item => item.quantity)
+
+        if (paymentMethod === 'cod') {
+
+            for (let i = 0; i < productIds.length; i++) {
+                const productId = productIds[i]
+                const returnQuantity = orderProductsQuantity[i]
+                const returnproduct = await Product.findByIdAndUpdate(productId, { $inc: { quantity: returnQuantity } }, { new: true })
+                console.log(returnproduct)
+            }
+            const order = await Order.findByIdAndUpdate(orderId, { UserOrderStatus: 'cancelled' }, { new: true })
+            res.redirect('/orderDetails/' + orderId)
+
+        } else if (paymentMethod === 'wallet' || paymentMethod === 'razorpay') {
+            const oder = await Order.findById(orderId)
+
+            const ReturnAmount = oder.totalprice
+
+            for (let i = 0; i < productIds.length; i++) {
+                const productId = productIds[i]
+                const returnQuantity = orderProductsQuantity[i]
+                const returnproduct = await Product.findByIdAndUpdate(productId, { $inc: { quantity: returnQuantity } }, { new: true })
+                console.log(returnproduct)
+            }
+           
+            const WalletReturn = await User.findByIdAndUpdate(userId, { $inc: { wallet: ReturnAmount } }, { new: true })
+          
+            const order = await Order.findByIdAndUpdate(orderId, { UserOrderStatus: 'cancelled' }, { new: true })
+        
+            res.redirect('/orderDetails/' + orderId)
+        }
+
+
 
     } catch (error) {
         console.log('error happend in cartcontrl in cancelorder', error)
 
     }
 }
+const ReturnProduct = async (req, res) => {
+    try {
+        const userId = req.session.user
+        const productId = req.params.id
+        const orderId = req.params.orderId
+        const order = await Order.findById(orderId)
+
+        const payment = order.paymentMethod
+        const productDetails = order.products.find(product => product.productId == productId)
+
+        if (payment === 'cod') {
+            const returnStock = await Product.findByIdAndUpdate(productId, { $inc: { quantity: productDetails.quantity } }, { new: true })
+            const statusUpdate = await Order.findByIdAndUpdate(orderId, {
+                $set: { 'products.$[element].isReturned': true }
+            },
+                { new: true, arrayFilters: [{ 'element.productId': productId }] })
+
+        } else if (payment === 'wallet' || payment === 'razorpay') {
+            const Amount = productDetails.quantity * productDetails.price
+
+            const returnStock = await Product.findByIdAndUpdate(productId, { $inc: { quantity: productDetails.quantity } }, { new: true })
+
+           
+            const ReturnAmount = await User.findByIdAndUpdate(userId, { $inc: { wallet: Amount } }, { new: true })
+          
+            const statusUpdate = await Order.findByIdAndUpdate(orderId,
+                { $set: { 'products.$[element].isReturned': true } },
+                { new: true, arrayFilters: [{ 'element.productId': productId }] })
+        }
+
+        res.redirect('/orderDetails/' + orderId)
+    } catch (error) {
+        console.log('error happend in cart contrl in returnproduct', error)
+    }
+}
+
 module.exports = {
     addtoCart,
     cartPage,
@@ -390,4 +516,6 @@ module.exports = {
     placeOrder,
     cancelOrder,
     verifyRazPayment,
+    ReturnProduct,
+
 }

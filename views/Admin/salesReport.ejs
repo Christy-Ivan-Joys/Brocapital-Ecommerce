@@ -1,0 +1,332 @@
+<%-include ('header')%>
+
+    <div class="page-body" style="margin-top:70px;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card card-table">
+                        <div class="card-body">
+                            <div class="title-header option-title d-sm-flex d-block">
+                                <div>
+                                    <h2 class="content-title card-title">Sales</h2>
+                                    <br><br>
+                                    <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" id="filterOrders">
+                                        <option value="all">Report</option>
+                                        <option value="all">All</option>
+                                        <option value="week">Report of this week</option>
+                                        <option value="month">Report of this month</option>
+                                        <option value="year">Report of this year</option>
+                                    </select>
+                                </div>
+                                <div class="right-options">
+                                    <ul>
+
+                                        <li>
+                                            <a class="btn btn-solid" onclick="createSalesReport('excel')"><i
+                                                    class="fas fa-download"></i>Sales Report Excel</a>
+                                        </li>
+                                        <li>
+                                            <a class="btn btn-solid" onclick="createSalesReport('pdf')"><i
+                                                    class="fas fa-download"></i>Sales Report PDF</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="table-responsive">
+                                    <table class="table all-package theme-table table-product" id="salesTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>User Name</th>
+                                                <th>status</th>
+                                                <th>Payment</th>
+                                                <th>Payment status</th>
+
+                                                <th>Details</th>
+                                                <th>Grandtotal</th>
+
+
+
+
+
+
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <%if (orders.length> 0){%>
+                                                <% for (let i=0;i < orders.length; i++){ %>
+                                                    <tr>
+
+                                                        <td style="display: none;">
+                                                            <%= orders[i]._id %>
+                                                        </td>
+                                                        <td>
+                                                            <%= orders[i].createdOn.toDateString() %>
+                                                        </td>
+
+                                                        <td>
+                                                            <%= orders[i].user.name %>
+                                                        </td>
+
+
+                                                        <td>
+                                                            <%= orders[i].status %>
+                                                        </td>
+
+
+                                                        <td>
+                                                            <%= orders[i].paymentMethod %>
+                                                        </td>
+
+                                                        <td style="display: none;">
+                                                            <%= orders[i].products.length%>
+                                                        </td>
+
+                                                        <td>
+                                                            <%= orders[i].paymentStatus %>
+                                                        </td>
+                                                        <td><a href="/admin/orderDetailsPage/<%= orders[i]._id %>"
+                                                                class="btn-small d-block">View</a></td>
+                                                        <td> ₹<%= orders[i].totalprice %>
+                                                        </td>
+
+
+
+                                                    </tr>
+
+                                                    <%}%>
+                                                        <%}%>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+    <!-- page-wrapper End-->
+    <% if (locals.totalPages) { %>
+        <!-- Bootstrap Pagination -->
+        <nav aria-label="Page navigation" style="margin-top:-90px;size:px ;margin-bottom: 100px;margin-left:150px;">
+            <ul class="pagination justify-content-center">
+                <% if (locals.currentPage> 1) { %>
+                    <li class="page-item">
+                        <a class="page-link btn-dark" href="?filter=<%= filter%>&page=<%= locals.currentPage - 1 %>" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <% } else { %>
+                        <li class="page-item disabled">
+                            <span class="page-link btn-dark" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </span>
+                        </li>
+                        <% } %>
+
+                            <% for (let i=1; i <=locals.totalPages; i++) { %>
+                                <li class="page-item <%= i === locals.currentPage ? 'active' : '' %>">
+                                    <a class="page-link btn-dark" href="?filter=<%= filter%>&page=<%= i %>">
+                                        <%= i %>
+                                    </a>
+                                </li>
+                                <% } %>
+
+                                    <% if (locals.currentPage < locals.totalPages){ %>
+                                        <li class="page-item">
+                                            <a class="page-link btn" href="?filter=<%= filter%>&page=<%= locals.currentPage + 1 %>"
+                                                aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                        <% } else { %>
+                                            <li class="page-item disabled">
+                                                <span class="page-link btn" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </span>
+                                            </li>
+                                            <% } %>
+            </ul>
+        </nav>
+        <% } %>
+
+
+
+            <!-- Modal Start -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog  modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <h5 class="modal-title" id="staticBackdropLabel">Logging Out</h5>
+                            <p>Are you sure you want to log out?</p>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                            <div class="button-box">
+                                <button type="button" class="btn btn--no" data-bs-dismiss="modal">No</button>
+                                <button type="button" class="btn  btn--yes btn-primary">Yes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal End -->
+            <script>
+                async function createSalesReport(type) {
+
+
+                    const salesTable = document.getElementById('salesTable')
+                
+                    const tableBody = salesTable.querySelector('tbody')
+                    const salesData = []
+                    for (const row of tableBody.rows) {
+                       
+                        const orderId = row.cells[0].textContent.trim();
+
+                        const date = row.cells[1].textContent.trim()
+
+                        const name = row.cells[2].textContent.trim()
+                        const payment = row.cells[4].textContent.trim()
+                        const products = row.cells[5].textContent.trim()
+                        let totalAmount = row.cells[8].textContent.trim();
+
+                        totalAmount = parseFloat(totalAmount.replace(/[^0-9]/g, ''), 10);
+
+                        // Do something with these values, for example, log them                
+                        const orderData = {
+                            orderId: orderId,
+                            name: name,
+                            date: date,
+                            totalAmount: totalAmount,
+                            payment: payment,
+                            products: products
+                        }
+
+                        salesData.push(orderData);
+                    }
+                 
+                    if (type === 'pdf') {
+
+
+                        try {
+                            const response = await fetch('/admin/generatePDF', {
+                                method: 'post',
+                                headers: {
+                                    "Content-Type": 'application/json'
+                                },
+                                body: JSON.stringify(salesData)
+
+                            })
+
+                            if (response.ok) {
+                                const blob = await response.blob()
+                                const url = window.URL.createObjectURL(blob)
+                                const a = document.createElement('a')
+                                a.href = url
+                                a.download = 'report.pdf'
+                                document.body.appendChild(a)
+                                a.click()
+                                document.body.removeChild(a)
+                            } else {
+                                alert('failed to generate pdf')
+                            }
+                        } catch (error) {
+                            alert(error.message)
+                        }
+
+
+
+
+
+                    } else if (type === 'excel') {
+                        try {
+                            const response = await fetch('/admin/generateExcel', {
+                                method: 'post',
+                                headers: {
+                                    "Content-Type": 'application/json'
+                                },
+                                body: JSON.stringify(salesData)
+                            });
+
+                            if (response.ok) {
+                                const blob = await response.blob();
+                                const url = window.URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = 'report.xlsx';
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                            } else {
+                                alert('Failed to generate Excel file');
+                            }
+                        } catch (error) {
+                            console.log('error in fetching data in generate Excel')
+                        }
+                    }
+                }
+                document.getElementById('filterOrders').addEventListener('change', function () {
+                    const value = this.value
+                    switch (value) {
+                        case 'week':
+                            window.location.href = '/admin/SalesReport?filter=week';
+                            break;
+                        case 'month':
+                            window.location.href='/admin/SalesReport?filter=month';
+                            break;
+                         case 'year':
+                            window.location.href='/admin/SalesReport?filter=year';
+                            break
+                          default :
+                          window.location.href='/admin/SalesReport?filter=all'
+                    }
+
+                })
+            </script>
+
+            <script src="/adminassets/js/jquery-3.6.0.min.js"></script>
+
+            <!-- Bootstrap js -->
+            <script src="/adminassets/js/bootstrap/bootstrap.bundle.min.js"></script>
+
+            <!-- feather icon js -->
+            <script src="/adminassets/js/icons/feather-icon/feather.min.js"></script>
+            <script src="/adminassets/js/icons/feather-icon/feather-icon.js"></script>
+
+            <!-- scrollbar simplebar js -->
+            <script src="/adminassets/js/scrollbar/simplebar.js"></script>
+            <script src="/adminassets/js/scrollbar/custom.js"></script>
+
+            <!-- Sidebar js -->
+            <script src="/adminassets/js/config.js"></script>
+
+            <!-- customizer js -->
+            <script src="/adminassets/js/customizer.js"></script>
+
+            <!-- Plugins js -->
+            <script src="/adminassets/js/sidebar-menu.js"></script>
+            <script src="/adminassets/js/notify/bootstrap-notify.min.js"></script>
+            <script src="/adminassets/js/notify/index.js"></script>
+
+            <!-- Data table js -->
+            <script src="/adminassets/js/jquery.dataTables.js"></script>
+            <script src="/adminassets/js/custom-data-table.js"></script>
+
+            <!-- sidebar effect -->
+            <script src="/adminassets/js/sidebareffect.js"></script>
+
+            <!-- Theme js -->
+            <script src="/adminassets/js/script.js"></script>
+            </body>
+
+
+
+            </html>

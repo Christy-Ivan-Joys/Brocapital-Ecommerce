@@ -5,9 +5,12 @@
         <link href="/proDetailassets/css/style2513.css?v=3.0.0" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
             integrity="sha384-rxNLgWzq61q2cWzRIlIUoZLSdCvZlFfYmox4j0FuwwALx1Ea5zFjM5DRce6RnB+x" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
     </head>
     <style>
-        
+
     </style>
 
     <section class="section block-cart">
@@ -29,9 +32,9 @@
                                 <!-- cart card start-------------------------------------------------------------------------------------------------------------- -->
                                 <div class="list-items-cart">
                                     <div class="item-cart">
-                                        <div    class="item-cart-image"><img
+                                        <div class="item-cart-image"><img
                                                 src="/adminassets/images/productimg/<%= sortedCartItems[i].image[0] %>"
-                                                alt="Guza" >
+                                                alt="Guza">
                                         </div>
                                         <div class="item-cart-info">
 
@@ -174,7 +177,7 @@
 
 
 
-<!-- 
+                                        <!-- 
                                          <div class="box-coupon" style="margin-left: 30px;">
                                             <div class="coupon-left">
 
@@ -196,7 +199,7 @@
 
                 </div>
 
-               
+
 
 
             </div>
@@ -205,10 +208,9 @@
     <%-include('footer') %>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
-        <script>
 
-        </script>
         <script>
+           
             function QuantityCheck(productId, cartQty, count, proPrice, i, productQty) {
 
                 const cartProQty = document.querySelector(`#cartProQty${i}`)
@@ -275,7 +277,17 @@
 
             }
             function deleteCartItem(id) {
-
+                
+             const walletStatus=localStorage.getItem('walletApplied')
+            
+            
+             var walletAmountApplied
+             if(walletStatus==='true'){
+                 walletAmountApplied=localStorage.getItem('WalletAmount')
+                
+             }else{
+                walletAmountApplied=undefined
+             }
                 Swal.fire({
                     title: "Are you sure?",
                     text: "Remove the item from the cart !",
@@ -286,13 +298,16 @@
                     confirmButtonText: "Yes, delete it!"
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        
                         $.ajax({
                             url: '/deleteCartItem',
                             method: 'post',
                             data: {
+                                 walletAmountApplied:walletAmountApplied,
                                 cartItemId: id,
 
                             }, success: function (response) {
+                                localStorage.setItem('walletApplied', 'false')
                                 location.reload()
                             }
                         })
@@ -301,7 +316,7 @@
 
             }
 
-         
+
         </script>
 
 

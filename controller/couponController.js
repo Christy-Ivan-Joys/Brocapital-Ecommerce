@@ -36,21 +36,34 @@ const createCoupon = async (req, res) => {
 
 const addcoupon = async (req, res) => {
     try {
-        console.log(req.body)
 
+   
+        const couponid=req.body._id
         const startDate = new Date(req.body.startdate)
         const endDate = new Date(req.body.enddate)
-        console.log(startDate, endDate)
+       
         startDate.setHours(0, 0, 0, 0);
         endDate.setHours(0, 0, 0, 0);
 
         const couponData = req.body
-        const existCoupon = await Coupon.findOne({ code: { $regex: new RegExp(req.body.code, 'i') } })
-        console.log(existCoupon ? existCoupon : null)
-        if (existCoupon) {
+       
+
+        const ExistingCoupon = await Coupon.findOne({
+            $and: [
+                { _id: { $ne: couponid } }, {
+                    $or: [
+                        { code: req.body.code }, { name: req.body.couponname }]
+                }]
+        })
+
+
+
+       
+        if (ExistingCoupon) {
             let couponexist = true
             res.render('Admin/addcoupon', { couponexist })
             console.log('coupon already exist')
+            couponexist = false
 
         } else {
 
@@ -86,42 +99,53 @@ const applyCoupon = async (req, res) => {
         const couponcode = req.body.couponCode
         const grandtotal = req.body.grandtotal
         const coupon = await Coupon.findOne({ code: couponcode })
-        const expirydate = coupon.Enddate
+       
+        if (coupon) {
+            const expirydate = coupon?.Enddate ? coupon.Enddate : undefined;
+            const alreadyUsed = await Coupon.findOne({ _id: coupon._id, user: { $in: [userId] } });
+            const minPrice = coupon.minprice
+            if (grandtotal >= minPrice) {
 
-        console.log(coupon._id)
-        const alreadyUsed = await Coupon.findOne({ _id: coupon._id, user: { $in: [userId] } });
 
-        console.log('useddddddddddddddddddddddddddddddddd', alreadyUsed)
-        console.log(currentdate, expirydate)
+                if (grandtotal !== 0) {
 
 
-        if (currentdate <= expirydate) {
-            console.log('yessssssssssssss')
-            if (alreadyUsed === null) {
-                console.log('else')
-                const discount = coupon.discount
-                
-                const Discount = grandtotal * discount / 100
-                const discountedvalue = grandtotal - grandtotal * discount / 100
-                const update = await Coupon.findByIdAndUpdate(coupon._id, { $push: { user: userId } }, { new: true })
-                
-               
-                res.json({ status: true, discountedvalue, Discount })
+                    if (currentdate <= expirydate) {
 
-            }else{
-                console.log('alereadt')
-                res.json({alreadyUsed:true})
+                        if (alreadyUsed === null) {
+
+                            const discount = coupon.discount
+
+                            const Discount = grandtotal * discount / 100
+                            const discountedvalue = grandtotal - grandtotal * discount / 100
+
+
+
+                            res.json({ status: true, discountedvalue, Discount, coupon })
+
+                        } else {
+
+                            res.json({ alreadyUsed: true })
+                        }
+
+                    } else {
+                        console.log('error as the coupon expired')
+                        res.json({ expired: true })
+                    }
+
+                } else {
+                    res.json({ fullPaidwithWallet: true })
+                }
+
+            } else {
+                console.log('minimum value error')
+                res.json({ MinpurchaseError: true,minPrice })
             }
 
         } else {
-            console.log('error as the coupon expired')
-            res.json({expired: true })
+            console.log('invalid coupon')
+            res.json({ Invalidcoupon: true })
         }
-
-
-
-
-
 
     } catch (error) {
         console.log('error happend in coupon contrl in applyCoupon', error)
@@ -131,7 +155,15 @@ const editCouponPage = async (req, res) => {
     try {
         const couponid = req.query.id
         const coupon = await Coupon.findById(couponid)
-        res.render('Admin/editcoupon', { coupon })
+        if (req.session.Err) {
+
+            req.session.Err = false
+
+            res.render('Admin/editcoupon', { coupon, Err: 'Coupon already exist' })
+        } else {
+            res.render('Admin/editcoupon', { coupon, Err: '' })
+        }
+
     } catch (error) {
         console.log('error happend in coupon contlr in editcoupon', error)
     }
@@ -140,20 +172,48 @@ const editcoupon = async (req, res) => {
     try {
         const couponid = req.query.id
         const data = req.body
-        console.log(data, couponid)
-        const update = await Coupon.findByIdAndUpdate(couponid, {
-            name: data.couponname,
-            code: data.code,
-            startdate: data.startdate,
-            Enddate: data.enddate,
-            description: data.description,
-            discount: data.discount,
-            minprice: data.minPrice,
-        }, { new: true })
-        console.log(update)
-        res.redirect('/admin/couponPage')
+        const ExistingCoupon = await Coupon.findOne({
+            $and: [
+                { _id: { $ne: couponid } }, {
+                    $or: [
+                        { code: req.body.code }, { name: req.body.couponname }]
+                }]
+        })
+
+        if (ExistingCoupon) {
+            req.session.Err = true
+         
+            res.redirect(`/admin/editCoupon?id=${couponid}`)
+        } else {
+            
+            const coupon = await Coupon.findById()
+            const update = await Coupon.findByIdAndUpdate(couponid, {
+                name: data.couponname,
+                code: data.code,
+                startdate: data.startdate,
+                Enddate: data.enddate,
+                description: data.description,
+                discount: data.discount,
+                minprice: data.minPrice,
+            }, { new: true })
+           
+            res.redirect('/admin/couponPage')
+        }
     } catch (error) {
         console.log('errror happend in coupon contrl in editcoupon', error)
+    }
+}
+const deleteCoupon = async (req, res) => {
+    try {
+        const id = req.query.CouponID
+        
+        const coupon = await Coupon.findByIdAndDelete(id)
+      
+        res.json({ deleted: true })
+
+    } catch (error) {
+        console.log('error happend in coupon COntrl in deleteCoupon', error)
+
     }
 }
 module.exports = {
@@ -163,6 +223,7 @@ module.exports = {
     applyCoupon,
     editCouponPage,
     editcoupon,
+    deleteCoupon,
 
 }
 

@@ -1,19 +1,7 @@
 const mongoose = require('mongoose')
 const moment = require('moment-timezone')
 
-const getCurrentDateWithoutTime = () => {
-    const currentDate = new Date();
-    currentDate.setUTCHours(0, 0, 0, 0);
-    
-    const year  = currentDate.getUTCFullYear();
-    const month = String(currentDate.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-based
-    const day = String(currentDate.getUTCDate()).padStart(2, '0');
-    const hours = String(currentDate.getHours()).padStart(2, '0');
-    const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-    const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-    
-    return `${day}-${month}-${year} Time :${hours}:${minutes}:${seconds}`;
-};
+
 
 let orderModel = new mongoose.Schema({
     user: {
@@ -27,17 +15,9 @@ let orderModel = new mongoose.Schema({
     },
 
     createdOn: {
-        type: String,
+        type: Date,
         required: true,
-        default: getCurrentDateWithoutTime(),
 
-
-
-    },
-    
-    date: {
-        type: String,
-        required: true,
 
     },
     products: [
@@ -48,7 +28,11 @@ let orderModel = new mongoose.Schema({
             },
             quantity: Number,
             price: Number,
-            size:String,
+            size: String,
+            isReturned: {
+                type: Boolean,
+                default: false
+            }
         },
     ],
     Address: {
@@ -68,7 +52,21 @@ let orderModel = new mongoose.Schema({
         type: String,
         required: true
     },
+    UserOrderStatus: {
+        type: String,
+        required: true,
+        default: 'Order placed'
+
+    }
 
 
 })
+
+orderModel.pre('save', function (next) {
+  // Assuming that createdOn is a Date object
+  const updatedDate = new Date(this.createdOn);
+  updatedDate.setHours(updatedDate.getHours() + 5);
+  this.createdOn = updatedDate;
+  next();
+});
 module.exports = mongoose.model('order', orderModel)

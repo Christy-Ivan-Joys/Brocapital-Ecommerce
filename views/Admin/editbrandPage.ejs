@@ -75,7 +75,7 @@
     <script>
         function validateForm(event) {
 
-            alert('hello')
+           
 
             const name = document.getElementById('brandname').value;
          
@@ -86,13 +86,13 @@
             const nameError = document.getElementById('nameError')
            
             const statusError = document.getElementById('statusError')
-            alert('helloooo 2')
+           
             const nameRegex = /^[A-Z][A-Za-z]*$/
             if (nameRegex.test(name)) {
-                alert('if')
+                
                 nameError.innerHTML = ''
             } else {
-                alert('else')
+                
                 nameError.innerHTML = 'Enter a valid brand name !'
                 event.preventDefault()
             }

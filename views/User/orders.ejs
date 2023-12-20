@@ -98,11 +98,7 @@
                                                 aria-controls="walley" aria-selected="false"><i
                                                     class="fi-rs-settings-sliders mr-10"></i>Wallet</a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link " id="dashboard-tab" href="/account/referrals" role="tab"
-                                                aria-controls="dashboard" aria-selected="false"><i
-                                                    class="fi fi-rs-share mr-10"></i>Referrals</a>
-                                        </li>
+                                     
                                         <li class="nav-item">
                                             <a class="nav-link" href="/logout"><i
                                                     class="fi fi-rs-sign-out mr-10"></i>Logout</a>
@@ -132,10 +128,10 @@
                                                         </thead>
                                                         <tbody>
 
-                                                            <% for(let i=orders.length-1;i>=0;i--){ %>
+                                                            <% for(let i=0;i<orders.length;i++){ %>
                                                                 <tr>
                                                                     <td>
-                                                                        <%= orders[i].createdOn %>
+                                                                        <%=new Date(orders[i].createdOn.getTime() - (5 * 60 * 60 * 1000)).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' }) %>
                                                                     </td>
                                                                    
                                                                     <td>
@@ -176,7 +172,7 @@
             </div>
             <% if (locals.totalPages) { %>
                 <!-- Bootstrap Pagination -->
-                <nav aria-label="Page navigation" >
+                <nav aria-label="Page navigation" style="margin-left: 350px;margin-top: px;" >
                     <ul class="pagination justify-content-center">
                         <% if (locals.currentPage> 1) { %>
                             <li class="page-item">
@@ -219,7 +215,9 @@
                                       <% } %>
         </section>
      
-                           </main>
+</main>
+
+<%- include('footer') %>
             <style>
                 .pagination li a.active,
                 .pagination li a:hover {

@@ -1,241 +1,268 @@
-
-
 <%-include('header')%>
 
+    <link rel="stylesheet" href="https://unpkg.com/cropperjs/dist/cropper.css">
+    <script src="https://unpkg.com/cropperjs"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 
+    <style>
+        .edit-image {
+            width: 100px;
+            height: auto;
+        }
+    </style>
 
-<style>
+    <br>
+    <h1>hii</h1>
+    <form action="/admin/editproduct/<%= product._id  %>" method="post" enctype="multipart/form-data">
 
-.edit-image {
-  width: 100px; 
-  height: auto; 
-}
-</style>
-
-<br>
-<h1>hii</h1>
-<form action="/admin/editproduct/<%= product._id  %>" method="post" enctype="multipart/form-data">
-   
-                <!-- New Product Add Start -->
-                <div class="container-fluid">
+        <!-- New Product Add Start -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
                     <div class="row">
-                        <div class="col-12">
-                            <div class="row">
-                                <div class="col-sm-8 m-auto">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="card-header-2">
-                                                <h5>Edit product</h5>
-                                            </div>
+                        <div class="col-sm-8 m-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-header-2">
+                                        <h5>Edit product</h5>
+                                    </div>
+<% if(product){ %>
 
-                                            
-                                                <div class="mb-4 row align-items-center">
-                                                    <label class="form-label-title col-sm-3 mb-0">Product
-                                                        Name</label>
-                                                    <div class="col-sm-9">
-                                                        <input class="form-control" type="text"
-                                                            placeholder="Product Name" name="productname" value="<%= product.productname %>" >
-                                                            <p id="nameError" style="color:red;"></p>
-                                                    </div>
-                                                </div>
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="form-label-title col-sm-3 mb-0">Product
+                                            Name</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="text" placeholder="Product Name"
+                                                name="productname" id="productname" value="<%= product.productname %>">
+                                            <p id="nameError" style="color:red;"></p>
+                                        </div>
+                                        <p id="" style="color:green;margin-left: 280px;">Use capital letter to start</p>
+                                    </div>
 
-                                               
 
-                                                <div class="mb-4 row align-items-center">
-                                                    <label
-                                                        class="col-sm-3 col-form-label form-label-title">Category</label>
-                                                    <div class="col-sm-9">
-                                                      
-                                                        <select class="js-example-basic-single w-100" name="category">
-                                                            
-                                                                <% for(let i=0;i<category.length;i++){ %>
-    
-                                                            
-                                                            <option value="<%= category[i].name %>"><%= category[i].name %></option>
-                                                                
-                                                            
-                                                             <% } %>
-                                                           
-                                                            
-                                                        </select>
-                                                        <p id="catError" style="color:red"></p>
-                                                       
-                                                    </div>
-                                                </div>
 
-                                               
-
-                                                <div class="mb-4 row align-items-center">
-                                                    <label class="col-sm-3 col-form-label form-label-title">Brand</label>
-                                                    <div class="col-sm-9">
-                                                        <select class="js-example-basic-single w-100" name="brand" id="brand">
-                                                            
-                                                            <% for(let i=0;i<brand.length;i++){%>
-            
-                                                                <option value="<%= brand[i].name %>">
-                                                                    <%= brand[i].name %>
-                                                                </option>
-                                                                <% } %>
-            
-                                                        </select>
-                                                        <p id="brandError" style="color:red"></p>
-                                                    </div>
-                                                </div>
-
-                                               
-                                                <div class="mb-4 row align-items-center">
-                                                    <label class="col-sm-3 col-form-label form-label-title">Size</label>
-                                                    <div class="col-sm-9">
-                                                        <select class="js-example-basic-single w-100" name="size">
-                                                            <option>S</option>
-                                                            <option>M</option>
-                                                            <option>L</option>
-                                                            <option>XL</option>
-                                                            
-                                            
-                                                        </select>
-                                                        <p id="sizeError" style="color:red"></p>
-                                                    </div>
-                                                </div>
-                                            
-                                                <div class="mb-4 row align-items-center">
-                                                    <label class="col-sm-3 form-label-title">Quantity</label>
-                                                    <div class="col-sm-9">
-                                                        <input class="form-control" type="number" placeholder="0"  name="quantity" value="<%= product.quantity %>">
-                                                        <p id="quantityError" style="color:red ;"></p>
-                                                    </div>
-                                                </div>
-                                                
-                                              
-                                            
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 col-form-label form-label-title">Category</label>
+                                        <div class="col-sm-9">
+                                            <select class="js-example-basic-single w-100" name="category" id="category">
+                                                <% for (let i=0; i < category.length; i++) { %>
+                                                    <% if (category[i].name===product.category.name) { %>
+                                                        <!-- Display the current category first -->
+                                                        <option value="<%= category[i].name %>" selected>
+                                                            <%= category[i].name %>
+                                                        </option>
+                                                        <% } %>
+                                                            <% } %>
+                                                                <!-- Display other options below the current category -->
+                                                                <% for (let i=0; i < category.length; i++) { %>
+                                                                    <% if (category[i].name !==product.category.name) {
+                                                                        %>
+                                                                        <option value="<%= category[i].name %>">
+                                                                            <%= category[i].name %>
+                                                                        </option>
+                                                                        <% } %>
+                                                                            <% } %>
+                                            </select>
+                                            <p id="catError" style="color: red"></p>
                                         </div>
                                     </div>
 
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="card-header-2">
-                                                <h5>Description</h5>
-                                            </div>
 
-                                            <div class="mb-4 row align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">Description
-                                                </label>
-                                                <div class="col-sm-9">
-                                                    <input class="form-control" type="text"
-                                                        placeholder="Product Name" name="description" value="<%= product.description %>" >
-                                                        <p id="descriptionError" style="color:red ;"></p>
-                                                    
-                                                </div>
-                                            </div>
-                                           
-                                            
-                                      
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 col-form-label form-label-title">Brand</label>
+                                        <div class="col-sm-9">
+                                            <select class="js-example-basic-single w-100" name="brand" id="brand">
+
+                                                <% for(let i=0;i<brand.length;i++){%>
+                                                    <% if(brand[i].name===product.brand){%>
+                                                        <option value="<%= brand[i].name %>">
+                                                            <%= brand[i].name %>
+                                                        </option>
+                                                        <% } %>
+                                                            <% } %>
+                                                                <% for(let i=0;i<brand.length;i++){%>
+                                                                    <% if(brand[i].name!==product.brand){%>
+                                                                        <option value="<%= brand[i].name %>">
+                                                                            <%= brand[i].name %>
+                                                                        </option>
+                                                                        <% } %>
+                                                                            <% } %>
+
+
+                                            </select>
+                                            <p id="brandError" style="color:red"></p>
                                         </div>
                                     </div>
 
-                                    <div class="card-header">
-                                        <h4>Images</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="input-upload">
-                                            <div class="d-flex"> 
-                                                <% for(var i=0;i<product.image.length;i++){ %>
-                                                    <img src="/adminassets/images/productimg/<%= product.image[i] %>?v=<%= Date.now()%>" alt="<%= product.image[1] %>" class="edit-image">
-                                                    <div><a class="btn-sm text  btn-danger" href="/admin/deleteImage/<%=product._id%>/<%= product.image[i]%>" onclick="return confirm('This action is going to delete the selected image.')">X</a></div>
-                                                <% } %>
-                                            </div>
-                                            <input multiple name="image" id="image" class="form-control" type="file">
+
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 col-form-label form-label-title">Size</label>
+                                        <div class="col-sm-9">
+                                            <select class="js-example-basic-single w-100" name="size" id="size">
+                                                <option>S</option>
+                                                <option>M</option>
+                                                <option>L</option>
+                                                <option>XL</option>
+
+
+                                            </select>
+                                            <p id="sizeError" style="color:red"></p>
                                         </div>
                                     </div>
-                                    <div class="mb-4">
-                                        <label for="product_name" class="form-label"></label>
-                                        <input type="hidden" class="form-control" value="<%=product.image%>" id="currentname" name="imageImport">
-                                        <p id="ImageError" style="color:red ; margin-left: 275px;"></p>
+
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 form-label-title">Quantity</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="number" placeholder="0" name="quantity"
+                                                value="<%= product.quantity %>" id="quantity">
+                                            <p id="quantityError" style="color:red ;"></p>
+                                        </div>
                                     </div>
 
-                                  
-                                    
 
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="card-header-2">
-                                                <h5>Product Price</h5>
+
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-header-2">
+                                        <h5>Description</h5>
+                                    </div>
+
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="form-label-title col-sm-3 mb-0">Description
+                                        </label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="text" placeholder="Product Name"
+                                                name="description" value="<%= product.description %>" id="description">
+                                            <p id="descriptionError" style="color:red ;"></p>
+
+                                        </div>
+                                        <p id="" style="color:green;margin-left: 280px;">Use capital letter to start</p>
+                                    </div>
+
+                            <%}else{%>
+                                <h>Error</h>
+                                <%}%>
+
+                                </div>
+                            </div>
+
+                            <div class="card-header">
+                                <h4>Images</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="input-upload">
+                                    <div class="d-flex">
+                                        <% for(var i=0;i<product.image.length;i++){ %>
+                                            <img src="/adminassets/images/productimg/<%= product.image[i] %>?v=<%= Date.now()%>"
+                                                alt="<%= product.image[1] %>" class="edit-image">
+
+                                            <div><a class="btn-sm text  btn-danger"
+                                                    href="/admin/deleteImage/<%=product._id%>/<%= product.image[i]%>"
+                                                    onclick="return confirm('This action is going to delete the selected image.')">X</a>
                                             </div>
 
-                                            
-                                                <div class="mb-4 row align-items-center">
-                                                    <label class="col-sm-3 form-label-title">price</label>
-                                                    <div class="col-sm-9">
-                                                        <input class="form-control" type="number" placeholder="0" required="true" name="price" value="<%= product.price %>">
-                                                        <p id="priceError" style="color:red ; margin-left: 275px;"></p>
-                                                    </div>
-                                                </div>
-                                                <!-- <div class="mb-4 row align-items-center">
+                                            <% } %>
+                                    </div>
+
+                                    <input multiple name="image" id="formFile" class="form-control" type="file">
+
+                                </div>
+                                <p id="ImageError" style="color:red ; margin-left: 275px;"></p>
+                            </div>
+                            <div class="mb-4">
+                                <label for="product_name" class="form-label"></label>
+                                <input type="hidden" class="form-control" value="<%=product.image%>" name="imageImport">
+
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-header-2">
+                                        <h5>Product Price</h5>
+                                    </div>
+
+
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 form-label-title">price</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="number" placeholder="0" name="price"
+                                                value="<%= product.price %>" id="price">
+                                            <p id="priceError" style="color:red ; margin-left: 275px;"></p>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="mb-4 row align-items-center">
                                                     <label class="col-sm-3 form-label-title">Offer
                                                         price</label>
                                                     <div class="col-sm-9">
                                                         <input class="form-control" type="number" placeholder="0" name="offerprice" value="<%= product.offerprice %>">
                                                     </div>
                                                 </div> -->
-                                               
-                                           
-                                        </div>
-                                    </div>
 
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="card-header-2">
-                                                <h5>Product Inventory</h5>
-                                            </div>
 
-                                            
-                                                <div class="mb-4 row align-items-center">
-                                                    <label class="col-sm-3 col-form-label form-label-title">Stock
-                                                        Status</label>
-                                                    <div class="col-sm-9">
-                                                        <select class="js-example-basic-single w-100" name="stock">
-                                                            <option>In Stock</option>
-                                                            <option>Out Of Stock</option>
-                                                            <option>On Backorder</option>
-                                                        </select>
-                                                        <p id="stockError" style="color:red ; margin-left: 275px;"></p>
-                                                    </div>
-                                                </div>
-                                         
-                                        
-                                        </div>
-                                    </div>
-
-                                    
-
-                                    
                                 </div>
                             </div>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-header-2">
+                                        <h5>Product Inventory</h5>
+                                    </div>
+
+
+                                    <div class="mb-4 row align-items-center">
+                                        <label class="col-sm-3 col-form-label form-label-title">Stock
+                                            Status</label>
+                                        <div class="col-sm-9">
+                                            <select class="js-example-basic-single w-100" name="stock" id="stock">
+                                                <option>In Stock</option>
+                                                <option>Out Of Stock</option>
+                                                <option>On Backorder</option>
+                                            </select>
+                                            <p id="stockError" style="color:red ; margin-left: 275px;"></p>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+
+
                         </div>
                     </div>
                 </div>
-               
-                <div class="title-header option-title" style="margin-bottom: 70px; margin-right: 350px;">
-                    <h5></h5>
-                    
-                        <button class="align-items-center btn btn-theme d-flex" type="submit" onclick="validate(event)" ><i data-feather="plus"></i>Update</button>
-                    
-                </div>
-               
-                
-               
-
-            </form>
-            <div class="title-header option-title" style="margin-bottom: 70px; margin-right: 350px;">
-                <h5></h5>
-                
-               
             </div>
-            
-               
-            
-      
+        </div>
+
+        <div class="title-header option-title" style="margin-bottom: 70px; margin-right: 350px;">
+            <h5></h5>
+
+            <button class="align-items-center btn btn-theme d-flex" type="submit" onclick="validate(event)"><i
+                    data-feather="plus"></i>Update</button>
+
+        </div>
+
+
+
+
+    </form>
+    <div class="title-header option-title" style="margin-bottom: 70px; margin-right: 350px;">
+        <h5></h5>
+
+
+    </div>
+
+
+
+
     </div>
     <!-- page-wrapper End -->
 
@@ -259,187 +286,197 @@
     </div>
     <!-- Modal End -->
 
-<style>
+    <style>
+       
+        .image-preview {
+            max-width: 200px;
+            
+            max-height: 200px;
+            
+            margin: 5px;
+          
+        }
+    </style>
+    <script>
 
-/* CSS for image preview size */
-.image-preview {
-    max-width: 200px; /* Set the maximum width */
-    max-height: 200px; /* Set the maximum height */
-    margin: 5px; /* Add margin for spacing */
-}
+        function validate(event) {
+            // const nameRegex = /^[A-Z][a-z]*(?: [A-Za-z]*)*$/;
+            const nameRegex = /^[A-Za-z][A-Za-z\d\s'’\-_,.&]*[A-Za-z\d]$/;
 
-</style>
-<script>
-
-
-  
-function validate(event) {
-                 alert('hellooooo')
-                 const current=document.getElementById('currentimage').value
-                 alert(current)
-                 const image=document.getElementById('formFile').value
-                 alert(image)
-                 const name = document.getElementById('productname').value
-                 alert(name)
-                 const category = document.getElementById('category').value
-                 alert(category)
-                 const size = document.getElementById('size').value
-                 alert(size)
-                 const brand = document.getElementById('brand').value
-                 alert(brand)
-                 const description = document.getElementById('description').value
-                 alert(description)
-                 const quantity = document.getElementById('quantity').value
-                 alert(quantity)
-                 const price = document.getElementById('price').value
-                 alert(price)
-                 const stock=document.getElementById('stock').value
-                 
+            const catRegex = /^[A-Z][^0-9]*$/;
+            const brandRegex = /^[A-Z][A-Za-z0-9]*[^\d]$/
+            const quantityRegex = /^(?!0\d*$)\d+(\.\d+)?$/
+            const descriptionRegex = /^(?!\s)[\s\S]*\S$/;
 
 
-               
+            
+
+
+
+            const name = document.getElementById('productname').value
+
+            const category = document.getElementById('category').value
+
+            const size = document.getElementById('size').value
+
+            const brand = document.getElementById('brand').value
+
+            const description = document.getElementById('description').value
+
+            const quantity = document.getElementById('quantity').value
+
+            const price = document.getElementById('price').value
+
+            const stock = document.getElementById('stock').value
+
+
+           if (nameRegex.test(name)) {
+                nameError.innerHTML = ''
                 
-                 
-                 const nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
-     
-     
-     
-                 const catRegex = /^[A-Z][^0-9]*$/;
-                 const brandRegex = /^[A-Z][A-Za-z0-9]*[^\d]$/
-     
-                 const quantityRegex = /^(?!0\d*$)\d+(\.\d+)?$/
-     
-     
-                 if (nameRegex.test(name)) {
-                        nameError.innerHTML = ''
-                 } else {
-     
-                     nameError.innerHTML = 'Invalid name'
-                     event.preventDefault()
-                 }
-     
-                 if (category === '') {
-                    
-     
-                     catError.innerHTML = ' Category is empty ,Enter a category name starting with capital letter'
-                     event.preventDefault()
-     
-                 } else if (!catRegex.test(category)) {
-                    
-                     categoryError.innerHTML = 'Enter a category name starting with a capital letter.'
-                     event.preventDefault()
-                 } else {
-                     catError.innerHTML = ''
-                 }
-     
-     
-                 if (brandRegex.test(brand)) {
-                     
-                     brandError.innerHTML = ''
-                 } else {
-                   
-                     brandError.innerHTML = 'Enter a brand start with capital letter !'
-                     event.preventDefault()
-                 }
-     
-                 if (size === '') {
-                    
-     
-                     sizeError.innerHTML = ' Size is empty ,select a size'
-                     event.preventDefault()
-     
-                 } else if (!catRegex.test(category)) {
-                   
-                     sizeError.innerHTML = 'Size is empty ,select a size'
-                     event.preventDefault()
-                 } else {
-                     sizeError.innerHTML = ''
-                 }
-                 if (quantityRegex.test(quantity)) {
-                     quantityError.innerHTML = ''
-                 } else {
-                     quantityError.innerHTML = 'Enter a valid quantity (non-zero & non-negative number)'
-                     event.preventDefault()
-                 }
-                 if(quantityRegex.test(price)){
-                     priceError.innerHTML=''
-                 }else{
-                     priceError.innerHTML='Enter a valid price'
-                     event.preventDefault()
-                 }
-                 if(nameRegex.test(description)){
-                     descriptionError.innerHTML=''
-                   }else{
-                 descriptionError.innerHTML='Enter a valid description'
-                 }
-     
-                 if (stock === '') {
-                    
-     
-                     stockError.innerHTML = ' stock is empty ,Enter the stock status'
-                     event.preventDefault()
-     
-                 } else if (!catRegex.test(category)) {
-                   
-                     stockError.innerHTML = 'stock is empty ,Enter the stock status'
-                     event.preventDefault()
-                 } else {
-                     stockError.innerHTML = ''     
-                 }
-                 if(image.files.length===0 ){
-                     ImageError.innerHTML='Upload product images to continue'
-                     event.preventDefault()
-                 }else if( image.files.length<4){
-                     ImageError.innerHTML='Upload product images to continue'
-                     event.preventDefault()
-                 }else{
-                     ImageError.innerHTML=''
-                 }
-             }
+            } else {
+                
+                nameError.innerHTML = 'Invalid name'
+                event.preventDefault()
+            }
+
+            if (category === '') {
 
 
+                catError.innerHTML = ' Category is empty ,Enter a category name starting with capital letter'
+                event.preventDefault()
+
+            } else if (!catRegex.test(category)) {
+
+                categoryError.innerHTML = 'Enter a category name starting with a capital letter.'
+                event.preventDefault()
+            } else {
+                catError.innerHTML = ''
+            }
 
 
+            if (brandRegex.test(brand)) {
+
+                brandError.innerHTML = ''
+            } else {
+
+                brandError.innerHTML = 'Enter a brand start with capital letter !'
+                event.preventDefault()
+            }
+
+            if (size === '') {
 
 
+                sizeError.innerHTML = ' Size is empty ,select a size'
+                event.preventDefault()
+
+            } else if (!catRegex.test(category)) {
+
+                sizeError.innerHTML = 'Size is empty ,select a size'
+                event.preventDefault()
+            } else {
+                sizeError.innerHTML = ''
+            }
+            if (quantityRegex.test(quantity)) {
+                quantityError.innerHTML = ''
+            } else {
+                quantityError.innerHTML = 'Enter a valid quantity (non-zero & non-negative number)'
+                event.preventDefault()
+            }
+            if (quantityRegex.test(price)) {
+                priceError.innerHTML = ''
+            } else {
+                priceError.innerHTML = 'Enter a valid price'
+                event.preventDefault()
+            }
+            if (descriptionRegex.test(description)) {
+                descriptionError.innerHTML = ''
+            } else {
+                descriptionError.innerHTML = 'Enter a valid description'
+                event.preventDefault()
+            }
+
+            if (stock === '') {
 
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const removeButtons = document.querySelectorAll(".remove-image");
-        removeButtons.forEach((button) => {
-            button.addEventListener("click", function () {
-                const index = this.getAttribute("data-index");
-                // Remove the image from the DOM
-                this.parentNode.remove();
-                // Add logic to remove the corresponding image from your data
+                stockError.innerHTML = ' stock is empty ,Enter the stock status'
+                event.preventDefault()
+
+            } else if (!catRegex.test(category)) {
+
+                stockError.innerHTML = 'stock is empty ,Enter the stock status'
+                event.preventDefault()
+            } else {
+                stockError.innerHTML = ''
+            }
+            
+            var currentImageCount = document.querySelectorAll('.edit-image').length;
+            const image = document.getElementById('formFile')
+            var totalImages = parseInt(currentImageCount) + parseInt(image.files.length)
+
+
+            var validImageTypes = ['image/jpeg', 'image/png', 'image/gif','image/webp'];
+            for (var i = 0; i < image.files.length; i++) {
+                var fileType = image.files[i].type
+
+                if (!validImageTypes.includes(fileType)) {
+
+                    ImageError.innerHTML = 'Upload images with jpeg / png / gif formats '
+                    event.preventDefault()
+                    return
+                }
+            }
+
+            if (totalImages < 4) {
+                
+                ImageError.innerHTML = 'Upload 4 product images !'
+                event.preventDefault()
+            } else if (totalImages > 4) {
+               
+                ImageError.innerHTML = 'Maximum 4 product images is allowed !'
+                event.preventDefault()
+            } else {
+
+                ImageError.innerHTML = ''
+
+            }
+
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            const removeButtons = document.querySelectorAll(".remove-image");
+            removeButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                    const index = this.getAttribute("data-index");
+                    // Remove the image from the DOM
+                    this.parentNode.remove();
+                    // Add logic to remove the corresponding image from your data
+                });
             });
+
+            // Handle newly selected images
+            // Inside the JavaScript code for handling newly selected images
+            const newImagesInput = document.querySelector('input[name="new_images"]');
+            newImagesInput.addEventListener("change", function () {
+                const files = this.files;
+                const imageContainer = this.nextElementSibling; // Assuming it's the div after the input
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        // Create an image element, apply the CSS class, and append it to the container
+                        const img = document.createElement("img");
+                        img.src = event.target.result;
+                        img.classList.add("image-preview"); // Apply the CSS class
+                        imageContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
         });
+    </script>
 
-        // Handle newly selected images
-// Inside the JavaScript code for handling newly selected images
-const newImagesInput = document.querySelector('input[name="new_images"]');
-newImagesInput.addEventListener("change", function () {
-    const files = this.files;
-    const imageContainer = this.nextElementSibling; // Assuming it's the div after the input
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            // Create an image element, apply the CSS class, and append it to the container
-            const img = document.createElement("img");
-            img.src = event.target.result;
-            img.classList.add("image-preview"); // Apply the CSS class
-            imageContainer.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-    }
-});
 
-    });
-</script>
 
-  
-  
 
     <!-- latest js -->
     <script src="/adminassets/js/jquery-3.6.0.min.js"></script>
@@ -486,9 +523,10 @@ newImagesInput.addEventListener("change", function () {
 
     <!-- Theme js -->
     <script src="/adminassets/js/script.js"></script>
-   
-</body>
+
+    </body>
 
 
-<!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/add-new-product.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 14 Oct 2023 04:08:59 GMT -->
-</html>
+    <!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/add-new-product.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 14 Oct 2023 04:08:59 GMT -->
+
+    </html>
