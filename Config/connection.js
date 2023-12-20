@@ -3,9 +3,9 @@ const mongoose=require('mongoose')
 module.exports={
     connect(){
 
-        mongoose.connect('mongodb://0.0.0.0:27017/Brocapital',{
-            useNewUrlParser:true,
-            useUnifiedTopology:true
+        mongoose.connect('mongodb+srv://christyivanjoys:Christy1@cluster0.zabnhj5.mongodb.net/Hii?retryWrites=true&w=majority',{
+            // useNewUrlParser:true,
+            // useUnifiedTopology:true
         })
         .then(()=>{
             console.log('Database connected to mongoose');
