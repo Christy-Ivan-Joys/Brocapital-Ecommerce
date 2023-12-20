@@ -1,4 +1,18 @@
 <!DOCTYPE html>
-<h1>Error page</h1>
-<%=err.message%>
-<%=err.status%>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Error</title>
+</head>
+<body>
+  <h1>Error Page</h1>
+  <% if (locals.message) { %>
+    <p><%=message %></p>
+  <% } %>
+  <% if (status) { %>
+    <p>Status: <%= status %></p>
+  <% } else { %>
+    <p>Status: 500 Internal Server Error</p>
+  <% } %>
+</body>
+</html>
