@@ -45,6 +45,7 @@ const homepage = async (req, res) => {
     } catch (error) {
         console.log('Error in homepage route', error)
         res.render('Error', { error: 'error occured' })
+        
     }
 
 }
@@ -185,6 +186,7 @@ const Dologin = async (req, res) => {
 
 const signuppage = async (req, res) => {
     try {
+        
         res.render('User/signup')
     } catch (error) {
 
@@ -194,7 +196,7 @@ const signuppage = async (req, res) => {
 const Dosignup = async (req, res) => {
     const email = req.body.email
     try {
-        console.log(req.body)
+        
         const userData = req.body
         const email = req.body.email
         const user = await User.findOne({ email: userData.email })
@@ -206,7 +208,7 @@ const Dosignup = async (req, res) => {
 
             console.log('user already exist')
             res.render('User/signup', { userExist })
-            console, log('heloo end')
+           
         } else {
 
             console.log('else worked');
@@ -234,12 +236,8 @@ const Dosignup = async (req, res) => {
 
                 req.session.userOtp = Otp
                 req.session.userData = req.body
-                console.log('otp end');
-                console.log(req.body);
                 console.log(Otp)
                 res.render('User/emailOtp')
-
-
             } else {
 
                 res.json('email error')
@@ -258,7 +256,7 @@ const Dosignup = async (req, res) => {
 
 const verifySignup = async (req, res) => {
 
-    console.log('started');
+ 
     const { first, second, third, fourth, fifth, sixth } = req.body
     const extract = Object.values(req.body)
     const enteredOTP = extract.join('')
@@ -450,7 +448,7 @@ const ResetPassword = async (req, res) => {
 
 const Logout = async (req, res) => {
     try {
-      
+
         req.session.user = null
         res.redirect('/loginpage')
     } catch (error) {
@@ -460,7 +458,7 @@ const Logout = async (req, res) => {
 
 const profile = async (req, res) => {
     try {
-        
+
         const userId = req.session.user
         const user = await User.findById(userId)
         let currentPassError
@@ -479,19 +477,19 @@ const profile = async (req, res) => {
 
 const orderPage = async (req, res) => {
     try {
-       
-        const order = await Order.find().sort({createdOn:-1})
-      
-        
+
+        const order = await Order.find().sort({ createdOn: -1 })
+
+
         const itemsperPage = 8
         const currentPage = parseInt(req.query.page) || 1
         const startIndex = (currentPage - 1) * itemsperPage
         const endIndex = startIndex + itemsperPage
-        const Orders=order.length
+        const Orders = order.length
         const totalPages = Math.ceil(Orders / itemsperPage)
         const orders = order.slice(startIndex, endIndex)
         const user = req.session.user
-       
+
         res.render('User/orders', { user, orders, currentPage, totalPages, })
 
     } catch (error) {
@@ -502,25 +500,26 @@ const orderPage = async (req, res) => {
 const orderDetailsPage = async (req, res) => {
     try {
         const orderId = req.params.id
-       
+
         const userId = req.session.user
         const user = await User.findById(userId)
         const order = await Order.findOne({ _id: orderId })
-        let orderProducts = order.products      
+        let orderProducts = order.products
         let productIDs = orderProducts.map(item => item.productId)
         const products = await Product.find({ _id: { $in: productIDs } })
 
         const productMap = new Map(products.map(product => [product._id.toString(), product]));
-       
+
         const sortedProducts = productIDs.map(id => productMap.get(id.toString()));
-     
-        
+
+
         //sending the final sorted product to get the same order of the quatity placed inside the products inside the order
-       res.render('User/orderDetails', { user, sortedProducts, orderProducts, order })
+        res.render('User/orderDetails', { user, sortedProducts, orderProducts, order })
 
     } catch (error) {
         console.log('error happend in user contrl in orderDetailsPage', error)
-
+       
+       
     }
 }
 const UserAddressPage = async (req, res) => {
@@ -559,19 +558,19 @@ const ManageAddress = async (req, res) => {
     }
 }
 
-const productDetails = async (req, res) => {
+const productDetails = async (req, res,next) => {
     try {
         const products = await Product.find()
         const id = req.params.id
         const product = await Product.findById(id)
-   
+
 
         const user = req.session.user
 
         if (product) {
             if (user) {
                 res.render('User/productDetail', { product, products, user })
-             
+
 
             } else {
                 res.render('User/productDetail', { product, products })
@@ -581,6 +580,8 @@ const productDetails = async (req, res) => {
         }
     } catch (error) {
         console.log('error happend in  usercontl in productDetails', error);
+        console.log(error.status)
+        next(error)
     }
 }
 
@@ -606,7 +607,7 @@ const addAddress = async (req, res) => {
         const address = req.body
         id = req.session.user
         const user = await User.findById(id)
-    
+
 
         if (user.address.length === 3) {
             let limiterror = true
@@ -658,11 +659,11 @@ const editAddressPage = async (req, res) => {
 
 const editAddress = async (req, res) => {
     try {
-       
+
         const userId = req.session.user
         const addressId = req.params.id
         const user = await User.findById(userId)
-        
+
         const address = user.address.id(addressId)
         const newAddess = req.body
         const updated = await User.findOneAndUpdate(
@@ -689,7 +690,7 @@ const deleteAddress = async (req, res) => {
     try {
         const userId = req.session.user
         const user = await User.findById(userId)
-        
+
         const addressId = req.params.id
         const deleteAddress = await User.findOneAndUpdate(
             { _id: userId }, {
@@ -698,7 +699,7 @@ const deleteAddress = async (req, res) => {
             }
         }, { new: true }
         )
-        
+
         res.redirect('/ManageAddress')
 
     } catch (error) {
@@ -712,14 +713,14 @@ const edituserDetails = async (req, res) => {
         const userId = req.query.id
         const user = await User.findById(userId)
         const Address = user.address
-       
+
         const password = req.body.password ? req.body.password : null
 
         if (password !== null) {
             let currentPassword = req.body.password
             let newPassword = req.body.npassword
             newPassword = await bcrypt.hash(newPassword, 10)
-            
+
             const status = await bcrypt.compare(currentPassword, user.password)
             if (status) {
                 const { name, email, phonenumber } = req.body
@@ -735,13 +736,13 @@ const edituserDetails = async (req, res) => {
                             password: newPassword,
                         }
                     }, { new: true })
-                
+
                 res.redirect('/profile')
             } else {
                 let currentPassError = true
                 res.render('User/profile', { currentPassError, user, Address })
                 currentPassError = false
-                
+
             }
         } else {
 
@@ -757,7 +758,7 @@ const edituserDetails = async (req, res) => {
                         phonenumber: phonenumber
                     }
                 }, { new: true })
-           
+
             res.redirect('/profile')
         }
 
@@ -772,7 +773,7 @@ const edituserDetails = async (req, res) => {
 
 const PrimaryAddress = async (req, res) => {
     const userId = req.session.user
-    
+
     try {
         if (userId) {
 
@@ -809,24 +810,24 @@ const PrimaryAddress = async (req, res) => {
         console.log('error happend in user contrl in primaryaddress', error)
     }
 }
-const walletPage=async(req,res)=>{
+const walletPage = async (req, res) => {
     try {
         const userId = req.session.user
         const user = await User.findById(userId)
-        const wallet=user.wallet
-        res.render('User/wallet',{user,wallet})
+        const wallet = user.wallet
+        res.render('User/wallet', { user, wallet })
     } catch (error) {
-        console.log('error happend in user contrl in walletpage',error)
-        
+        console.log('error happend in user contrl in walletpage', error)
+
     }
 }
-const UserInvoice=async(req,res)=>{
+const UserInvoice = async (req, res) => {
     try {
         console.log(req.query.id)
-        await invoice.invoice(req,res)
+        await invoice.invoice(req, res)
     } catch (error) {
-        console.log('error happend in UserInvoice',error)
-        
+        console.log('error happend in UserInvoice', error)
+
     }
 }
 module.exports = {

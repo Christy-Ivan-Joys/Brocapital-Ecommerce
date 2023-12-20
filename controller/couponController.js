@@ -12,10 +12,17 @@ const Coupon = require('../model/couponmodel')
 
 const couponPage = async (req, res) => {
     try {
-        const coupons = await Coupon.find()
+        const coupon = await Coupon.find()
 
+        const itemsperPage = 8
+        const currentPage = parseInt(req.query.page) || 1
+        const startIndex = (currentPage - 1) * itemsperPage
+        const endIndex = startIndex + itemsperPage
+        const totalPages = Math.ceil(coupon.length / 8)
 
-        res.render('Admin/couponlist', { coupons })
+        const coupons = coupon.slice(startIndex, endIndex)
+
+        res.render('Admin/couponlist', { coupons,totalPages,currentPage })
 
     } catch (error) {
         console.log('error happend in coupon contlr in couponPage', error)

@@ -105,7 +105,49 @@
             </div>
         </div>
 
-
+        <% if (locals.totalPages) { %>
+            <!-- Bootstrap Pagination -->
+            <nav aria-label="Page navigation" style="margin-bottom: 60px;size:px ;">
+                <ul class="pagination justify-content-center">
+                    <% if (locals.currentPage> 1) { %>
+                        <li class="page-item">
+                            <a class="page-link btn-dark" href="?page=<%= locals.currentPage - 1 %>" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <% } else { %>
+                            <li class="page-item disabled">
+                                <span class="page-link btn-dark" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </span>
+                            </li>
+                            <% } %>
+    
+                                <% for (let i=1; i <=locals.totalPages; i++) { %>
+                                    <li class="page-item <%= i === locals.currentPage ? 'active' : '' %>">
+                                        <a class="page-link btn-dark" href="?page=<%= i %>">
+                                            <%= i %>
+                                        </a>
+                                    </li>
+                                    <% } %>
+    
+                                        <% if (locals.currentPage < locals.totalPages){ %>
+                                            <li class="page-item">
+                                                <a class="page-link btn" href="?page=<%= locals.currentPage + 1 %>"
+                                                    aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                            <% } else { %>
+                                                <li class="page-item disabled">
+                                                    <span class="page-link btn" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </span>
+                                                </li>
+                                                <% } %>
+                </ul>
+            </nav>
+            <% } %>
 
 
 
