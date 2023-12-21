@@ -268,7 +268,7 @@ const deleteCartItem = async (req, res) => {
 }
 const placeOrder = async (req, res) => {
     try {
-
+        
         let userID = req.session.user
         const data = req.body
         var grandtotal = parseInt(req.body.currentTotalNumber)

@@ -124,7 +124,7 @@
                     </div>
                     <div class="modal-body">
                 
-                        <h5 style="padding: 80px 0px;margin-left: 150px;">are you sure ?</h5>
+                        <h5 style="padding: px 0px;margin-left: 35px;">Are you sure to delete the address ?</h5>
 
                        
  
@@ -133,7 +133,7 @@
                             
                     </div>
                     <div class="modal-footer">
-                      <a  href="/deleteAddress/" type="button" class="btn btn-border" >Yes</a>
+                      <a  href="/deleteAddress/<%= address[i]._id%>" type="button" class="btn btn-border" >Yes</a>
                       <a href="" type="button" class="btn btn-border" data-dismiss="modal">No</a>
                     </div>
                   </div>
@@ -146,6 +146,8 @@
                                     <% } %>
                                     <% }else{ %>
                                         <h3 style="margin-left: 180px;">No address to show ! <a href=""></a> </h3>
+                                        <a class="btn btn-dark " style="width: 120px;margin-left: 280px;" id="track-orders-tab" href="/UserAddress" role="button" aria-controls="track-orders" aria-selected="false">Add Address</a>
+
                                         <% } %>
                                 </div>
                                 </div>

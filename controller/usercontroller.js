@@ -81,11 +81,11 @@ const Shoppage = async (req, res) => {
         const user = await User.find()
 
 
-        const itemsperPage = 8
+        const itemsperPage = 10
         const currentPage = parseInt(req.query.page) || 1
         const startIndex = (currentPage - 1) * itemsperPage
         const endIndex = startIndex + itemsperPage
-        const totalPages = Math.ceil(product.length / 8)
+        const totalPages = Math.ceil(product.length / 10)
 
 
 
@@ -477,8 +477,8 @@ const profile = async (req, res) => {
 
 const orderPage = async (req, res) => {
     try {
-
-        const order = await Order.find().sort({ createdOn: -1 })
+        const userID=req.session.user
+        const order = await Order.find({user:userID}).sort({ createdOn: -1 })
 
 
         const itemsperPage = 8
@@ -692,6 +692,7 @@ const deleteAddress = async (req, res) => {
         const user = await User.findById(userId)
 
         const addressId = req.params.id
+        console.log(addressId)
         const deleteAddress = await User.findOneAndUpdate(
             { _id: userId }, {
             $pull: {

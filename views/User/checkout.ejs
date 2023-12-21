@@ -180,6 +180,7 @@
                     <p id="codeError" style="color: red;font-size: 15px;margin-left: 150px;"></p>
                     <p id="couponError" style="color: red;font-size: 15px;margin-left: 200px;"></p>
                     <p id="AppliedError" style="color: red;font-size: 15px;margin-left: 180px;"></p>
+                    <p id="AddressError" style="color: red;font-size: 15px;margin-left: 130px;"></p>
                     <br>
 
 
@@ -283,7 +284,7 @@
                     </div>
 
                     <div class="box-button-checkout"> <a class="btn btn-black" style="color: aliceblue;"
-                        onclick="placeOrder()">Place Order</a></div>
+                        onclick="placeOrder()" id="placeOrderButton">Place Order</a></div>
               </div>
             </div>
           </div>
@@ -352,7 +353,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
-     
+
 
     </script>
 
@@ -379,10 +380,24 @@
       }
 
       var addressId = $('input[name="address"]:checked').data('address-id')
+      document.getElementById('placeOrderButton').addEventListener('click', function () {
+        checkAddress(addressId)
+       
+      })
+      function checkAddress(addressId) {
+     
+        if (addressId === undefined) {
+          const AddressError = document.getElementById('AddressError')
+          event.preventDefault()
+          AddressError.innerHTML = 'No Address !. Add address to continue!'
+        } else {
+          AddressError.innerHTML = ''
+        }
+      }
 
       $('input[name="address"]').change(function () {
         if ($(this).is(':checked')) {
-          addressId = $(this).data('address-id')
+
 
         }
       })
@@ -467,7 +482,11 @@
         var currentTotal = total.textContent.trim();
         var currentTotalNumber = currentTotal.replace('₹', '');
 
-        const addressId = document.getElementById('address').getAttribute('data-address-id');
+
+
+        const addressId = document.getElementById('address').getAttribute('data-address-id') 
+
+
         const addressStatus = localStorage.getItem('noAddress')
         const walletPay = localStorage.getItem('walletApplied')
 
@@ -534,102 +553,102 @@
 
 
 
-      
-     
+
+
 
         const isCouponApplied = sessionStorage.getItem('CouponApplied') === 'true';
 
         if (isCouponApplied) {
-         const AppliedError=document.getElementById('AppliedError')
-        AppliedError.innerHTML = 'Coupon is already applied!';
+          const AppliedError = document.getElementById('AppliedError')
+          AppliedError.innerHTML = 'Coupon is already applied!';
         } else {
-          
-        
-   
 
 
 
-        const code = document.getElementById('couponinput').value
-        const grandtotalElement = document.getElementById('grandtotal')
-        const grandtotal = grandtotalElement.getAttribute('data-grand-id')
-        if (code === '') {
-          codeError.innerHTML = 'Enter a coupon code to apply !'
-          return
-
-        } else {
-          codeError.innerHTML = ''
-
-        }
 
 
 
-        $.ajax({
-          url: '/applyCoupon',
-          method: 'post',
-          data: {
-            couponCode: code,
-            grandtotal: grandtotal
-          }, success: function (response) {
+          const code = document.getElementById('couponinput').value
+          const grandtotalElement = document.getElementById('grandtotal')
+          const grandtotal = grandtotalElement.getAttribute('data-grand-id')
+          if (code === '') {
+            codeError.innerHTML = 'Enter a coupon code to apply !'
+            return
 
-            if (response.status == true) {
+          } else {
+            codeError.innerHTML = ''
 
-             
-              Swal.fire({
-                title: 'Coupon applied!',
-                text: 'Coupon has applied successfully',
-                icon: 'success',
-                confirmButtonText: 'OK'
-              }).then(() => {
-                const total = response.discountedvalue
-                const discount = response.Discount
-                const discoutElement = document.getElementById('discount')
-                discoutElement.innerHTML = `-₹ ${discount}`
-                const totalElement = document.getElementById('total')
-                totalElement.innerHTML = `₹ ${total}`
-                sessionStorage.setItem('CouponApplied', 'true')
-
-                var CouponName = response.coupon
-                sessionStorage.setItem('CouponName', JSON.stringify(response.coupon))
-              })
-            } else {
-
-              if (response.alreadyUsed === true) {
-
-                Swal.fire({
-                  title: 'Coupon already used!',
-                  text: 'This coupon has already been used.',
-                  icon: 'error',
-                  confirmButtonText: 'OK'
-                });
-              } else if (response.expired === true) {
-                Swal.fire({
-                  title: 'Coupon expired!',
-                  text: 'This coupon has expired.',
-                  icon: 'error',
-                  confirmButtonText: 'OK'
-                });
-              } else if (response.Invalidcoupon === true) {
-                Swal.fire({
-                  title: 'Invalid coupon!',
-                  text: 'Cannot apply coupon',
-                  icon: 'error',
-                  confirmButtonText: 'OK'
-                });
-              } else if (response.MinpurchaseError === true) {
-                const minPrice = response.minPrice
-                Swal.fire({
-                  title: `purchase for minimum ₹${minPrice} to apply this coupon!`,
-                  text: 'Cannot apply coupon',
-                  icon: 'info',
-                  confirmButtonText: 'OK'
-                });
-              }
-
-
-            }
           }
-        })
-      }
+
+
+
+          $.ajax({
+            url: '/applyCoupon',
+            method: 'post',
+            data: {
+              couponCode: code,
+              grandtotal: grandtotal
+            }, success: function (response) {
+
+              if (response.status == true) {
+
+
+                Swal.fire({
+                  title: 'Coupon applied!',
+                  text: 'Coupon has applied successfully',
+                  icon: 'success',
+                  confirmButtonText: 'OK'
+                }).then(() => {
+                  const total = response.discountedvalue
+                  const discount = response.Discount
+                  const discoutElement = document.getElementById('discount')
+                  discoutElement.innerHTML = `-₹ ${discount}`
+                  const totalElement = document.getElementById('total')
+                  totalElement.innerHTML = `₹ ${total}`
+                  sessionStorage.setItem('CouponApplied', 'true')
+
+                  var CouponName = response.coupon
+                  sessionStorage.setItem('CouponName', JSON.stringify(response.coupon))
+                })
+              } else {
+
+                if (response.alreadyUsed === true) {
+
+                  Swal.fire({
+                    title: 'Coupon already used!',
+                    text: 'This coupon has already been used.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                  });
+                } else if (response.expired === true) {
+                  Swal.fire({
+                    title: 'Coupon expired!',
+                    text: 'This coupon has expired.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                  });
+                } else if (response.Invalidcoupon === true) {
+                  Swal.fire({
+                    title: 'Invalid coupon!',
+                    text: 'Cannot apply coupon',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                  });
+                } else if (response.MinpurchaseError === true) {
+                  const minPrice = response.minPrice
+                  Swal.fire({
+                    title: `purchase for minimum ₹${minPrice} to apply this coupon!`,
+                    text: 'Cannot apply coupon',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                  });
+                }
+
+
+              }
+            }
+          })
+        }
       }
 
 
