@@ -135,13 +135,13 @@ const updateCart = async (req, res) => {
 
 
         if (user) {
-            console.log('i am inside')
+          
             const existingCartItem = user.cart.find((item => item.productId === Id))
 
-            console.log(existingCartItem)
-            console.log(count);
+            
+            
             if (existingCartItem) {
-                console.log('i am inside')
+               
                 let newQty
                 if (count == 1) {
                     newQty = existingCartItem.quantity + 1
@@ -192,7 +192,7 @@ const updateCart = async (req, res) => {
 
 const checkoutPage = async (req, res) => {
     try {
-        let user = req.session.user
+        const user = req.session.user
 
 
         const coupons = await Coupon.find()
@@ -269,7 +269,7 @@ const deleteCartItem = async (req, res) => {
 const placeOrder = async (req, res) => {
     try {
         
-        let userID = req.session.user
+        let userid = req.session.user
         const data = req.body
         var grandtotal = parseInt(req.body.currentTotalNumber)
         const paymentMethod = req.body.payment
