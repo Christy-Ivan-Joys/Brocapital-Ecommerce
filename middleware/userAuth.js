@@ -30,7 +30,6 @@ const isUser = ((req, res, next) => {
 
                     next()
                 } else {
-
                     let isBlock = true
                     res.render('User/login', { isBlock })
                 }
