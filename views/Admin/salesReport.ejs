@@ -67,29 +67,29 @@
                                                         </td>
 
                                                         <td>
-                                                            <%= orders[i].user.name %>
+                                                            <%= orders[i]?.user?.name %>
                                                         </td>
 
 
                                                         <td>
-                                                            <%= orders[i].status %>
+                                                            <%= orders[i]?.status %>
                                                         </td>
 
 
                                                         <td>
-                                                            <%= orders[i].paymentMethod %>
+                                                            <%= orders[i]?.paymentMethod %>
                                                         </td>
 
                                                         <td style="display: none;">
-                                                            <%= orders[i].products.length%>
+                                                            <%= orders[i]?.products?.length%>
                                                         </td>
 
                                                         <td>
-                                                            <%= orders[i].paymentStatus %>
+                                                            <%= orders[i]?.paymentStatus %>
                                                         </td>
                                                         <td><a href="/admin/orderDetailsPage/<%= orders[i]._id %>"
                                                                 class="btn-small d-block">View</a></td>
-                                                        <td> ₹<%= orders[i].totalprice %>
+                                                        <td> ₹<%= orders[i]?.totalprice %>
                                                         </td>
 
 

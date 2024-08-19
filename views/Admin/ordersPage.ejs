@@ -42,19 +42,19 @@
 
                                             <td><%=new Date(orders[i].createdOn.getTime() - (5 * 60 * 60 * 1000)).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })%></td>
                                        
-                                            <td><%= orders[i].user.name %></td>
+                                            <td><%= orders[i]?.user?.name %></td>
 
                                 
-                                            <td><%= orders[i].status %></td>
+                                            <td><%= orders[i]?.status %></td>
 
 
-                                           <td><%= orders[i].paymentMethod %></td>
+                                           <td><%= orders[i]?.paymentMethod %></td>
 
-                                            <td><%= orders[i].paymentStatus %></td>
+                                            <td><%= orders[i]?.paymentStatus %></td>
 
                                             <td><a href="/admin/orderDetailsPage/<%= orders[i]._id %>"
                                                 class="btn-small d-block">View</a></td>
-                                            <td > ₹<%= orders[i].totalprice %></td>
+                                            <td > ₹<%= orders[i]?.totalprice %></td>
                                             
                                         </tr>
 
